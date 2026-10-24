@@ -468,10 +468,7 @@
       </div>
     </div>
 
-    <!-- Ảnh Bánh Kem Thật -->
-    <div class="cake-photo-box" id="cake-photo-box">
-      <img id="cake-img" src="" alt="Birthday Cake" />
-    </div>
+
 
     <!-- Chữ "Click vào nhé" -->
     <div class="click-hint-bottom" id="click-grid-hint">Click vào nhé</div>
@@ -526,7 +523,7 @@
       couplePhoto: "./hoa-hong.jpg"
     };
 
-    document.getElementById("cake-img").src = CONFIG.cakePhoto;
+
     document.getElementById("couple-img").src = CONFIG.couplePhoto;
 
     // Tạo mã QR nằm gọn trong Trái Tim Đỏ
@@ -924,8 +921,59 @@
     centerHeartMesh.scale.set(13, 13, 13);
     heartGroup.add(centerHeartMesh);
 
+    // Hàm tính toán tọa độ chiếc Bánh Kem Sinh Nhật 3 Tầng xếp bằng hàng trăm trái tim 3D
+    function generate3DCakePositions(count) {
+      const pts = [];
+
+      // Tầng 1: Đáy bánh (R = 94..80, Y = -55..-25)
+      const n1 = Math.floor(count * 0.40);
+      for (let i = 0; i < n1; i++) {
+        const layer = i % 3;
+        const y = -55 + layer * 14;
+        const r = 94 - layer * 7;
+        const theta = (i / (n1 / 3)) * Math.PI * 2;
+        pts.push(new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta)));
+      }
+
+      // Tầng 2: Giữa bánh (R = 64..52, Y = -10..+16)
+      const n2 = Math.floor(count * 0.30);
+      for (let i = 0; i < n2; i++) {
+        const layer = i % 2;
+        const y = -10 + layer * 15;
+        const r = 62 - layer * 6;
+        const theta = (i / (n2 / 2)) * Math.PI * 2;
+        pts.push(new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta)));
+      }
+
+      // Tầng 3: Đỉnh bánh (R = 36..28, Y = +22..+42)
+      const n3 = Math.floor(count * 0.18);
+      for (let i = 0; i < n3; i++) {
+        const layer = i % 2;
+        const y = 22 + layer * 12;
+        const r = 35 - layer * 6;
+        const theta = (i / (n3 / 2)) * Math.PI * 2;
+        pts.push(new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta)));
+      }
+
+      // Thân nến & Ngọn lửa trái tim rực cháy trên đỉnh bánh (Y = 44..80)
+      const nCandle = count - pts.length;
+      for (let i = 0; i < nCandle; i++) {
+        if (i === 0) {
+          pts.push(new THREE.Vector3(0, 80, 0));
+        } else {
+          const cy = 44 + (i % 4) * 9;
+          const cr = (i > 4 ? 18 : 0);
+          const angle = (i / 4) * Math.PI * 2;
+          pts.push(new THREE.Vector3(cr * Math.cos(angle), cy, cr * Math.sin(angle)));
+        }
+      }
+
+      return pts;
+    }
+
     const heartSprites = [];
-    const TOTAL_HEARTS = 125;
+    const TOTAL_HEARTS = 220;
+    const cakePositions = generate3DCakePositions(TOTAL_HEARTS);
 
     for (let i = 0; i < TOTAL_HEARTS; i++) {
       const isRoseGold = i % 3 === 0;
@@ -962,6 +1010,7 @@
       const baseScale = isRoseGold ? (5.2 + Math.random() * 2.2) : (6.4 + Math.random() * 2.6);
 
       mesh.userData = {
+        cakePos: cakePositions[i],
         spherePos,
         gridPos,
         freePos,
@@ -1207,50 +1256,69 @@
         pGeo.attributes.color.needsUpdate = true;
       }, 4500);
 
-      // 5. Hạt vàng ghép thành Hologram 3D Chiếc Bánh Kem
+      // 5. HÀNG TRĂM TRÁI TIM 3D TỪ XA TỰ ĐỘNG BAY VÀO XẾP THÀNH BÁNH KEM SINH NHẬT
       setTimeout(() => {
+        stage = "HEART_CAKE";
+        playSuccessChime();
+
+        // Ánh sáng nến sinh nhật ở đỉnh bánh kem
+        corePointLight.position.set(0, 80, 0);
+        gsap.to(corePointLight, { intensity: 4.2, duration: 2.0 });
+
+        // Hạt sao vàng lấp lánh xếp quanh bánh kem
         const cakePts = generateCakeHologramPoints();
-        setParticleTargets(cakePts, "#ffe082", 2.0);
+        setParticleTargets(cakePts, "#ffe082", 2.2);
+        pMat.opacity = 0.55;
+
+        // Trái tim ngọn lửa lớn nhất ở đỉnh bánh kem
+        centerHeartMesh.position.set(0, 82, 0);
+        gsap.to(centerHeartMat, { opacity: 1, duration: 1.5 });
+        gsap.to(centerHeartMesh.scale, { x: 12, y: 12, z: 12, duration: 1.5 });
+
+        // Từng trái tim từ xa bay vào lắp ghép chính xác vào từng tầng bánh kem
+        heartSprites.forEach((sp, idx) => {
+          gsap.to(sp.material, { opacity: 1, duration: 1.2, delay: idx * 0.003 });
+          gsap.to(sp.position, {
+            x: sp.userData.cakePos.x,
+            y: sp.userData.cakePos.y,
+            z: sp.userData.cakePos.z,
+            duration: 2.4,
+            ease: "power3.out"
+          });
+        });
       }, 5600);
 
-      // 6. Hiện bức ảnh Bánh Kem Thật
-      setTimeout(() => {
-        document.getElementById("cake-photo-box").classList.add("show");
-        gsap.to(pMat, { opacity: 0.15, duration: 1.0 });
-      }, 6900);
-
-      // 7. Bánh kem mờ đi, để lại bầu trời sao
-      setTimeout(() => {
-        document.getElementById("cake-photo-box").classList.remove("show");
-        gsap.to(pMat, { opacity: 0, duration: 0.8 });
-      }, 10500);
-
-      // 8. Quả Cầu Trái Tim 3D + Hào quang hồng
+      // 6. Chiếc bánh kem trái tim chuyển hóa thành Quả Cầu Trái Tim 3D
       setTimeout(() => {
         stage = "HEART_SPHERE";
         controls.enabled = true;
         document.getElementById("sphere-core-glow").style.opacity = "1";
 
+        // Hạ điểm sáng về tâm quả cầu
+        gsap.to(corePointLight.position, { x: 0, y: 0, z: 0, duration: 1.6 });
+        gsap.to(corePointLight, { intensity: 3.5, duration: 1.6 });
+
+        // Đưa trái tim lớn về tâm quả cầu
+        gsap.to(centerHeartMesh.position, { x: 0, y: 0, z: 0, duration: 1.6 });
         gsap.to(centerHeartMat, { opacity: 0.95, duration: 1.5 });
-        gsap.to(corePointLight, { intensity: 3.5, duration: 1.8 });
+        gsap.to(pMat, { opacity: 0.08, duration: 1.2 });
 
         heartSprites.forEach((sp, idx) => {
-          gsap.to(sp.material, { opacity: 1, duration: 0.9, delay: idx * 0.005 });
           gsap.to(sp.position, {
             x: sp.userData.spherePos.x,
             y: sp.userData.spherePos.y,
             z: sp.userData.spherePos.z,
-            duration: 1.8,
+            duration: 2.0,
             ease: "power3.out"
           });
         });
-      }, 12200);
+      }, 12800);
 
-      // 9. Xếp thành Lưới Phẳng + Hiện chữ "Click vào nhé"
+      // 7. Xếp thành Lưới Phẳng + Hiện chữ "Click vào nhé"
       setTimeout(() => {
         stage = "HEART_GRID";
         gsap.to(heartGroup.rotation, { x: 0, y: 0, z: 0, duration: 1.2 });
-        heartSprites.slice(0, 42).forEach((sp) => {
+        heartSprites.slice(0, 48).forEach((sp) => {
           gsap.to(sp.position, {
             x: sp.userData.gridPos.x,
             y: sp.userData.gridPos.y,
@@ -1260,7 +1328,7 @@
           });
         });
         document.getElementById("click-grid-hint").classList.add("show");
-      }, 16800);
+      }, 18000);
     }
 
     // 10. Chạm vào "Click vào nhé" -> Trái tim bay tự do & Hiện Phong bì thiên thần
@@ -1379,7 +1447,7 @@
         mesh.rotation.y += mesh.userData.rotSpeed.y;
         mesh.rotation.z += mesh.userData.rotSpeed.z;
 
-        if (stage === "HEART_SPHERE" || stage === "HEART_FREE") {
+        if (stage === "HEART_CAKE" || stage === "HEART_SPHERE" || stage === "HEART_FREE") {
           const bs = mesh.userData.baseScale * pulse;
           mesh.scale.set(bs, bs, bs);
         }
@@ -1391,8 +1459,10 @@
         centerHeartMesh.rotation.y += 0.014;
       }
 
-      // 5. Xoay chuyển động quả cầu 3D
-      if (stage === "HEART_SPHERE") {
+      // 5. Xoay chuyển động bánh kem hoặc quả cầu 3D
+      if (stage === "HEART_CAKE") {
+        heartGroup.rotation.y += 0.007; // Chiếc bánh kem 3D xoay 360 độ quanh trục
+      } else if (stage === "HEART_SPHERE") {
         heartGroup.rotation.y += 0.006;
         controls.update();
       } else if (stage === "HEART_FREE") {
