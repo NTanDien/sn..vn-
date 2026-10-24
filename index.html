@@ -65,31 +65,38 @@
 
     .red-heart-qr-wrap {
       position: relative;
-      width: 220px;
-      height: 205px;
+      width: 250px;
+      height: 235px;
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 0 25px rgba(255, 20, 50, 0.85));
-      animation: heartBeat 1.4s infinite ease-in-out;
+      transform: rotate(12deg);
+      filter: drop-shadow(0 0 28px rgba(255, 20, 50, 0.95));
+      animation: heartBeat 1.5s infinite ease-in-out;
     }
     @keyframes heartBeat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
+      0%, 100% { transform: rotate(12deg) scale(1); }
+      50% { transform: rotate(12deg) scale(1.05); }
     }
     .red-heart-svg {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
+      pointer-events: none;
     }
     #heart-qr-box {
       position: relative;
       z-index: 2;
-      margin-top: -12px;
-      border-radius: 8px;
+      margin-top: -16px;
+      border-radius: 14px;
       overflow: hidden;
-      mix-blend-mode: multiply;
+      background: #ffffff;
+      padding: 6px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .qr-hint {
       margin-top: 28px;
@@ -430,15 +437,15 @@
       <div class="corner br"></div>
 
       <div class="red-heart-qr-wrap">
-        <svg class="red-heart-svg" viewBox="0 0 200 185">
+        <svg class="red-heart-svg" viewBox="0 0 260 240">
           <defs>
-            <radialGradient id="redHeartGrad" cx="50%" cy="45%" r="55%">
-              <stop offset="0%" stop-color="#ff3b4e"/>
-              <stop offset="70%" stop-color="#e6192e"/>
-              <stop offset="100%" stop-color="#990012"/>
+            <radialGradient id="redHeartGrad" cx="45%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#ff3b56"/>
+              <stop offset="60%" stop-color="#e60026"/>
+              <stop offset="100%" stop-color="#b30018"/>
             </radialGradient>
           </defs>
-          <path fill="url(#redHeartGrad)" d="M100,175 C100,175 12,120 12,62 C12,28 40,8 68,8 C85,8 95,18 100,28 C105,18 115,8 132,8 C160,8 188,28 188,62 C188,120 100,175 100,175 Z"/>
+          <path fill="url(#redHeartGrad)" d="M130,225 C130,225 18,155 18,78 C18,34 54,10 92,10 C114,10 125,22 130,32 C135,22 146,10 168,10 C206,10 242,34 242,78 C242,155 130,225 130,225 Z"/>
         </svg>
         <div id="heart-qr-box"></div>
       </div>
@@ -468,7 +475,10 @@
       </div>
     </div>
 
-
+    <!-- Ảnh Bánh Kem Thật -->
+    <div class="cake-photo-box" id="cake-photo-box">
+      <img id="cake-img" src="" alt="Birthday Cake" />
+    </div>
 
     <!-- Chữ "Click vào nhé" -->
     <div class="click-hint-bottom" id="click-grid-hint">Click vào nhé</div>
@@ -508,7 +518,10 @@
     </div>
   </div>
 
-
+  <!-- Nhạc nền Piano lãng mạn -->
+  <audio id="bg-audio" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112191.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     /* =========================================================================
@@ -520,21 +533,27 @@
       cakePhoto: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=700&q=85",
       letterTitle: "Gửi cô gái mang theo cả bầu trời dịu dàng,",
       letterText: "\"Hôm nay là ngày thế giới đón chào một người cực kỳ đáng quý, nên mình muốn dành tặng bạn một không gian chỉ thuộc về riêng bạn — nơi không có deadline, không có muộn phiền, chỉ có những vì sao và sự trân trọng mình dành cho bạn.\n\nGiữa hàng vạn người lướt qua nhau mỗi ngày, thật may mắn vì mình đã được gặp bạn, được nhìn thấy dáng vẻ rạng rỡ khi bạn cười và cả sự ấm áp trong từng hành động nhỏ của bạn. Có lẽ bạn không nhận ra đâu, nhưng chính bạn đã làm những ngày bình thường nhất trở nên có ý nghĩa hơn rất nhiều.\n\nTuổi mới, chúc bạn mỗi sáng thức dậy đều có lý do để mỉm cười, mỗi tối đi ngủ đều thấy lòng an nhiên. Người ta nói những điều đẹp đẽ nhất đều cần thời gian và sự chân thành để mở khóa — giống như cách bạn vừa kiên nhẫn đi qua từng bước nhỏ để mở bức thư này vậy.\n\nMình đã gom hết sự kiên nhẫn và chân thành đặt vào đây rồi, nếu trái tim bạn cũng có một chút rung động, thì đừng giữ trong lòng một mình nhé, hãy cho mình cơ hội được chăm sóc bạn nhiều hơn một người bạn bình thường nha!\"",
-      couplePhoto: "./hoa-hong.jpg"
+      couplePhoto: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=85" // Thay link ảnh xinh nhất của bạn nữ vào đây
     };
 
-
+    document.getElementById("cake-img").src = CONFIG.cakePhoto;
     document.getElementById("couple-img").src = CONFIG.couplePhoto;
 
-    // Tạo mã QR nằm gọn trong Trái Tim Đỏ
+    // Tạo mã QR nằm gọn trong Trái Tim Đỏ chuẩn khoảng cách cho camera quét
     if (window.QRCodeStyling) {
+      const liveUrl = (window.location.protocol === "file:")
+        ? "https://ntandien.github.io/sn..vn-/"
+        : window.location.href;
+
       const qr = new QRCodeStyling({
-        width: 92,
-        height: 92,
-        data: window.location.href,
-        dotsOptions: { color: "#2b0005", type: "rounded" },
-        cornersSquareOptions: { color: "#2b0005", type: "extra-rounded" },
-        backgroundOptions: { color: "transparent" }
+        width: 135,
+        height: 135,
+        data: liveUrl,
+        margin: 4,
+        dotsOptions: { color: "#99001f", type: "rounded" },
+        cornersSquareOptions: { color: "#b30022", type: "extra-rounded" },
+        cornersDotOptions: { color: "#b30022", type: "dot" },
+        backgroundOptions: { color: "#ffffff" }
       });
       qr.append(document.getElementById("heart-qr-box"));
     }
@@ -544,7 +563,7 @@
        ========================================================================= */
     const canvas = document.getElementById("webgl-canvas");
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 3000);
+    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 2500);
     camera.position.z = 330;
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -556,25 +575,6 @@
     controls.dampingFactor = 0.05;
     controls.enabled = false;
 
-    // =========================================================================
-    // HỆ THỐNG ÁNH SÁNG VŨ TRỤ ĐIỆN ẢNH (CINEMATIC LIGHTING)
-    // =========================================================================
-    const ambientLight = new THREE.AmbientLight(0x2a102b, 1.4);
-    scene.add(ambientLight);
-
-    const dirLightFront = new THREE.DirectionalLight(0xfff5ea, 1.3);
-    dirLightFront.position.set(220, 260, 320);
-    scene.add(dirLightFront);
-
-    const dirLightRim = new THREE.DirectionalLight(0xff3388, 1.1);
-    dirLightRim.position.set(-280, -180, -220);
-    scene.add(dirLightRim);
-
-    // Điểm sáng trung tâm tỏa hào quang hồng ngọc
-    const corePointLight = new THREE.PointLight(0xff1e78, 0, 450);
-    corePointLight.position.set(0, 0, 0);
-    scene.add(corePointLight);
-
     function createSoftDotTexture() {
       const c = document.createElement("canvas");
       c.width = 64;
@@ -582,8 +582,8 @@
       const ctx = c.getContext("2d");
       const grad = ctx.createRadialGradient(32, 32, 2, 32, 32, 30);
       grad.addColorStop(0, "rgba(255, 255, 255, 1)");
-      grad.addColorStop(0.35, "rgba(255, 220, 240, 0.9)");
-      grad.addColorStop(1, "rgba(255, 80, 160, 0)");
+      grad.addColorStop(0.4, "rgba(255, 220, 240, 0.85)");
+      grad.addColorStop(1, "rgba(255, 100, 180, 0)");
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(32, 32, 30, 0, Math.PI * 2);
@@ -592,127 +592,24 @@
     }
     const dotTexture = createSoftDotTexture();
 
-    // =========================================================================
-    // 1. BẦU TRỜI SAO VŨ TRỤ ĐA QUANG PHỔ THỰC TẾ (REALISTIC MULTI-COLOR STARS)
-    // =========================================================================
-    const STAR_COUNT = 3200;
+    // Bầu trời sao trắng nền sâu
+    const STAR_COUNT = 2200;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(STAR_COUNT * 3);
-    const starColors = new Float32Array(STAR_COUNT * 3);
-
-    const starSpectrum = [
-      new THREE.Color("#ffffff"), // Sao trắng sáng
-      new THREE.Color("#cfe2ff"), // Sao khổng lồ xanh băng
-      new THREE.Color("#ffe5b4"), // Sao vàng ấm mặt trời
-      new THREE.Color("#ffb6c1"), // Sao hồng tinh vân
-      new THREE.Color("#b8f2e6")  // Sao ngọc lam
-    ];
-
-    for (let i = 0; i < STAR_COUNT; i++) {
-      starPositions[i * 3] = (Math.random() - 0.5) * 1900;
-      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 1900;
-      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 1900;
-
-      const col = starSpectrum[Math.floor(Math.random() * starSpectrum.length)];
-      starColors[i * 3] = col.r;
-      starColors[i * 3 + 1] = col.g;
-      starColors[i * 3 + 2] = col.b;
+    for (let i = 0; i < STAR_COUNT * 3; i++) {
+      starPositions[i] = (Math.random() - 0.5) * 1600;
     }
     starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
-    starGeo.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
-
     const starMat = new THREE.PointsMaterial({
-      size: 3.8,
+      size: 3.5,
       map: dotTexture,
-      vertexColors: true,
+      color: 0xffffff,
       transparent: true,
-      opacity: 0.88,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
+      opacity: 0.75,
+      depthWrite: false
     });
     const starField = new THREE.Points(starGeo, starMat);
     scene.add(starField);
-
-    // =========================================================================
-    // 2. MÂY TINH VÂN VŨ TRỤ HUYỀN ẢO (VOLUMETRIC COSMIC NEBULA CLOUDS)
-    // =========================================================================
-    function createNebulaCloudTexture() {
-      const c = document.createElement("canvas");
-      c.width = 128;
-      c.height = 128;
-      const ctx = c.getContext("2d");
-      const grad = ctx.createRadialGradient(64, 64, 4, 64, 64, 60);
-      grad.addColorStop(0, "rgba(255, 60, 150, 0.42)");
-      grad.addColorStop(0.35, "rgba(160, 20, 110, 0.22)");
-      grad.addColorStop(0.7, "rgba(50, 0, 70, 0.08)");
-      grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 128, 128);
-      return new THREE.CanvasTexture(c);
-    }
-
-    const nebulaTex = createNebulaCloudTexture();
-    const nebulaGroup = new THREE.Group();
-    scene.add(nebulaGroup);
-    const NEBULA_COUNT = 38;
-
-    for (let i = 0; i < NEBULA_COUNT; i++) {
-      const nMat = new THREE.SpriteMaterial({
-        map: nebulaTex,
-        transparent: true,
-        opacity: 0.35 + Math.random() * 0.3,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      const nSprite = new THREE.Sprite(nMat);
-      nSprite.position.set(
-        (Math.random() - 0.5) * 1200,
-        (Math.random() - 0.5) * 800,
-        -400 - Math.random() * 800
-      );
-      const nScale = 300 + Math.random() * 380;
-      nSprite.scale.set(nScale, nScale, 1);
-      nebulaGroup.add(nSprite);
-    }
-
-    // =========================================================================
-    // 3. SAO BĂNG XẸT NGANG BẦU TRỜI (SHOOTING STARS / METEORS)
-    // =========================================================================
-    const meteorGeo = new THREE.BufferGeometry();
-    meteorGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array([0, 0, 0, -45, 26, -20]), 3));
-    const meteorMat = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0,
-      linewidth: 2
-    });
-    const meteorLine = new THREE.Line(meteorGeo, meteorMat);
-    scene.add(meteorLine);
-
-    let meteorActive = false;
-    function triggerShootingStar() {
-      if (meteorActive) return;
-      meteorActive = true;
-      const startX = (Math.random() - 0.5) * 700 + 260;
-      const startY = (Math.random() - 0.5) * 350 + 200;
-      const startZ = -300 - Math.random() * 350;
-      meteorLine.position.set(startX, startY, startZ);
-      meteorMat.opacity = 0.9;
-
-      gsap.to(meteorLine.position, {
-        x: startX - 650,
-        y: startY - 380,
-        z: startZ + 180,
-        duration: 0.72,
-        ease: "power2.in",
-        onComplete: () => {
-          meteorMat.opacity = 0;
-          meteorActive = false;
-          setTimeout(triggerShootingStar, 3500 + Math.random() * 4500);
-        }
-      });
-    }
-    setTimeout(triggerShootingStar, 2500);
 
     /* =========================================================================
        HỆ THỐNG 20.000 HẠT KIM TUYẾN BIẾN HÌNH
@@ -844,143 +741,99 @@
     /* =========================================================================
        2 LOẠI STICKER TRÁI TIM Y2K CHUẨN NHƯ VIDEO
        ========================================================================= */
-    // =========================================================================
-    // KHỐI HÌNH TRÁI TIM 3D NGUYÊN KHỐI THỰC TẾ (REAL 3D EXTRUDED BEVELED HEART)
-    // =========================================================================
-    function createRealistic3DHeartGeometry() {
-      const shape = new THREE.Shape();
-      // Tỷ lệ chuẩn đường cong thẩm mỹ mềm mại
-      shape.moveTo(0, 0);
-      shape.bezierCurveTo(0, -0.35, -0.65, -0.9, -1.35, -0.9);
-      shape.bezierCurveTo(-2.15, -0.9, -2.45, -0.2, -2.45, 0.45);
-      shape.bezierCurveTo(-2.45, 1.25, -1.5, 2.05, 0, 3.25);
-      shape.bezierCurveTo(1.5, 2.05, 2.45, 1.25, 2.45, 0.45);
-      shape.bezierCurveTo(2.45, -0.2, 2.15, -0.9, 1.35, -0.9);
-      shape.bezierCurveTo(0.65, -0.9, 0, -0.35, 0, 0);
+    function createY2KBubbleHeartTexture() {
+      const c = document.createElement("canvas");
+      c.width = 256;
+      c.height = 256;
+      const ctx = c.getContext("2d");
 
-      const extrudeSettings = {
-        depth: 0.85,
-        bevelEnabled: true,
-        bevelSegments: 8,
-        steps: 2,
-        bevelSize: 0.5,
-        bevelThickness: 0.55
-      };
-      const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-      geo.center();
-      geo.rotateZ(Math.PI); // Đầu nhọn hướng xuống
-      return geo;
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(128, 222);
+      ctx.bezierCurveTo(118, 210, 24, 152, 24, 86);
+      ctx.bezierCurveTo(24, 42, 66, 22, 100, 22);
+      ctx.bezierCurveTo(116, 22, 128, 35, 128, 48);
+      ctx.bezierCurveTo(128, 35, 140, 22, 156, 22);
+      ctx.bezierCurveTo(190, 22, 232, 42, 232, 86);
+      ctx.bezierCurveTo(232, 152, 138, 210, 128, 222);
+      ctx.closePath();
+
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = "#3a0018";
+      ctx.stroke();
+
+      const grad = ctx.createRadialGradient(96, 76, 10, 128, 125, 110);
+      grad.addColorStop(0, "#ffeef5");
+      grad.addColorStop(0.28, "#ff85b3");
+      grad.addColorStop(0.72, "#eb1468");
+      grad.addColorStop(1, "#7a0032");
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.ellipse(76, 72, 24, 11, -0.55, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.88)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.ellipse(168, 66, 12, 6, 0.4, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+      ctx.fill();
+      ctx.restore();
+      return new THREE.CanvasTexture(c);
     }
 
-    const heart3DGeo = createRealistic3DHeartGeometry();
+    function createNeonOutlineHeartTexture() {
+      const c = document.createElement("canvas");
+      c.width = 256;
+      c.height = 256;
+      const ctx = c.getContext("2d");
 
-    // 2 Loại vật liệu Pha Lê Hồng Ngọc & Kim Cương Ánh Kim chân thực
-    const rubyMaterialBase = new THREE.MeshPhysicalMaterial({
-      color: 0xff1053,
-      emissive: 0x880028,
-      emissiveIntensity: 0.45,
-      roughness: 0.12,
-      metalness: 0.22,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.08,
-      transmission: 0.5,
-      transparent: true,
-      opacity: 0,
-      depthWrite: false
-    });
+      function strokeHeart(cx, cy, sc) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(sc, sc);
+        ctx.beginPath();
+        ctx.moveTo(0, 70);
+        ctx.bezierCurveTo(-10, 60, -80, 15, -80, -35);
+        ctx.bezierCurveTo(-80, -70, -45, -85, -20, -85);
+        ctx.bezierCurveTo(-5, -85, 0, -72, 0, -60);
+        ctx.bezierCurveTo(0, -72, 5, -85, 20, -85);
+        ctx.bezierCurveTo(45, -85, 80, -70, 80, -35);
+        ctx.bezierCurveTo(80, 15, 10, 60, 0, 70);
+        ctx.closePath();
+        ctx.shadowColor = "#ff1e78";
+        ctx.shadowBlur = 16;
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = "#ff80ab";
+        ctx.stroke();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "#ffffff";
+        ctx.stroke();
+        ctx.restore();
+      }
+      strokeHeart(105, 130, 0.85);
+      strokeHeart(155, 105, 0.55);
+      return new THREE.CanvasTexture(c);
+    }
 
-    const roseGoldMaterialBase = new THREE.MeshPhysicalMaterial({
-      color: 0xff85b3,
-      emissive: 0x550022,
-      emissiveIntensity: 0.35,
-      roughness: 0.14,
-      metalness: 0.48,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.1,
-      transmission: 0.35,
-      transparent: true,
-      opacity: 0,
-      depthWrite: false
-    });
+    const texBubble = createY2KBubbleHeartTexture();
+    const texNeon = createNeonOutlineHeartTexture();
 
     const heartGroup = new THREE.Group();
     scene.add(heartGroup);
-
-    // Trái tim lớn phát sáng trung tâm quả cầu
-    const centerHeartMat = new THREE.MeshPhysicalMaterial({
-      color: 0xff004f,
-      emissive: 0xff1e6d,
-      emissiveIntensity: 0.9,
-      roughness: 0.1,
-      metalness: 0.2,
-      clearcoat: 1.0,
-      transparent: true,
-      opacity: 0
-    });
-    const centerHeartMesh = new THREE.Mesh(heart3DGeo, centerHeartMat);
-    centerHeartMesh.scale.set(13, 13, 13);
-    heartGroup.add(centerHeartMesh);
-
-    // Hàm tính toán tọa độ chiếc Bánh Kem Sinh Nhật 3 Tầng xếp bằng hàng trăm trái tim 3D
-    function generate3DCakePositions(count) {
-      const pts = [];
-
-      // Tầng 1: Đáy bánh (R = 94..80, Y = -55..-25)
-      const n1 = Math.floor(count * 0.40);
-      for (let i = 0; i < n1; i++) {
-        const layer = i % 3;
-        const y = -55 + layer * 14;
-        const r = 94 - layer * 7;
-        const theta = (i / (n1 / 3)) * Math.PI * 2;
-        pts.push(new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta)));
-      }
-
-      // Tầng 2: Giữa bánh (R = 64..52, Y = -10..+16)
-      const n2 = Math.floor(count * 0.30);
-      for (let i = 0; i < n2; i++) {
-        const layer = i % 2;
-        const y = -10 + layer * 15;
-        const r = 62 - layer * 6;
-        const theta = (i / (n2 / 2)) * Math.PI * 2;
-        pts.push(new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta)));
-      }
-
-      // Tầng 3: Đỉnh bánh (R = 36..28, Y = +22..+42)
-      const n3 = Math.floor(count * 0.18);
-      for (let i = 0; i < n3; i++) {
-        const layer = i % 2;
-        const y = 22 + layer * 12;
-        const r = 35 - layer * 6;
-        const theta = (i / (n3 / 2)) * Math.PI * 2;
-        pts.push(new THREE.Vector3(r * Math.cos(theta), y, r * Math.sin(theta)));
-      }
-
-      // Thân nến & Ngọn lửa trái tim rực cháy trên đỉnh bánh (Y = 44..80)
-      const nCandle = count - pts.length;
-      for (let i = 0; i < nCandle; i++) {
-        if (i === 0) {
-          pts.push(new THREE.Vector3(0, 80, 0));
-        } else {
-          const cy = 44 + (i % 4) * 9;
-          const cr = (i > 4 ? 18 : 0);
-          const angle = (i / 4) * Math.PI * 2;
-          pts.push(new THREE.Vector3(cr * Math.cos(angle), cy, cr * Math.sin(angle)));
-        }
-      }
-
-      return pts;
-    }
-
     const heartSprites = [];
-    const TOTAL_HEARTS = 220;
-    const cakePositions = generate3DCakePositions(TOTAL_HEARTS);
+    const TOTAL_HEARTS = 135;
 
     for (let i = 0; i < TOTAL_HEARTS; i++) {
-      const isRoseGold = i % 3 === 0;
-      const mat = (isRoseGold ? roseGoldMaterialBase : rubyMaterialBase).clone();
-      const mesh = new THREE.Mesh(heart3DGeo, mat);
+      const isBubble = i % 3 !== 0;
+      const mat = new THREE.SpriteMaterial({
+        map: isBubble ? texBubble : texNeon,
+        transparent: true,
+        opacity: 0
+      });
+      const sp = new THREE.Sprite(mat);
 
-      // 1. Tọa độ Quả Cầu Fibonacci 3D
       const phi = Math.acos(1 - (2 * (i + 0.5)) / TOTAL_HEARTS);
       const theta = Math.PI * (1 + Math.sqrt(5)) * i;
       const rSphere = 135;
@@ -990,7 +843,6 @@
         rSphere * Math.cos(phi)
       );
 
-      // 2. Tọa độ Lưới Phẳng
       const cols = 6;
       const row = Math.floor(i / cols);
       const col = i % cols;
@@ -1000,161 +852,23 @@
         (Math.random() - 0.5) * 25
       );
 
-      // 3. Tọa độ Bay Tự Do Trong Vũ Trụ
       const freePos = new THREE.Vector3(
-        (Math.random() - 0.5) * 580,
-        (Math.random() - 0.5) * 580,
-        (Math.random() - 0.5) * 480
+        (Math.random() - 0.5) * 560,
+        (Math.random() - 0.5) * 560,
+        (Math.random() - 0.5) * 460
       );
 
-      const baseScale = isRoseGold ? (5.2 + Math.random() * 2.2) : (6.4 + Math.random() * 2.6);
-
-      mesh.userData = {
-        cakePos: cakePositions[i],
+      sp.userData = {
         spherePos,
         gridPos,
         freePos,
-        baseScale,
-        rotSpeed: {
-          x: (Math.random() - 0.5) * 0.02,
-          y: (Math.random() - 0.5) * 0.025,
-          z: (Math.random() - 0.5) * 0.018
-        }
+        baseScale: isBubble ? (22 + Math.random() * 24) : (16 + Math.random() * 14)
       };
+      sp.position.copy(freePos);
+      sp.scale.set(sp.userData.baseScale, sp.userData.baseScale, 1);
 
-      mesh.position.copy(freePos);
-      mesh.scale.set(baseScale, baseScale, baseScale);
-      mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-
-      heartGroup.add(mesh);
-      heartSprites.push(mesh);
-    }
-
-    /* =========================================================================
-       HỆ THỐNG HIỆU ỨNG ÂM THANH KHI CLICK (WEB AUDIO API - ZERO LAG & TỰ NHIÊN)
-       ========================================================================= */
-    let audioCtx = null;
-    function getAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === "suspended") {
-        audioCtx.resume();
-      }
-      return audioCtx;
-    }
-
-    // 1. Tiếng quét mã QR / Click mở đầu (quét beep + chime pha lê)
-    function playScanSound() {
-      try {
-        const ctx = getAudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(620, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1240, ctx.currentTime + 0.16);
-        gain.gain.setValueAtTime(0.12, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.32);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.32);
-      } catch(e) {}
-    }
-
-    // 2. Tiếng khi bắt đầu và trong lúc nhấn giữ (chuỗi nhịp sạc năng lượng tăng dần)
-    function playHoldTickSound(percent) {
-      try {
-        const ctx = getAudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = "sine";
-        const freq = 420 + percent * 4.8;
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        gain.gain.setValueAtTime(0.07, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.08);
-      } catch(e) {}
-    }
-
-    // 3. Tiếng chuông pha lê khi giữ đủ 100% bắt đầu biến hình chữ
-    function playSuccessChime() {
-      try {
-        const ctx = getAudioContext();
-        const notes = [523.25, 659.25, 783.99, 1046.5];
-        notes.forEach((freq, i) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.type = "triangle";
-          osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
-          gain.gain.setValueAtTime(0.12, ctx.currentTime + i * 0.08);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.08 + 0.45);
-          osc.start(ctx.currentTime + i * 0.08);
-          osc.stop(ctx.currentTime + i * 0.08 + 0.45);
-        });
-      } catch(e) {}
-    }
-
-    // 4. Tiếng bung tỏa khi bấm "Click vào nhé" (tiếng sao vỡ / lấp lánh lung linh)
-    function playBurstSound() {
-      try {
-        const ctx = getAudioContext();
-        const notes = [440, 554.37, 659.25, 880, 1108.73, 1318.51];
-        notes.forEach((f, i) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(f, ctx.currentTime + i * 0.045);
-          gain.gain.setValueAtTime(0.09, ctx.currentTime + i * 0.045);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.045 + 0.38);
-          osc.start(ctx.currentTime + i * 0.045);
-          osc.stop(ctx.currentTime + i * 0.045 + 0.38);
-        });
-      } catch(e) {}
-    }
-
-    // 5. Tiếng mở thư phép thuật khi chạm vào Phong Bì Thiên Thần
-    function playEnvelopeOpenSound() {
-      try {
-        const ctx = getAudioContext();
-        const chord = [392.00, 493.88, 587.33, 783.99, 987.77, 1174.66];
-        chord.forEach((freq, idx) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.065);
-          gain.gain.setValueAtTime(0.11, ctx.currentTime + idx * 0.065);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.065 + 0.65);
-          osc.start(ctx.currentTime + idx * 0.065);
-          osc.stop(ctx.currentTime + idx * 0.065 + 0.65);
-        });
-      } catch(e) {}
-    }
-
-    // 6. Tiếng gõ phím nhỏ nhẹ êm ái khi máy gõ từng chữ
-    function playTypingTick() {
-      try {
-        const ctx = getAudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(1350 + Math.random() * 320, ctx.currentTime);
-        gain.gain.setValueAtTime(0.025, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0005, ctx.currentTime + 0.035);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.035);
-      } catch(e) {}
+      heartGroup.add(sp);
+      heartSprites.push(sp);
     }
 
     /* =========================================================================
@@ -1164,7 +878,6 @@
     let lerpSpeed = 0.075;
 
     document.getElementById("qr-scanner-trigger").addEventListener("click", () => {
-      playScanSound();
       const qrScreen = document.getElementById("qr-intro-screen");
       const loadScreen = document.getElementById("loading-screen");
       qrScreen.style.opacity = "0";
@@ -1188,6 +901,10 @@
       if (e) e.preventDefault();
       if (stage !== "NEBULA_WAIT") return;
 
+      const audio = document.getElementById("bg-audio");
+      audio.volume = 0.75;
+      audio.play().catch(() => {});
+
       for (let i = 0; i < P_COUNT; i++) {
         tarPos[i * 3] = curPos[i * 3] * 0.28;
         tarPos[i * 3 + 1] = curPos[i * 3 + 1] * 0.28;
@@ -1197,14 +914,10 @@
       clearInterval(holdTimer);
       holdTimer = setInterval(() => {
         holdPercent += 5;
-        if (holdPercent % 10 === 0) {
-          playHoldTickSound(holdPercent);
-        }
         const offset = 144 - (144 * holdPercent) / 100;
         holdCircle.style.strokeDashoffset = offset;
         if (holdPercent >= 100) {
           clearInterval(holdTimer);
-          playSuccessChime();
           runParticleStoryline();
         }
       }, 35);
@@ -1256,69 +969,47 @@
         pGeo.attributes.color.needsUpdate = true;
       }, 4500);
 
-      // 5. HÀNG TRĂM TRÁI TIM 3D TỪ XA TỰ ĐỘNG BAY VÀO XẾP THÀNH BÁNH KEM SINH NHẬT
+      // 5. Hạt vàng ghép thành Hologram 3D Chiếc Bánh Kem
       setTimeout(() => {
-        stage = "HEART_CAKE";
-        playSuccessChime();
-
-        // Ánh sáng nến sinh nhật ở đỉnh bánh kem
-        corePointLight.position.set(0, 80, 0);
-        gsap.to(corePointLight, { intensity: 4.2, duration: 2.0 });
-
-        // Hạt sao vàng lấp lánh xếp quanh bánh kem
         const cakePts = generateCakeHologramPoints();
-        setParticleTargets(cakePts, "#ffe082", 2.2);
-        pMat.opacity = 0.55;
-
-        // Trái tim ngọn lửa lớn nhất ở đỉnh bánh kem
-        centerHeartMesh.position.set(0, 82, 0);
-        gsap.to(centerHeartMat, { opacity: 1, duration: 1.5 });
-        gsap.to(centerHeartMesh.scale, { x: 12, y: 12, z: 12, duration: 1.5 });
-
-        // Từng trái tim từ xa bay vào lắp ghép chính xác vào từng tầng bánh kem
-        heartSprites.forEach((sp, idx) => {
-          gsap.to(sp.material, { opacity: 1, duration: 1.2, delay: idx * 0.003 });
-          gsap.to(sp.position, {
-            x: sp.userData.cakePos.x,
-            y: sp.userData.cakePos.y,
-            z: sp.userData.cakePos.z,
-            duration: 2.4,
-            ease: "power3.out"
-          });
-        });
+        setParticleTargets(cakePts, "#ffe082", 2.0);
       }, 5600);
 
-      // 6. Chiếc bánh kem trái tim chuyển hóa thành Quả Cầu Trái Tim 3D
+      // 6. Hiện bức ảnh Bánh Kem Thật
+      setTimeout(() => {
+        document.getElementById("cake-photo-box").classList.add("show");
+        gsap.to(pMat, { opacity: 0.15, duration: 1.0 });
+      }, 6900);
+
+      // 7. Bánh kem mờ đi, để lại bầu trời sao
+      setTimeout(() => {
+        document.getElementById("cake-photo-box").classList.remove("show");
+        gsap.to(pMat, { opacity: 0, duration: 0.8 });
+      }, 10500);
+
+      // 8. Quả Cầu Trái Tim 3D + Hào quang hồng
       setTimeout(() => {
         stage = "HEART_SPHERE";
         controls.enabled = true;
         document.getElementById("sphere-core-glow").style.opacity = "1";
 
-        // Hạ điểm sáng về tâm quả cầu
-        gsap.to(corePointLight.position, { x: 0, y: 0, z: 0, duration: 1.6 });
-        gsap.to(corePointLight, { intensity: 3.5, duration: 1.6 });
-
-        // Đưa trái tim lớn về tâm quả cầu
-        gsap.to(centerHeartMesh.position, { x: 0, y: 0, z: 0, duration: 1.6 });
-        gsap.to(centerHeartMat, { opacity: 0.95, duration: 1.5 });
-        gsap.to(pMat, { opacity: 0.08, duration: 1.2 });
-
         heartSprites.forEach((sp, idx) => {
+          gsap.to(sp.material, { opacity: 1, duration: 0.9, delay: idx * 0.005 });
           gsap.to(sp.position, {
             x: sp.userData.spherePos.x,
             y: sp.userData.spherePos.y,
             z: sp.userData.spherePos.z,
-            duration: 2.0,
+            duration: 1.8,
             ease: "power3.out"
           });
         });
-      }, 12800);
+      }, 12200);
 
-      // 7. Xếp thành Lưới Phẳng + Hiện chữ "Click vào nhé"
+      // 9. Xếp thành Lưới Phẳng + Hiện chữ "Click vào nhé"
       setTimeout(() => {
         stage = "HEART_GRID";
         gsap.to(heartGroup.rotation, { x: 0, y: 0, z: 0, duration: 1.2 });
-        heartSprites.slice(0, 48).forEach((sp) => {
+        heartSprites.slice(0, 42).forEach((sp) => {
           gsap.to(sp.position, {
             x: sp.userData.gridPos.x,
             y: sp.userData.gridPos.y,
@@ -1328,19 +1019,15 @@
           });
         });
         document.getElementById("click-grid-hint").classList.add("show");
-      }, 18000);
+      }, 16800);
     }
 
     // 10. Chạm vào "Click vào nhé" -> Trái tim bay tự do & Hiện Phong bì thiên thần
     function scatterHeartsToSpace() {
       if (stage !== "HEART_GRID" && stage !== "HEART_SPHERE") return;
-      playBurstSound();
       stage = "HEART_FREE";
       document.getElementById("click-grid-hint").classList.remove("show");
       document.getElementById("sphere-core-glow").style.opacity = "0";
-
-      gsap.to(centerHeartMat, { opacity: 0, duration: 1.0 });
-      gsap.to(corePointLight, { intensity: 0.5, duration: 1.2 });
 
       heartSprites.forEach((sp) => {
         gsap.to(sp.position, {
@@ -1364,7 +1051,6 @@
 
     // 11. Chạm vào Phong Bì -> Mở Thư Hồng Tự Cuộn + Gõ chữ + Hiện Ảnh
     document.getElementById("winged-envelope").addEventListener("click", () => {
-      playEnvelopeOpenSound();
       const env = document.getElementById("winged-envelope");
       document.getElementById("wing-l").style.opacity = "0";
       document.getElementById("wing-r").style.opacity = "0";
@@ -1384,15 +1070,11 @@
         const fullMsg = CONFIG.letterText;
         const typer = setInterval(() => {
           contentEl.textContent += fullMsg.charAt(idx);
-          if (idx % 2 === 0) {
-            playTypingTick();
-          }
           // Tự động cuộn mượt xuống theo từng dòng chữ đang được gõ
           card.scrollTop = card.scrollHeight;
           idx++;
           if (idx >= fullMsg.length) {
             clearInterval(typer);
-            playSuccessChime();
             document.getElementById("type-cursor").style.display = "none";
             const photoFrame = document.getElementById("letter-photo-frame");
             photoFrame.classList.add("expand");
@@ -1405,20 +1087,13 @@
     });
 
     /* =========================================================================
-       VÒNG LẶP RENDER 60FPS CHÂN THỰC & ĐIỆN ẢNH
+       VÒNG LẶP RENDER 60FPS
        ========================================================================= */
-    const animClock = new THREE.Clock();
-
     function animate() {
       requestAnimationFrame(animate);
-      const elapsed = animClock.getElapsedTime();
 
-      // 1. Vũ trụ trôi chậm & mây tinh vân bồng bềnh
-      starField.rotation.y = elapsed * 0.012;
-      starField.rotation.x = elapsed * 0.006;
-      nebulaGroup.rotation.y = elapsed * 0.007;
+      starField.rotation.y += 0.0005;
 
-      // 2. Chuyển động hạt chữ biến hình
       if (stage === "NEBULA_WAIT" || stage === "MORPH_TEXT") {
         if (stage === "NEBULA_WAIT") {
           mainParticles.rotation.z += 0.003;
@@ -1432,38 +1107,8 @@
         pGeo.attributes.position.needsUpdate = true;
       }
 
-      // 3. Nhịp đập Trái Tim Chân Thật (Physiological Heartbeat Pulse 2 thì: Bùm - Tặc)
-      const beatCycle = (elapsed * 1.25) % 1.0;
-      let pulse = 1.0;
-      if (beatCycle < 0.12) {
-        pulse += Math.sin((beatCycle / 0.12) * Math.PI) * 0.085;
-      } else if (beatCycle >= 0.16 && beatCycle < 0.28) {
-        pulse += Math.sin(((beatCycle - 0.16) / 0.12) * Math.PI) * 0.05;
-      }
-
-      // 4. Từng khối trái tim 3D tự lượn xoay nhẹ phản chiếu ánh sáng pha lê
-      heartSprites.forEach((mesh) => {
-        mesh.rotation.x += mesh.userData.rotSpeed.x;
-        mesh.rotation.y += mesh.userData.rotSpeed.y;
-        mesh.rotation.z += mesh.userData.rotSpeed.z;
-
-        if (stage === "HEART_CAKE" || stage === "HEART_SPHERE" || stage === "HEART_FREE") {
-          const bs = mesh.userData.baseScale * pulse;
-          mesh.scale.set(bs, bs, bs);
-        }
-      });
-
-      if (centerHeartMesh) {
-        const cs = 13 * pulse;
-        centerHeartMesh.scale.set(cs, cs, cs);
-        centerHeartMesh.rotation.y += 0.014;
-      }
-
-      // 5. Xoay chuyển động bánh kem hoặc quả cầu 3D
-      if (stage === "HEART_CAKE") {
-        heartGroup.rotation.y += 0.007; // Chiếc bánh kem 3D xoay 360 độ quanh trục
-      } else if (stage === "HEART_SPHERE") {
-        heartGroup.rotation.y += 0.006;
+      if (stage === "HEART_SPHERE") {
+        heartGroup.rotation.y += 0.007;
         controls.update();
       } else if (stage === "HEART_FREE") {
         heartGroup.rotation.y += 0.002;
