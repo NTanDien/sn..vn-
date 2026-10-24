@@ -71,7 +71,7 @@
       align-items: center;
       justify-content: center;
       transform: rotate(16deg);
-      filter: drop-shadow(0 0 16px rgba(255, 20, 50, 0.4));
+      filter: drop-shadow(0 0 24px rgba(255, 25, 60, 0.65));
       animation: heartBeat 1.5s infinite ease-in-out;
     }
     @keyframes heartBeat {
@@ -89,14 +89,18 @@
       position: relative;
       z-index: 2;
       transform: rotate(45deg);
-      margin-top: -12px;
-      background: transparent;
-      padding: 0;
-      box-shadow: none;
+      margin-top: -10px;
+      background: rgba(255, 255, 255, 0.94);
+      padding: 4px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 30, 60, 0.4), inset 0 0 4px rgba(255, 255, 255, 0.8);
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 0 10px rgba(255, 30, 60, 0.75));
+    }
+    #heart-qr-box canvas, #heart-qr-box svg {
+      border-radius: 10px;
+      display: block;
     }
     .qr-hint {
       margin-top: 28px;
@@ -439,15 +443,15 @@
       <div class="red-heart-qr-wrap">
         <svg class="red-heart-svg" viewBox="0 0 260 250">
           <defs>
-            <radialGradient id="redHeartGrad" cx="50%" cy="40%" r="65%">
-              <stop offset="0%" stop-color="#2c0208"/>
-              <stop offset="65%" stop-color="#180005"/>
-              <stop offset="100%" stop-color="#0d0003"/>
+            <radialGradient id="redHeartGrad" cx="48%" cy="38%" r="62%">
+              <stop offset="0%" stop-color="#ff3b5c"/>
+              <stop offset="55%" stop-color="#e60029"/>
+              <stop offset="100%" stop-color="#ab001a"/>
             </radialGradient>
           </defs>
-          <!-- Nền trái tim đỏ sẫm dịu mắt, viền đỏ tinh tế, đáy trái tim nhọn 90 độ -->
+          <!-- Trái tim màu đỏ tươi rực rỡ, viền sắc nét, đáy nhọn 90 độ ăn khớp góc vuông QR -->
           <path fill="url(#redHeartGrad)" 
-                stroke="#ff2448" stroke-width="2.5" stroke-linejoin="round"
+                stroke="#ff4d6d" stroke-width="2" stroke-linejoin="round"
                 d="M130,230 
                    L40,140 
                    C12,112 12,62 45,32 
@@ -555,13 +559,13 @@
         : window.location.href;
 
       const qr = new QRCodeStyling({
-        width: 125,
-        height: 125,
+        width: 120,
+        height: 120,
         data: liveUrl,
-        margin: 2,
-        dotsOptions: { color: "#ff2042", type: "rounded" },
-        cornersSquareOptions: { color: "#ff2042", type: "extra-rounded" },
-        cornersDotOptions: { color: "#ff2042", type: "dot" },
+        margin: 4,
+        dotsOptions: { color: "#c80028", type: "rounded" },
+        cornersSquareOptions: { color: "#b00020", type: "extra-rounded" },
+        cornersDotOptions: { color: "#d90029", type: "dot" },
         backgroundOptions: { color: "transparent" }
       });
       qr.append(document.getElementById("heart-qr-box"));
