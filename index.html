@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>🎂 Happy Birthday Nàng Thơ — Món Quà Kỳ Diệu</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Dynamic Atmospheric Background -->
+    <div class="sky-background">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+        <div class="aurora-wave"></div>
+        <div id="petal-container" class="petal-container"></div>
+        <div id="sparkle-layer" class="sparkle-layer"></div>
+    </div>
+
+    <!-- Main Mobile Container -->
+    <div id="app" class="app-container">
+
+        <!-- Top Status Bar: The Magic Vault & Gems Progress -->
+        <header id="magic-topbar" class="magic-topbar">
+            <div class="topbar-glass">
+                <div class="topbar-brand">
+                    <span class="crown-icon">👑</span>
+                    <div class="brand-text">
+                        <span class="brand-subtitle">Dành Tặng Công Chúa</span>
+                        <h2 class="brand-title" id="topbar-name">Nàng Thơ</h2>
+                    </div>
+                </div>
+
+                <!-- 4 Secret Gem Slots -->
+                <div class="vault-progress">
+                    <div class="gem-slot" id="slot-0" data-tooltip="Gương Thần">
+                        <span class="gem-inner">?</span>
+                    </div>
+                    <div class="gem-slot" id="slot-1" data-tooltip="Ký Ức">
+                        <span class="gem-inner">?</span>
+                    </div>
+                    <div class="gem-slot" id="slot-2" data-tooltip="Hộp Quà">
+                        <span class="gem-inner">?</span>
+                    </div>
+                    <div class="gem-slot" id="slot-3" data-tooltip="Nguyện Ước">
+                        <span class="gem-inner">?</span>
+                    </div>
+                </div>
+
+                <!-- Music Synthesizer Disc -->
+                <button class="music-toggle-btn" id="music-btn" aria-label="Bật tắt nhạc lãng mạn">
+                    <div class="music-disc-visual">
+                        <span class="disc-icon">🌸</span>
+                        <div class="sound-wave-bars">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </header>
+
+        <!-- ========================================================
+             MÀN HÌNH 0: CỔNG PHA LÊ & MÃ QR NGHỆ THUẬT SIÊU HUYỀN BÍ
+        ======================================================== -->
+        <section class="screen active" id="screen-0">
+            <div class="screen-scroll-wrap">
+                <div class="hero-header">
+                    <div class="romantic-badge">
+                        <span class="badge-spark">✦</span>
+                        <span>MÓN QUÀ BÍ MẬT ĐỘC QUYỀN</span>
+                        <span class="badge-spark">✦</span>
+                    </div>
+                    <h1 class="hero-title">
+                        Có Một Điều Kỳ Diệu<br>
+                        <span class="gradient-text-gold">Đang Chờ Đón Nàng...</span>
+                    </h1>
+                    <p class="hero-desc">
+                        Cánh cổng này chỉ mở duy nhất vào ngày hôm nay. Hãy mở ra bức thư kỳ diệu bên trong nhé!
+                    </p>
+                </div>
+
+                <!-- Luxury Hologram QR Box -->
+                <div class="qr-luxury-card floating-anim">
+                    <div class="hologram-border"></div>
+                    <div class="luxury-ribbon-tag">🎀 SECRET GIFT 🎀</div>
+                    
+                    <div class="qr-canvas-holder" id="qr-target-box">
+                        <div id="qr-code-render"></div>
+                        <div class="laser-scanner"></div>
+                    </div>
+
+                    <div class="qr-card-footer">
+                        <span class="qr-safe-tag">🔒 Chỉ người được chọn mới có thể mở</span>
+                    </div>
+                </div>
+
+                <!-- Scanning Progress Bar (Shows on Tap) -->
+                <div class="unlocking-bar-wrap" id="unlock-progress-wrap">
+                    <div class="unlocking-bar">
+                        <div class="unlocking-fill" id="unlock-progress-fill"></div>
+                    </div>
+                    <span class="unlocking-status" id="unlock-progress-text">Đang nhận diện công chúa... 0%</span>
+                </div>
+
+                <!-- Big Shiny Action Button -->
+                <button class="btn-royal-gradient" id="btn-start-scan">
+                    <span class="btn-icon">✨</span>
+                    <span class="btn-text">Chạm Để Mở Cánh Cổng Bí Mật</span>
+                    <span class="btn-icon">✨</span>
+                </button>
+
+                <p class="camera-hint">
+                    <span>📱</span> Hoặc dùng camera điện thoại quét mã QR bên trên
+                </p>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             MÀN HÌNH 1: CHIẾC GƯƠNG THẦN KỲ (Nhan Sắc Triệu Like)
+        ======================================================== -->
+        <section class="screen" id="screen-1">
+            <div class="screen-scroll-wrap">
+                <div class="section-badge-header">
+                    <div class="sub-badge">Chặng 01 / 04</div>
+                    <h2 class="section-title">🪞 Chiếc Gương Thần</h2>
+                    <p class="section-desc">
+                        Gương kia ngự ở trên tường, thế gian ai đẹp được dường như em? Chạm chọn ít nhất 3 bức ảnh nàng thấy xinh nhất nào!
+                    </p>
+                </div>
+
+                <!-- 3x3 Photo Captcha Grid -->
+                <div class="mirror-grid" id="captcha-grid"></div>
+
+                <!-- Validation Status Notification -->
+                <div class="mirror-feedback" id="captcha-feedback">
+                    Chạm vào ảnh để chọn những khoảnh khắc rạng rỡ nhất ✨
+                </div>
+
+                <button class="btn-royal-gradient" id="btn-confirm-mirror">
+                    <span class="btn-icon">💖</span>
+                    <span class="btn-text">Xác Nhận Nhan Sắc Cực Phẩm</span>
+                    <span class="btn-icon">💖</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             MÀN HÌNH 2: BẢO TÀNG KÝ ỨC (Nàng Thơ Wrapped & 3D Polaroid)
+        ======================================================== -->
+        <section class="screen" id="screen-2">
+            <div class="screen-scroll-wrap">
+                <div class="section-badge-header">
+                    <div class="sub-badge">Chặng 02 / 04</div>
+                    <h2 class="section-title">📸 Nàng Thơ Wrapped</h2>
+                    <p class="section-desc">
+                        Những con số biết nói và những lát cắt cảm xúc tuyệt vời nhất của em trong năm qua!
+                    </p>
+                </div>
+
+                <!-- 3 Wrapped Horizontal Stat Cards -->
+                <div class="wrapped-stats-container">
+                    <div class="stat-pill glass-morphism">
+                        <div class="stat-num gradient-gold">365</div>
+                        <div class="stat-meta">Ngày Tỏa Sáng</div>
+                    </div>
+                    <div class="stat-pill glass-morphism star-pill">
+                        <div class="stat-num gradient-pink">1000%</div>
+                        <div class="stat-meta">Độ Đáng Yêu</div>
+                    </div>
+                    <div class="stat-pill glass-morphism">
+                        <div class="stat-num gradient-gold">01</div>
+                        <div class="stat-meta">Bản Độc Quyền</div>
+                    </div>
+                </div>
+
+                <!-- 3D Interactive Polaroid Cards -->
+                <div class="polaroid-deck" id="polaroid-container"></div>
+
+                <div class="album-counter" id="polaroid-counter-text">
+                    Chạm vào từng tấm ảnh để lật mặt sau đọc lời nhắn bí mật (0/3) 💌
+                </div>
+
+                <button class="btn-royal-gradient btn-disabled" id="btn-next-to-gacha" disabled>
+                    <span class="btn-icon">🔓</span>
+                    <span class="btn-text">Lật Đủ 3 Tấm Để Mở Chặng Tiếp</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             MÀN HÌNH 3: RƯƠNG GACHA PHA LÊ (Rút Thẻ Đặc Quyền VIP)
+        ======================================================== -->
+        <section class="screen" id="screen-3">
+            <div class="screen-scroll-wrap">
+                <div class="section-badge-header">
+                    <div class="sub-badge">Chặng 03 / 04</div>
+                    <h2 class="section-title">🎁 Rương Thần Kỳ Gacha</h2>
+                    <p class="section-desc">
+                        Chạm vào từng hộp quà may mắn để mở khóa 3 tấm thẻ đặc quyền tối thượng!
+                    </p>
+                </div>
+
+                <!-- 3 Wobbling Gift Boxes -->
+                <div class="gacha-shelf">
+                    <div class="gacha-item wobbler" data-index="0" onclick="handleOpenGacha(0)">
+                        <div class="gacha-aura-glow"></div>
+                        <div class="gacha-box-shell">
+                            <span class="gacha-emoji">🎁</span>
+                        </div>
+                        <span class="gacha-title">Hộp Ruby</span>
+                    </div>
+
+                    <div class="gacha-item wobbler delay-1" data-index="1" onclick="handleOpenGacha(1)">
+                        <div class="gacha-aura-glow"></div>
+                        <div class="gacha-box-shell">
+                            <span class="gacha-emoji">🎀</span>
+                        </div>
+                        <span class="gacha-title">Hộp Thạch Anh</span>
+                    </div>
+
+                    <div class="gacha-item wobbler delay-2" data-index="2" onclick="handleOpenGacha(2)">
+                        <div class="gacha-aura-glow"></div>
+                        <div class="gacha-box-shell">
+                            <span class="gacha-emoji">👑</span>
+                        </div>
+                        <span class="gacha-title">Hộp Vương Miện</span>
+                    </div>
+                </div>
+
+                <!-- Vouchers List Display -->
+                <div class="voucher-collection" id="voucher-cards-list"></div>
+
+                <button class="btn-royal-gradient btn-disabled" id="btn-next-to-cake" disabled>
+                    <span class="btn-icon">🎂</span>
+                    <span class="btn-text">Mở Đủ 3 Quà Để Tiếp Tục</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================
+             MÀN HÌNH 4: NGHI THỨC THỔI NẾN THẬT & MỞ TOANG KÉT SẮT
+        ======================================================== -->
+        <section class="screen" id="screen-4">
+            <div class="screen-scroll-wrap">
+                <div class="section-badge-header">
+                    <div class="sub-badge">Chặng Cuối Cùng</div>
+                    <h2 class="section-title">🎂 Nghi Thức Thổi Nến</h2>
+                    <p class="section-desc" id="candle-instructions">
+                        Nhắm mắt lại, ước một điều thật dịu dàng trong lòng... rồi thổi thật mạnh vào micro nhé!
+                    </p>
+                </div>
+
+                <!-- Handcrafted Grand 3-Tier Birthday Cake in CSS -->
+                <div class="grand-cake-arena">
+                    <div class="candle-construct" id="candle-interact">
+                        <div class="flame-halo" id="flame-glow"></div>
+                        <div class="flame-fire" id="flame-element"></div>
+                        <div class="candle-stick">
+                            <div class="wax-spiral"></div>
+                        </div>
+                    </div>
+
+                    <div class="grand-cake-body">
+                        <!-- Top Tier -->
+                        <div class="cake-tier tier-top">
+                            <div class="cream-icing">
+                                <span class="icing-drip d-1"></span>
+                                <span class="icing-drip d-2"></span>
+                                <span class="icing-drip d-3"></span>
+                                <span class="icing-drip d-4"></span>
+                            </div>
+                            <div class="berry-toppings">🍓 ✨ 🍓</div>
+                        </div>
+                        <!-- Middle Tier -->
+                        <div class="cake-tier tier-mid">
+                            <div class="gold-ribbon-line"></div>
+                            <div class="macaron-decor">🌸 🌸 🌸 🌸</div>
+                        </div>
+                        <!-- Bottom Tier -->
+                        <div class="cake-tier tier-bottom">
+                            <div class="cake-engraving">💖 Happy Birthday Princess 💖</div>
+                        </div>
+                        <!-- Luxury Porcelain Plate -->
+                        <div class="gold-plate"></div>
+                    </div>
+                </div>
+
+                <!-- Blow Controls: Microphone & Touch Fallback -->
+                <div class="blowing-interaction-box" id="blow-action-area">
+                    <button class="btn-royal-gradient btn-mic-pulse" id="btn-activate-mic">
+                        <span class="btn-icon">🎤</span>
+                        <span class="btn-text" id="mic-btn-label">Bật Micro Thổi Nến Thật</span>
+                        <span class="btn-icon">💨</span>
+                    </button>
+                    <div class="mic-volume-meter" id="mic-meter" style="display: none;">
+                        <div class="meter-bar" id="meter-fill"></div>
+                    </div>
+                    <p class="candle-touch-hint">🕯️ Hoặc chạm trực tiếp vào ngọn nến để thổi tắt</p>
+                </div>
+
+                <!-- FINAL VAULT UNLOCKED: Grand Reveal Letter -->
+                <div class="final-treasure-chest" id="final-box-reveal" style="display: none;">
+                    <div class="unlocked-vault-badge">
+                        <span>✨ KÉT SẮT ĐÃ MỞ TOÀN BỘ ✨</span>
+                    </div>
+
+                    <!-- 4 Secret Digits Revealed -->
+                    <div class="revealed-code-row" id="final-code-display"></div>
+
+                    <!-- Parchment Letter -->
+                    <div class="letter-scroll-parchment">
+                        <div class="parchment-stamp">💌</div>
+                        <div class="letter-body-content" id="final-letter-content"></div>
+                        <div class="parchment-signature">
+                            <p class="sign-text">Yêu thương vô điều kiện,</p>
+                            <span class="sign-heart">💖✨🌸</span>
+                        </div>
+                    </div>
+
+                    <button class="btn-replay" id="btn-replay-journey" onclick="restartJourney()">
+                        <span>🔄</span> Xem Lại Hành Trình Từ Đầu
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Application Script -->
+    <script src="script.js"></script>
+</body>
+</html>
