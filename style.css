@@ -1,26 +1,31 @@
 /* ==========================================================================
-   🎂 AESTHETIC LUXURY BIRTHDAY DESIGN SYSTEM (CLEAN & PREMIUM)
+   🌌 AESTHETIC MULTI-SCENE DESIGN SYSTEM (3 DISTINCT IMMERSIVE WORLDS)
    ========================================================================== */
 
 :root {
-    /* Sophisticated Pastel Luxury Palette */
-    --bg-base: #fdfaf7;
-    --bg-soft-pink: #fbf2f4;
-    --bg-card: rgba(255, 255, 255, 0.88);
-    
-    --rose-gold: #c98897;
-    --rose-deep: #a6586b;
-    --champagne: #dfb387;
-    --champagne-light: #f7ede2;
-    
-    --text-main: #332328;
-    --text-muted: #7f6a71;
-    --text-faint: #b4a2a8;
-    
-    --border-luxury: 1px solid rgba(201, 136, 151, 0.22);
-    --shadow-soft: 0 16px 40px rgba(166, 88, 107, 0.08);
-    --shadow-card: 0 20px 50px rgba(80, 40, 50, 0.09);
-    
+    /* Palette 1: Pearl Silk & Soft Rose (Daylight Atelier) */
+    --p1-bg: #fdf8f9;
+    --p1-rose-gold: #c98897;
+    --p1-champagne: #dfb387;
+    --p1-card-bg: rgba(255, 255, 255, 0.88);
+    --p1-text-main: #342228;
+    --p1-text-sub: #78636b;
+
+    /* Palette 2: Warm Amber Sunset & Romantic Glow */
+    --p2-sunset-1: #fae1dd;
+    --p2-sunset-2: #fcd5ce;
+    --p2-sunset-3: #f8edeb;
+    --p2-amber: #e76f51;
+    --p2-rose-deep: #b54f67;
+    --p2-text-main: #2b1d1f;
+
+    /* Palette 3: Velvet Midnight Galaxy & Starry Gala */
+    --p3-night-1: #0d091a;
+    --p3-night-2: #1b1233;
+    --p3-night-3: #2d1847;
+    --p3-gold-bright: #ffdf85;
+    --p3-text-light: #fef7ec;
+
     /* Typography */
     --font-serif: 'Cormorant Garamond', serif;
     --font-script: 'Dancing Script', cursive;
@@ -39,88 +44,228 @@
 
 html {
     scroll-behavior: smooth;
-    background-color: #f7f1ee;
+    background-color: #0d091a;
 }
 
 body {
     font-family: var(--font-sans);
-    color: var(--text-main);
+    color: var(--p1-text-main);
     min-height: 100dvh;
     display: flex;
     justify-content: center;
-    background: linear-gradient(180deg, #fefbfc 0%, #fbf3f5 50%, #f7edf0 100%);
     overflow-x: hidden;
     position: relative;
+    transition: background 0.8s ease;
 }
 
 /* ==========================================================================
-   🌸 AMBIENT GLOW & SAKURA DUST
+   🌌 3 HỆ THỐNG BACKGROUND CHÂN THẬT CHO TỪNG TRANG
    ========================================================================== */
-.ambient-glow {
+.scene-backgrounds {
     position: fixed;
     inset: 0;
-    pointer-events: none;
     z-index: 0;
+    pointer-events: none;
     overflow: hidden;
 }
 
-.glow-circle {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.55;
-}
-
-.gc-1 {
-    width: 320px;
-    height: 320px;
-    background: radial-gradient(circle, #f9d8e0 0%, transparent 70%);
-    top: -60px;
-    right: -60px;
-}
-
-.gc-2 {
-    width: 380px;
-    height: 380px;
-    background: radial-gradient(circle, #f6e6d7 0%, transparent 70%);
-    bottom: -80px;
-    left: -80px;
-}
-
-.floating-petals {
+.bg-layer {
     position: absolute;
     inset: 0;
+    opacity: 0;
+    transition: opacity 1s var(--ease-out-quint), transform 1s var(--ease-out-quint);
+    transform: scale(1.04);
 }
 
-.dust-particle {
+.bg-layer.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ----------------------------------------------------
+   NỀN TRANG 1: Lụa Ngọc Trai & Bụi Vàng Nắng Sớm
+---------------------------------------------------- */
+.layer-1 {
+    background: linear-gradient(160deg, #fef8f9 0%, #fbf1f4 45%, #f6e6ec 100%);
+}
+
+.pearl-mesh {
     position: absolute;
-    top: -30px;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(255, 230, 238, 0.7) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(254, 243, 235, 0.8) 0%, transparent 60%);
+}
+
+.sunbeam-light {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(255, 250, 240, 0.9) 0%, rgba(223, 179, 135, 0.15) 50%, transparent 70%);
+    filter: blur(40px);
+}
+
+.silk-ribbon-decor {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.4;
+    animation: ribbonFloat 12s infinite alternate ease-in-out;
+}
+
+.decor-1 {
+    width: 300px;
+    height: 300px;
+    background: #f8bbd0;
+    bottom: -60px;
+    left: -60px;
+}
+
+.decor-2 {
+    width: 260px;
+    height: 260px;
+    background: #ffe0b2;
+    top: 30%;
+    right: -40px;
+    animation-delay: -6s;
+}
+
+@keyframes ribbonFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, -30px) scale(1.15); }
+}
+
+.particle-field .p1-dust {
+    position: absolute;
+    color: var(--p1-champagne);
     user-select: none;
     pointer-events: none;
-    opacity: 0;
-    animation: driftDown linear infinite;
-    font-size: 14px;
+    animation: dustRise var(--dur, 6s) infinite linear;
+    filter: drop-shadow(0 0 4px rgba(223, 179, 135, 0.6));
 }
 
-@keyframes driftDown {
-    0% {
-        opacity: 0;
-        transform: translateY(0) rotate(0deg);
-    }
-    15% {
-        opacity: 0.7;
-    }
-    85% {
-        opacity: 0.6;
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(105dvh) rotate(360deg);
-    }
+@keyframes dustRise {
+    0% { opacity: 0; transform: translateY(105dvh) rotate(0deg); }
+    20% { opacity: 0.8; }
+    80% { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-30px) rotate(360deg); }
+}
+
+/* ----------------------------------------------------
+   NỀN TRANG 2: Hoàng Hôn Lãng Mạn & Bokeh Ấm Áp
+---------------------------------------------------- */
+.layer-2 {
+    background: linear-gradient(170deg, #fceade 0%, #fad2e1 40%, #eddcd2 80%, #dfccf1 100%);
+}
+
+.sunset-warmth {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(255, 209, 193, 0.8) 0%, transparent 70%);
+}
+
+.bokeh-orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 238, 204, 0.65) 0%, rgba(255, 183, 178, 0.2) 70%, transparent 100%);
+    filter: blur(14px);
+    animation: bokehWander var(--b-dur, 8s) infinite ease-in-out alternate;
+}
+
+@keyframes bokehWander {
+    0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
+    50% { opacity: 0.7; }
+    100% { transform: translateY(-40px) translateX(25px) scale(1.25); opacity: 0.4; }
+}
+
+.rose-petals-field .p2-petal {
+    position: absolute;
+    user-select: none;
+    pointer-events: none;
+    animation: petalSway var(--p-dur, 7s) infinite linear;
+    filter: drop-shadow(0 4px 8px rgba(181, 79, 103, 0.2));
+}
+
+@keyframes petalSway {
+    0% { opacity: 0; transform: translateY(-20px) rotate(0deg) translateX(0); }
+    15% { opacity: 0.75; }
+    85% { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(105dvh) rotate(360deg) translateX(40px); }
+}
+
+/* ----------------------------------------------------
+   NỀN TRANG 3: Dạ Tiệc Đêm Sao & Sao Băng Huyền Diệu
+---------------------------------------------------- */
+.layer-3 {
+    background: linear-gradient(180deg, #090614 0%, #170e2e 45%, #251240 85%, #150929 100%);
+}
+
+.midnight-sky {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 65%, rgba(94, 43, 138, 0.35) 0%, transparent 65%);
+}
+
+.cake-spotlight {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 380px;
+    background: radial-gradient(ellipse at 50% 50%, rgba(255, 223, 133, 0.18) 0%, rgba(186, 104, 200, 0.08) 50%, transparent 75%);
+    filter: blur(30px);
+    pointer-events: none;
+}
+
+.star-point {
+    position: absolute;
+    background: #ffffff;
+    border-radius: 50%;
+    animation: starTwinkle var(--s-dur, 3s) infinite ease-in-out;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px rgba(255, 223, 133, 0.4);
+}
+
+@keyframes starTwinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.7); }
+    50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* Shooting Stars */
+.shooting-star {
+    position: absolute;
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 223, 133, 0.5), transparent);
+    transform: rotate(-35deg);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ss-1 {
+    top: 12%;
+    left: 20%;
+    animation: shootStar 7s infinite ease-in;
+    animation-delay: 2s;
+}
+
+.ss-2 {
+    top: 25%;
+    left: 55%;
+    animation: shootStar 9s infinite ease-in;
+    animation-delay: 5.5s;
+}
+
+@keyframes shootStar {
+    0% { opacity: 0; transform: translate(0, 0) rotate(-35deg); }
+    5% { opacity: 1; }
+    15% { opacity: 0; transform: translate(160px, 120px) rotate(-35deg); }
+    100% { opacity: 0; transform: translate(160px, 120px) rotate(-35deg); }
 }
 
 /* ==========================================================================
-   🎵 FLOATING MUSIC PILL
+   🎵 MUSIC PILL
    ========================================================================== */
 .music-pill {
     position: fixed;
@@ -129,7 +274,7 @@ body {
     z-index: 999;
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
-    border: var(--border-luxury);
+    border: 1px solid rgba(201, 136, 151, 0.25);
     border-radius: 30px;
     padding: 8px 16px;
     display: flex;
@@ -137,27 +282,22 @@ body {
     gap: 6px;
     cursor: pointer;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
 }
 
-.music-pill:active {
-    transform: scale(0.95);
+body[data-page="3"] .music-pill {
+    background: rgba(27, 18, 51, 0.8);
+    border-color: rgba(255, 223, 133, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.music-icon {
-    font-size: 14px;
+body[data-page="3"] .music-label {
+    color: var(--p3-gold-bright);
 }
 
-.music-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-}
-
-.music-pill.playing {
-    border-color: var(--rose-gold);
-    background: #ffffff;
-}
+.music-pill:active { transform: scale(0.95); }
+.music-icon { font-size: 14px; }
+.music-label { font-size: 12px; font-weight: 600; color: var(--p1-text-sub); }
 
 .music-pill.playing .music-icon {
     animation: spinRotate 3s linear infinite;
@@ -168,7 +308,7 @@ body {
 }
 
 /* ==========================================================================
-   📱 APP VIEWPORT (MOBILE-FIRST 430PX)
+   📱 APP VIEWPORT & PAGE CONTAINERS
    ========================================================================== */
 .app-viewport {
     position: relative;
@@ -180,18 +320,17 @@ body {
     flex-direction: column;
 }
 
-/* Page transitions */
 .page {
     display: none;
     min-height: 100dvh;
     width: 100%;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
 }
 
 .page.active {
     display: block;
-    animation: pageFadeIn 0.7s var(--ease-out-quint) forwards;
+    animation: pageFadeIn 0.75s var(--ease-out-quint) forwards;
 }
 
 .page.fade-out {
@@ -199,25 +338,13 @@ body {
 }
 
 @keyframes pageFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pageFadeOut {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-24px); }
 }
 
 .page-content {
@@ -230,47 +357,47 @@ body {
 }
 
 /* Section Header Typography */
-.section-tag-row {
-    margin-bottom: 8px;
-}
+.section-tag-row { margin-bottom: 8px; }
 
 .section-tag {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
-    color: var(--rose-gold);
+    color: var(--p1-rose-gold);
     text-transform: uppercase;
 }
+
+.tag-sunset { color: var(--p2-rose-deep); }
+.tag-night { color: var(--p3-gold-bright); text-shadow: 0 0 10px rgba(255, 223, 133, 0.4); }
 
 .page-headline {
     font-family: var(--font-serif);
     font-size: 30px;
     font-weight: 600;
-    color: var(--text-main);
     text-align: center;
     line-height: 1.25;
     margin-bottom: 6px;
 }
 
+.headline-sunset { color: var(--p2-text-main); }
+.headline-night { color: var(--p3-text-light); text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6); }
+
 .page-subline {
     font-size: 13.5px;
-    color: var(--text-muted);
     text-align: center;
     max-width: 320px;
-    line-height: 1.5;
+    line-height: 1.55;
     margin-bottom: 24px;
 }
 
-/* ==========================================================================
-   ✨ AESTHETIC ROYAL BUTTON
-   ========================================================================== */
+.subline-sunset { color: var(--p2-rose-deep); opacity: 0.85; }
+.subline-night { color: rgba(254, 247, 236, 0.75); }
+
+/* Buttons */
 .btn-aesthetic {
-    background: linear-gradient(135deg, #a6586b 0%, #c98897 100%);
-    color: #ffffff;
     font-family: var(--font-sans);
     font-size: 14.5px;
     font-weight: 600;
-    letter-spacing: 0.3px;
     border: none;
     border-radius: 40px;
     padding: 15px 30px;
@@ -279,38 +406,50 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    box-shadow: 0 8px 24px rgba(166, 88, 107, 0.28);
     transition: all 0.3s ease;
     width: 100%;
     max-width: 320px;
 }
 
-.btn-aesthetic:active {
-    transform: scale(0.97);
+.btn-aesthetic:active { transform: scale(0.97); }
+
+.btn-pearl {
+    background: linear-gradient(135deg, #a6586b 0%, #c98897 100%);
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(166, 88, 107, 0.28);
 }
 
-.btn-highlight {
-    background: linear-gradient(135deg, #dfb387 0%, #c98897 100%);
-    box-shadow: 0 8px 26px rgba(223, 179, 135, 0.35);
+.btn-sunset {
+    background: linear-gradient(135deg, #b54f67 0%, #e76f51 100%);
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(181, 79, 103, 0.35);
+}
+
+.btn-night-gold {
+    background: linear-gradient(135deg, #ffdf85 0%, #dfb387 100%);
+    color: #1a0f2b;
+    font-weight: 700;
+    box-shadow: 0 8px 28px rgba(255, 223, 133, 0.4);
 }
 
 /* ==========================================================================
-   💌 TRANG 1: THIỆP MỜI MÃ QR TINH TẾ (AESTHETIC INVITATION)
+   💌 TRANG 1: THIỆP MỜI MÃ QR LỤA NGỌC TRAI
    ========================================================================== */
 .invitation-card {
     position: relative;
     width: 100%;
-    background: var(--bg-card);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: var(--p1-card-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border-radius: 28px;
     padding: 34px 24px 28px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    box-shadow: var(--shadow-card);
-    border: var(--border-luxury);
+    box-shadow: 0 20px 50px rgba(166, 88, 107, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: transform 0.2s ease;
 }
 
 .card-foil-border {
@@ -321,23 +460,25 @@ body {
     pointer-events: none;
 }
 
-.invitation-header {
+.wax-seal-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f7d6de, #e3a9b6);
+    border: 2px solid #ffffff;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
-}
-
-.ribbon-bow {
-    font-size: 28px;
-    margin-bottom: 4px;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(166, 88, 107, 0.2);
+    margin-bottom: 8px;
 }
 
 .invite-tag {
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 2px;
-    color: var(--rose-gold);
+    color: var(--p1-rose-gold);
     margin-bottom: 8px;
 }
 
@@ -345,19 +486,19 @@ body {
     font-family: var(--font-serif);
     font-size: 34px;
     font-weight: 600;
-    color: var(--text-main);
+    color: var(--p1-text-main);
     line-height: 1.15;
     margin-bottom: 8px;
 }
 
 .invite-subtitle {
     font-size: 13px;
-    color: var(--text-muted);
+    color: var(--p1-text-sub);
     max-width: 280px;
     line-height: 1.5;
 }
 
-/* QR Aesthetic Box */
+/* QR Box */
 .qr-aesthetic-box {
     position: relative;
     width: 220px;
@@ -372,14 +513,12 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: transform 0.3s ease;
-    margin-bottom: 22px;
+    margin: 18px 0 22px;
 }
 
-.qr-aesthetic-box:active {
-    transform: scale(0.97);
-}
+.qr-aesthetic-box:active { transform: scale(0.97); }
 
-.qr-shimmer-ring {
+.qr-glow-aura {
     position: absolute;
     inset: -3px;
     border-radius: 25px;
@@ -409,56 +548,71 @@ body {
     100% { top: 204px; opacity: 0.9; }
 }
 
-.qr-action-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-}
-
 .qr-guidance {
     font-size: 12px;
-    color: var(--text-faint);
+    color: var(--p1-text-sub);
+    margin-bottom: 12px;
 }
 
 .card-footer-stamp {
-    margin-top: 24px;
+    margin-top: 22px;
     font-size: 9.5px;
     letter-spacing: 1.5px;
-    color: var(--text-faint);
+    color: var(--p1-rose-gold);
     font-weight: 600;
 }
 
 /* ==========================================================================
-   📸 TRANG 2: BỨC THƯ TÌNH & KỶ NIỆM (POLAROIDS & VOUCHERS)
+   📸 TRANG 2: PHONG BÌ THƯ HOÀNG HÔN & POLAROID
    ========================================================================== */
 #page-2 .page-content {
     justify-content: flex-start;
     padding-top: 60px;
 }
 
-/* Polaroid Row */
+.love-envelope-box {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 24px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 16px 45px rgba(181, 79, 103, 0.12);
+    margin-bottom: 28px;
+}
+
+.envelope-top-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--p2-rose-deep);
+    border-bottom: 1px dashed rgba(181, 79, 103, 0.25);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+}
+
 .polaroid-row {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .polaroid-item {
     background: #ffffff;
     border-radius: 18px;
     padding: 12px 12px 24px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    transform: rotate(var(--rot, 0deg));
     transition: transform 0.3s ease;
 }
 
-.polaroid-item:active {
-    transform: scale(0.98);
-}
+.polaroid-item:active { transform: scale(0.98); }
 
 .polaroid-img-wrap {
     width: 100%;
@@ -478,34 +632,29 @@ body {
     font-family: var(--font-serif);
     font-size: 17px;
     font-style: italic;
-    color: var(--text-main);
+    color: var(--p2-text-main);
     text-align: center;
     line-height: 1.4;
 }
 
-/* Vouchers Box */
-.vouchers-envelope {
-    width: 100%;
-    background: var(--bg-card);
-    backdrop-filter: blur(12px);
-    border-radius: 22px;
-    padding: 20px 18px;
-    border: var(--border-luxury);
-    box-shadow: var(--shadow-soft);
-    margin-bottom: 28px;
+/* Vouchers in Envelope */
+.voucher-collection {
+    background: rgba(252, 234, 222, 0.5);
+    border-radius: 18px;
+    padding: 16px;
+    border: 1px solid rgba(231, 111, 81, 0.2);
 }
 
-.envelope-header {
+.voucher-title-row {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--p2-rose-deep);
+    text-align: center;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-family: var(--font-serif);
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--rose-deep);
-    margin-bottom: 14px;
-    border-bottom: 1px dashed rgba(201, 136, 151, 0.3);
-    padding-bottom: 10px;
+    justify-content: center;
+    gap: 6px;
 }
 
 .voucher-ticket-list {
@@ -516,35 +665,23 @@ body {
 
 .voucher-ticket {
     background: #ffffff;
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 12px 14px;
-    border: 1px solid rgba(223, 179, 135, 0.35);
+    border: 1px solid rgba(231, 111, 81, 0.25);
+    border-left: 4px solid var(--p2-amber);
     display: flex;
     align-items: center;
     gap: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
-.v-icon {
-    font-size: 24px;
-    flex-shrink: 0;
-}
+.v-icon { font-size: 22px; flex-shrink: 0; }
+.v-content { font-size: 12.5px; color: var(--p2-text-main); line-height: 1.45; font-weight: 500; }
 
-.v-content {
-    font-size: 12.5px;
-    color: var(--text-main);
-    line-height: 1.45;
-    font-weight: 500;
-}
-
-.page-bottom-action {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
+.page-bottom-action { width: 100%; display: flex; justify-content: center; }
 
 /* ==========================================================================
-   🎂 TRANG 3: BÁNH KEM 3D TƯƠNG TÁC THREE.JS
+   🎂 TRANG 3: BÁNH KEM 3D DẠ TIỆC SAO HOÀNG GIA
    ========================================================================== */
 #page-3 .page-content {
     justify-content: flex-start;
@@ -554,13 +691,13 @@ body {
 .canvas-3d-wrapper {
     position: relative;
     width: 100%;
-    height: 340px;
-    border-radius: 24px;
-    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.9) 0%, rgba(247, 237, 240, 0.6) 100%);
-    box-shadow: var(--shadow-card);
-    border: var(--border-luxury);
+    height: 350px;
+    border-radius: 28px;
+    background: radial-gradient(circle at 50% 50%, rgba(37, 18, 64, 0.8) 0%, rgba(13, 9, 26, 0.95) 100%);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 223, 133, 0.2);
+    border: 1px solid rgba(255, 223, 133, 0.25);
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     touch-action: none;
 }
 
@@ -572,7 +709,7 @@ body {
 
 .drag-hint {
     position: absolute;
-    bottom: 10px;
+    bottom: 12px;
     left: 0;
     right: 0;
     text-align: center;
@@ -582,11 +719,12 @@ body {
 .drag-hint span {
     font-size: 11px;
     font-weight: 600;
-    color: var(--text-faint);
-    background: rgba(255, 255, 255, 0.7);
-    padding: 4px 12px;
+    color: var(--p3-gold-bright);
+    background: rgba(13, 9, 26, 0.75);
+    border: 1px solid rgba(255, 223, 133, 0.3);
+    padding: 5px 14px;
     border-radius: 20px;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
 }
 
 /* Candle Blow Control */
@@ -598,16 +736,12 @@ body {
     width: 100%;
 }
 
-.btn-candle-blow {
-    background: linear-gradient(135deg, #dfb387 0%, #c98897 100%);
-}
-
 .hint-mic {
     font-size: 12px;
-    color: var(--text-faint);
+    color: rgba(254, 247, 236, 0.5);
 }
 
-/* Final Letter Modal */
+/* Birthday Letter Modal */
 .birthday-letter-modal {
     width: 100%;
     animation: letterUnfold 0.8s var(--ease-out-quint);
@@ -615,58 +749,53 @@ body {
 }
 
 @keyframes letterUnfold {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .letter-inner-card {
-    background: var(--bg-card);
-    backdrop-filter: blur(16px);
-    border: var(--border-luxury);
-    border-radius: 24px;
-    padding: 30px 22px;
-    box-shadow: var(--shadow-card);
+    background: rgba(27, 18, 51, 0.92);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 223, 133, 0.35);
+    border-radius: 28px;
+    padding: 32px 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 }
 
-.letter-top-badge {
+.letter-ribbon-tag {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 2px;
-    color: var(--rose-deep);
-    margin-bottom: 16px;
+    color: var(--p3-gold-bright);
+    margin-bottom: 18px;
+    text-shadow: 0 0 10px rgba(255, 223, 133, 0.5);
 }
 
 .letter-text {
     font-family: var(--font-script);
     font-size: 22px;
     line-height: 1.8;
-    color: var(--text-main);
+    color: var(--p3-text-light);
     white-space: pre-line;
     text-align: left;
     margin-bottom: 20px;
-    border-bottom: 1px dashed rgba(201, 136, 151, 0.3);
-    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(255, 223, 133, 0.25);
+    padding-bottom: 18px;
     width: 100%;
 }
 
 .letter-signature {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 .letter-signature p {
     font-family: var(--font-script);
     font-size: 20px;
-    color: var(--rose-deep);
+    color: var(--p3-gold-bright);
 }
 
 /* ==========================================================================
@@ -676,13 +805,13 @@ body {
     .page-content { padding: 30px 18px 50px; }
     .page-headline { font-size: 26px; }
     .qr-aesthetic-box { width: 195px; height: 195px; }
-    .canvas-3d-wrapper { height: 300px; }
+    .canvas-3d-wrapper { height: 310px; }
 }
 
 @media (min-width: 431px) {
     .app-viewport {
-        border-left: 1px solid rgba(0, 0, 0, 0.05);
-        border-right: 1px solid rgba(0, 0, 0, 0.05);
-        box-shadow: 0 0 60px rgba(0, 0, 0, 0.04);
+        border-left: 1px solid rgba(255, 255, 255, 0.08);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 80px rgba(0, 0, 0, 0.35);
     }
 }

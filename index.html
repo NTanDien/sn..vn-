@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Happy Birthday — Dành Riêng Cho Em</title>
     
-    <!-- Google Fonts: Elegant Luxury & Handwriting -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Dancing+Script:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,22 +17,45 @@
     
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-page="1">
 
-    <!-- Subtle Ambient Lighting -->
-    <div class="ambient-glow">
-        <div class="glow-circle gc-1"></div>
-        <div class="glow-circle gc-2"></div>
-        <div class="floating-petals" id="petal-dust"></div>
+    <!-- ========================================================
+         🌌 3 HỆ THỐNG NỀN RIÊNG BIỆT CHO 3 TRANG
+    ======================================================== -->
+    <div class="scene-backgrounds">
+        <!-- NỀN TRANG 1: Lụa Ngọc Trai & Bụi Vàng Nắng Sớm (Silk Pearl & Sunlight Dust) -->
+        <div class="bg-layer layer-1 active" id="bg-layer-1">
+            <div class="pearl-mesh"></div>
+            <div class="sunbeam-light"></div>
+            <div class="silk-ribbon-decor decor-1"></div>
+            <div class="silk-ribbon-decor decor-2"></div>
+            <div class="particle-field" id="particles-p1"></div>
+        </div>
+
+        <!-- NỀN TRANG 2: Hoàng Hôn Lãng Mạn & Bokeh Đèn Vàng Ấm Áp (Warm Amber Sunset & Bokeh) -->
+        <div class="bg-layer layer-2" id="bg-layer-2">
+            <div class="sunset-warmth"></div>
+            <div class="bokeh-orbs-wrap" id="bokeh-wrap"></div>
+            <div class="rose-petals-field" id="petals-p2"></div>
+        </div>
+
+        <!-- NỀN TRANG 3: Bầu Trời Đêm Sao & Sao Băng Dạ Tiệc (Velvet Midnight Gala & Shooting Stars) -->
+        <div class="bg-layer layer-3" id="bg-layer-3">
+            <div class="midnight-sky"></div>
+            <div class="starfield" id="stars-p3"></div>
+            <div class="shooting-star ss-1"></div>
+            <div class="shooting-star ss-2"></div>
+            <div class="cake-spotlight"></div>
+        </div>
     </div>
 
-    <!-- Music Toggle -->
+    <!-- Music Player Pill -->
     <button class="music-pill" id="music-btn" aria-label="Bật/Tắt nhạc">
         <span class="music-icon">🎵</span>
         <span class="music-label">Giai điệu</span>
     </button>
 
-    <!-- App Container (Mobile-First 430px) -->
+    <!-- Main Viewport (Mobile-First 430px) -->
     <main class="app-viewport">
 
         <!-- ========================================================
@@ -40,11 +63,14 @@
         ======================================================== -->
         <section class="page active" id="page-1">
             <div class="page-content">
-                <div class="invitation-card">
+                <div class="invitation-card" id="invitation-tilt-card">
                     <div class="card-foil-border"></div>
+                    <div class="card-shimmer-highlight"></div>
                     
                     <div class="invitation-header">
-                        <span class="ribbon-bow">🎀</span>
+                        <div class="wax-seal-badge">
+                            <span>💌</span>
+                        </div>
                         <span class="invite-tag">SPECIAL INVITATION</span>
                         <h1 class="invite-name" id="display-girl-name">Ngọc Ánh</h1>
                         <p class="invite-subtitle">Có một món quà nhỏ đã được chuẩn bị riêng cho em hôm nay</p>
@@ -52,7 +78,7 @@
 
                     <!-- Clean Elegant QR Container -->
                     <div class="qr-aesthetic-box" id="qr-tap-trigger">
-                        <div class="qr-shimmer-ring"></div>
+                        <div class="qr-glow-aura"></div>
                         <div class="qr-render-area" id="qr-code-slot">
                             <!-- Canvas QR injected by JS -->
                         </div>
@@ -60,53 +86,62 @@
                     </div>
 
                     <div class="qr-action-area">
-                        <p class="qr-guidance">Chạm nhẹ vào mã hoặc quét bằng camera</p>
+                        <p class="qr-guidance">Chạm nhẹ vào mã hoặc quét bằng camera điện thoại</p>
                         
-                        <button class="btn-aesthetic" id="btn-open-gift">
+                        <button class="btn-aesthetic btn-pearl" id="btn-open-gift">
                             <span>Mở Món Quà Bí Mật</span>
                             <span class="btn-arrow">✨</span>
                         </button>
                     </div>
 
                     <div class="card-footer-stamp">
-                        <span>EST. 2026 — EXCLUSIVELY FOR YOU</span>
+                        <span>✦ EXCLUSIVELY FOR YOUR SPECIAL DAY ✦</span>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ========================================================
-             TRANG 2: BỨC THƯ TÌNH & KỶ NIỆM (MEMORY & PRIVILEGES)
+             TRANG 2: PHONG BÌ THƯ TÌNH & KỶ NIỆM (MEMORY & PRIVILEGES)
         ======================================================== -->
         <section class="page" id="page-2">
             <div class="page-content">
                 <div class="section-tag-row">
-                    <span class="section-tag">CHAPTER 02</span>
+                    <span class="section-tag tag-sunset">CHAPTER 02 — KHOẢNH KHẮC</span>
                 </div>
                 
-                <h2 class="page-headline">Gửi Nàng Thơ Của Anh</h2>
-                <p class="page-subline">Những điều dịu dàng nhất dành tặng em trong tuổi mới</p>
+                <h2 class="page-headline headline-sunset">Gửi Nàng Thơ Của Anh</h2>
+                <p class="page-subline subline-sunset">Những điều dịu dàng nhất được gom lại dành tặng em</p>
 
-                <!-- Interactive Polaroid Cards -->
-                <div class="polaroid-row" id="polaroid-row">
-                    <!-- Injected by script.js -->
-                </div>
-
-                <!-- 3 VIP Privilege Vouchers -->
-                <div class="vouchers-envelope">
-                    <div class="envelope-header">
-                        <span class="envelope-icon">💌</span>
-                        <span>Đặc Quyền Dành Riêng Cho Em</span>
+                <!-- 3D Interactive Envelope -->
+                <div class="love-envelope-box">
+                    <div class="envelope-top-bar">
+                        <span class="stamp-icon">🌸</span>
+                        <span class="envelope-title">Lá Thư Gửi Từ Trái Tim</span>
                     </div>
-                    <div class="voucher-ticket-list" id="voucher-list">
+                    
+                    <!-- Polaroid Cards with Realistic Shadow -->
+                    <div class="polaroid-row" id="polaroid-row">
                         <!-- Injected by script.js -->
+                    </div>
+
+                    <!-- 3 VIP Privilege Vouchers -->
+                    <div class="voucher-collection">
+                        <div class="voucher-title-row">
+                            <span class="v-spark">✨</span>
+                            <span>3 Tấm Thẻ Đặc Quyền Vô Hạn</span>
+                            <span class="v-spark">✨</span>
+                        </div>
+                        <div class="voucher-ticket-list" id="voucher-list">
+                            <!-- Injected by script.js -->
+                        </div>
                     </div>
                 </div>
 
                 <!-- Progress action to page 3 -->
                 <div class="page-bottom-action">
-                    <button class="btn-aesthetic btn-highlight" id="btn-go-to-cake">
-                        <span>Bước Vào Điều Bất Ngờ Nhất</span>
+                    <button class="btn-aesthetic btn-sunset" id="btn-go-to-cake">
+                        <span>Bước Vào Bữa Tiệc Sinh Nhật</span>
                         <span class="btn-arrow">🎂</span>
                     </button>
                 </div>
@@ -114,28 +149,27 @@
         </section>
 
         <!-- ========================================================
-             TRANG 3: QUYẾT ĐỊNH SIÊU LỚN — BÁNH KEM 3D TƯƠNG TÁC
+             TRANG 3: QUYẾT ĐỊNH SIÊU LỚN — BÁNH KEM 3D DẠ TIỆC SAO
         ======================================================== -->
         <section class="page" id="page-3">
             <div class="page-content cake-stage">
                 <div class="section-tag-row">
-                    <span class="section-tag">THE GRAND FINALE</span>
+                    <span class="section-tag tag-night">THE GRAND FINALE — ĐÊM SINH NHẬT</span>
                 </div>
 
-                <h2 class="page-headline" id="cake-headline">Ước Một Điều Thật Đẹp Em Nhé</h2>
-                <p class="page-subline" id="cake-subline">Dùng tay vuốt xoay 360° để ngắm bánh kem và chạm nến để thổi ước nguyện</p>
+                <h2 class="page-headline headline-night" id="cake-headline">Ước Một Điều Thật Đẹp Em Nhé</h2>
+                <p class="page-subline subline-night" id="cake-subline">Dùng tay vuốt xoay 360° ngắm bánh kem và chạm nến để thổi ước nguyện</p>
 
                 <!-- Three.js 3D WebGL Canvas Arena -->
                 <div class="canvas-3d-wrapper" id="cake-3d-container">
-                    <!-- Three.js canvas auto-appended here -->
                     <div class="drag-hint">
-                        <span>👆 Vuốt để xoay bánh 360°</span>
+                        <span>👆 Vuốt ngón tay để xoay bánh 360°</span>
                     </div>
                 </div>
 
                 <!-- Candle Blow Interaction Panel -->
                 <div class="candle-control-box" id="candle-controls">
-                    <button class="btn-aesthetic btn-candle-blow" id="btn-blow-candle">
+                    <button class="btn-aesthetic btn-night-gold" id="btn-blow-candle">
                         <span class="btn-icon">🕯️</span>
                         <span>Thổi Nến Sinh Nhật</span>
                         <span class="btn-icon">💨</span>
@@ -146,7 +180,7 @@
                 <!-- Birthday Letter Unfolded After Blow -->
                 <div class="birthday-letter-modal" id="letter-modal" style="display: none;">
                     <div class="letter-inner-card">
-                        <div class="letter-top-badge">🎉 HAPPY BIRTHDAY 🎉</div>
+                        <div class="letter-ribbon-tag">🎉 HAPPY BIRTHDAY PRINCESS 🎉</div>
                         <div class="letter-text" id="final-letter-text">
                             <!-- Injected by script.js -->
                         </div>
@@ -154,7 +188,7 @@
                             <p>Yêu thương em mãi mãi,</p>
                             <span>💖✨🌸</span>
                         </div>
-                        <button class="btn-aesthetic" id="btn-replay" onclick="location.reload()">
+                        <button class="btn-aesthetic btn-night-gold" id="btn-replay" onclick="location.reload()">
                             <span>Xem Lại Từ Đầu</span>
                             <span>🔄</span>
                         </button>
