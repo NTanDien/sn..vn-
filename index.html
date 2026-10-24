@@ -71,7 +71,7 @@
       align-items: center;
       justify-content: center;
       transform: rotate(16deg);
-      filter: drop-shadow(0 0 30px rgba(255, 20, 50, 0.95));
+      filter: drop-shadow(0 0 16px rgba(255, 20, 50, 0.4));
       animation: heartBeat 1.5s infinite ease-in-out;
     }
     @keyframes heartBeat {
@@ -439,21 +439,15 @@
       <div class="red-heart-qr-wrap">
         <svg class="red-heart-svg" viewBox="0 0 260 250">
           <defs>
-            <radialGradient id="redHeartGrad" cx="50%" cy="38%" r="65%">
-              <stop offset="0%" stop-color="#ff3b56"/>
-              <stop offset="65%" stop-color="#e60026"/>
-              <stop offset="100%" stop-color="#990014"/>
+            <radialGradient id="redHeartGrad" cx="50%" cy="40%" r="65%">
+              <stop offset="0%" stop-color="#2c0208"/>
+              <stop offset="65%" stop-color="#180005"/>
+              <stop offset="100%" stop-color="#0d0003"/>
             </radialGradient>
-            <filter id="redNeonGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="8" result="glow"/>
-              <feMerge>
-                <feMergeNode in="glow"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
           </defs>
-          <!-- Đáy trái tim là góc nhọn 90 độ chuẩn -->
-          <path fill="url(#redHeartGrad)" filter="url(#redNeonGlow)"
+          <!-- Nền trái tim đỏ sẫm dịu mắt, viền đỏ tinh tế, đáy trái tim nhọn 90 độ -->
+          <path fill="url(#redHeartGrad)" 
+                stroke="#ff2448" stroke-width="2.5" stroke-linejoin="round"
                 d="M130,230 
                    L40,140 
                    C12,112 12,62 45,32 
@@ -548,7 +542,7 @@
       cakePhoto: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=700&q=85",
       letterTitle: "Gửi cô gái mang theo cả bầu trời dịu dàng,",
       letterText: "\"Hôm nay là ngày thế giới đón chào một người cực kỳ đáng quý, nên mình muốn dành tặng bạn một không gian chỉ thuộc về riêng bạn — nơi không có deadline, không có muộn phiền, chỉ có những vì sao và sự trân trọng mình dành cho bạn.\n\nGiữa hàng vạn người lướt qua nhau mỗi ngày, thật may mắn vì mình đã được gặp bạn, được nhìn thấy dáng vẻ rạng rỡ khi bạn cười và cả sự ấm áp trong từng hành động nhỏ của bạn. Có lẽ bạn không nhận ra đâu, nhưng chính bạn đã làm những ngày bình thường nhất trở nên có ý nghĩa hơn rất nhiều.\n\nTuổi mới, chúc bạn mỗi sáng thức dậy đều có lý do để mỉm cười, mỗi tối đi ngủ đều thấy lòng an nhiên. Người ta nói những điều đẹp đẽ nhất đều cần thời gian và sự chân thành để mở khóa — giống như cách bạn vừa kiên nhẫn đi qua từng bước nhỏ để mở bức thư này vậy.\n\nMình đã gom hết sự kiên nhẫn và chân thành đặt vào đây rồi, nếu trái tim bạn cũng có một chút rung động, thì đừng giữ trong lòng một mình nhé, hãy cho mình cơ hội được chăm sóc bạn nhiều hơn một người bạn bình thường nha!\"",
-      couplePhoto: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=85" // Thay link ảnh xinh nhất của bạn nữ vào đây
+      couplePhoto: "./hoa-hong.jpg" // Ảnh bó hoa hồng trái tim đã tải lên
     };
 
     document.getElementById("cake-img").src = CONFIG.cakePhoto;
