@@ -235,6 +235,47 @@
       object-fit: cover;
     }
 
+    /* NÚT TIẾP TỤC CHUYỂN BƯỚC */
+    .next-step-btn {
+      position: absolute;
+      bottom: 7.5%;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      z-index: 60;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: rgba(255, 30, 80, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 140, 180, 0.8);
+      color: #fff;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      font-size: 0.96rem;
+      letter-spacing: 0.8px;
+      padding: 11px 28px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 24px rgba(255, 50, 100, 0.55), inset 0 0 10px rgba(255, 200, 220, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: nextBtnPulse 1.8s infinite ease-in-out;
+    }
+    .next-step-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .next-step-btn:active {
+      transform: translateX(-50%) scale(0.95);
+    }
+    @keyframes nextBtnPulse {
+      0%, 100% { box-shadow: 0 0 18px rgba(255, 40, 90, 0.45); }
+      50% { box-shadow: 0 0 32px rgba(255, 70, 130, 0.9); }
+    }
+
     /* DÒNG CHỮ "Click vào nhé" Ở ĐÁY MÀN HÌNH */
     .click-hint-bottom {
       position: absolute;
@@ -504,6 +545,12 @@
 
     <!-- Chữ "Click vào nhé" -->
     <div class="click-hint-bottom" id="click-grid-hint">Click vào nhé</div>
+
+    <!-- Nút "Tiếp tục" chuyển từng cảnh tương tác -->
+    <button class="next-step-btn" id="next-step-btn">
+      <span id="next-step-label">Tiếp tục</span>
+      <span style="font-size: 1.15rem;">✨</span>
+    </button>
 
     <!-- Phong bì Cánh Thiên Thần -->
     <div class="winged-letter-btn" id="winged-envelope">
@@ -1001,6 +1048,31 @@
     window.addEventListener("mouseup", stopHolding);
     window.addEventListener("touchend", stopHolding);
 
+    const nextBtn = document.getElementById("next-step-btn");
+    const nextLabel = document.getElementById("next-step-label");
+    let nextCallback = null;
+
+    function showNextStepBtn(text, callback) {
+      nextLabel.textContent = text;
+      nextCallback = callback;
+      nextBtn.classList.add("show");
+    }
+
+    function hideNextStepBtn() {
+      nextBtn.classList.remove("show");
+      nextCallback = null;
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (nextCallback) {
+        playSfx("click");
+        const cb = nextCallback;
+        hideNextStepBtn();
+        cb();
+      }
+    });
+
+    // BƯỚC 1: Hiện Chữ "Chúc Mừng Sinh Nhật" sau khi nhấn giữ
     function runParticleStoryline() {
       stage = "MORPH_TEXT";
       pMat.opacity = 1.0;
@@ -1008,24 +1080,11 @@
       holdBtn.classList.remove("visible");
       setTimeout(() => holdBtn.style.display = "none", 500);
 
-      // 1. Chữ "Chúc Mừng Sinh Nhật" - ghép từ các hạt bụi hồng bay từ vũ trụ vào
+      // Chữ "Chúc Mừng Sinh Nhật" - ghép từ các hạt bụi hồng bay từ vũ trụ vào
       const pts1 = sampleDenseText(CONFIG.text1, 90);
       setParticleTargets(pts1, "#ff2a85", 1.5);
 
-      // 2. Gió thổi xé ngang chữ
-      setTimeout(() => {
-        for (let i = 0; i < P_COUNT; i++) {
-          tarPos[i * 3] += (Math.random() - 0.35) * 240;
-        }
-      }, 2500);
-
-      // 3. Tụ lại thành chữ "Cô Gái Dịu Dàng ❤️"
-      setTimeout(() => {
-        const pts2 = sampleDenseText(CONFIG.text2, 86);
-        setParticleTargets(pts2, "#ff5c9e", 1.4);
-      }, 3100);
-
-      // 4. Chuyển sang màu Vàng Kim lấp lánh
+      // Chuyển sang ánh vàng kim lấp lánh
       setTimeout(() => {
         const colArr = pGeo.attributes.color.array;
         for (let i = 0; i < P_COUNT; i++) {
@@ -1035,65 +1094,102 @@
           colArr[i * 3 + 2] = c.b;
         }
         pGeo.attributes.color.needsUpdate = true;
-      }, 4500);
+      }, 1200);
 
-      // 5. Hạt vàng ghép thành Hologram 3D Chiếc Bánh Kem
+      // Hiện nút "Tiếp tục ✨" để người xem bấm mới chuyển
       setTimeout(() => {
-        const cakePts = generateCakeHologramPoints();
-        setParticleTargets(cakePts, "#ffe082", 2.0);
-      }, 5600);
-
-      // 6. Hiện bức ảnh Bánh Kem Thật
-      setTimeout(() => {
-        document.getElementById("cake-photo-box").classList.add("show");
-        gsap.to(pMat, { opacity: 0.15, duration: 1.0 });
-      }, 6900);
-
-      // 7. Bánh kem mờ đi, để lại bầu trời sao
-      setTimeout(() => {
-        document.getElementById("cake-photo-box").classList.remove("show");
-        gsap.to(pMat, { opacity: 0, duration: 0.8 });
-      }, 10500);
-
-      // 8. Quả Cầu Trái Tim 3D + Hào quang hồng
-      setTimeout(() => {
-        stage = "HEART_SPHERE";
-        controls.enabled = true;
-        document.getElementById("sphere-core-glow").style.opacity = "1";
-
-        heartSprites.forEach((sp, idx) => {
-          gsap.to(sp.material, { opacity: 1, duration: 0.9, delay: idx * 0.005 });
-          gsap.to(sp.position, {
-            x: sp.userData.spherePos.x,
-            y: sp.userData.spherePos.y,
-            z: sp.userData.spherePos.z,
-            duration: 1.8,
-            ease: "power3.out"
-          });
-        });
-      }, 12200);
-
-      // 9. Xếp thành Lưới Phẳng + Hiện chữ "Click vào nhé"
-      setTimeout(() => {
-        stage = "HEART_GRID";
-        gsap.to(heartGroup.rotation, { x: 0, y: 0, z: 0, duration: 1.2 });
-        heartSprites.slice(0, 42).forEach((sp) => {
-          gsap.to(sp.position, {
-            x: sp.userData.gridPos.x,
-            y: sp.userData.gridPos.y,
-            z: sp.userData.gridPos.z,
-            duration: 1.3,
-            ease: "power2.inOut"
-          });
-        });
-        document.getElementById("click-grid-hint").classList.add("show");
-      }, 16800);
+        showNextStepBtn("Tiếp tục", step2_NameText);
+      }, 1800);
     }
 
-    // 10. Chạm vào "Click vào nhé" -> Trái tim bay tự do & Hiện Phong bì thiên thần
+    // BƯỚC 2: Chuyển sang chữ tên người ấy ("Cô Gái Dịu Dàng ❤️")
+    function step2_NameText() {
+      // Gió thổi nhẹ xé chữ cũ
+      for (let i = 0; i < P_COUNT; i++) {
+        tarPos[i * 3] += (Math.random() - 0.35) * 260;
+      }
+
+      // Tụ lại thành chữ mới
+      setTimeout(() => {
+        const pts2 = sampleDenseText(CONFIG.text2, 86);
+        setParticleTargets(pts2, "#ff5c9e", 1.4);
+      }, 600);
+
+      // Hiện nút "Tiếp tục ✨"
+      setTimeout(() => {
+        showNextStepBtn("Tiếp tục", step3_Cake);
+      }, 2000);
+    }
+
+    // BƯỚC 3: Hiện Bánh Kem Sinh Nhật Hologram & Ảnh Bánh Kem
+    function step3_Cake() {
+      // Hạt vàng ghép thành Hologram 3D Chiếc Bánh Kem
+      const cakePts = generateCakeHologramPoints();
+      setParticleTargets(cakePts, "#ffe082", 2.0);
+
+      // Hiện bức ảnh Bánh Kem Thật
+      setTimeout(() => {
+        document.getElementById("cake-photo-box").classList.add("show");
+        gsap.to(pMat, { opacity: 0.2, duration: 1.0 });
+      }, 900);
+
+      // Hiện nút "Tiếp tục ✨" để người xem ngắm xong bánh kem
+      setTimeout(() => {
+        showNextStepBtn("Tiếp tục", step4_HeartSphere);
+      }, 2200);
+    }
+
+    // BƯỚC 4: Quả Cầu Trái Tim 3D
+    function step4_HeartSphere() {
+      // Ẩn ảnh bánh kem, làm mờ hạt hologram
+      document.getElementById("cake-photo-box").classList.remove("show");
+      gsap.to(pMat, { opacity: 0, duration: 0.8 });
+
+      stage = "HEART_SPHERE";
+      controls.enabled = true;
+      document.getElementById("sphere-core-glow").style.opacity = "1";
+
+      heartSprites.forEach((sp, idx) => {
+        gsap.to(sp.material, { opacity: 1, duration: 0.9, delay: idx * 0.005 });
+        gsap.to(sp.position, {
+          x: sp.userData.spherePos.x,
+          y: sp.userData.spherePos.y,
+          z: sp.userData.spherePos.z,
+          duration: 1.8,
+          ease: "power3.out"
+        });
+      });
+
+      // Sau khi quả cầu trái tim hình thành, hiện nút "Tiếp tục ✨"
+      setTimeout(() => {
+        showNextStepBtn("Tiếp tục", step5_HeartGrid);
+      }, 2400);
+    }
+
+    // BƯỚC 5: Xếp thành Lưới Trái Tim Phẳng
+    function step5_HeartGrid() {
+      stage = "HEART_GRID";
+      gsap.to(heartGroup.rotation, { x: 0, y: 0, z: 0, duration: 1.2 });
+      heartSprites.slice(0, 42).forEach((sp) => {
+        gsap.to(sp.position, {
+          x: sp.userData.gridPos.x,
+          y: sp.userData.gridPos.y,
+          z: sp.userData.gridPos.z,
+          duration: 1.3,
+          ease: "power2.inOut"
+        });
+      });
+
+      setTimeout(() => {
+        showNextStepBtn("Mở Mật Thư ✨", scatterHeartsToSpace);
+      }, 1400);
+    }
+
+    // BƯỚC 6: Trái tim bay tự do & Hiện Phong bì thiên thần
     function scatterHeartsToSpace() {
       if (stage !== "HEART_GRID" && stage !== "HEART_SPHERE") return;
       stage = "HEART_FREE";
+      hideNextStepBtn();
       document.getElementById("click-grid-hint").classList.remove("show");
       document.getElementById("sphere-core-glow").style.opacity = "0";
 
@@ -1109,7 +1205,7 @@
 
       setTimeout(() => {
         document.getElementById("winged-envelope").classList.add("show");
-      }, 3600);
+      }, 3200);
     }
 
     document.getElementById("click-grid-hint").addEventListener("click", scatterHeartsToSpace);
