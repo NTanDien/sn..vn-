@@ -2,242 +2,697 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🎂 Happy Birthday — Dành Riêng Cho Em</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chúc Mừng Sinh Nhật Em Yêu 💖</title>
     
-    <!-- Google Fonts: Luxury Serif & Romantic Handwriting -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Dancing+Script:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Libraries -->
+    <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
-    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ========================================================
+           CSS VARIABLES & RESET
+        ======================================================== */
+        :root {
+            --pink-bg: #ffeef2;
+            --pink-card: rgba(255, 255, 255, 0.9);
+            --primary-pink: #ff4d79;
+            --deep-pink: #e0245e;
+            --soft-pink: #ffb8c6;
+            --text-dark: #4a2835;
+            --text-muted: #8a6270;
+            --shadow-card: 0 16px 40px rgba(255, 77, 121, 0.15);
+            --font-main: 'Quicksand', sans-serif;
+            --font-cursive: 'Dancing Script', cursive;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, #fff0f3 0%, #ffe3e8 50%, #ffd1dc 100%);
+            color: var(--text-dark);
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px 16px;
+        }
+
+        /* ========================================================
+           💖 FLOATING HEARTS BACKGROUND
+        ======================================================== */
+        .hearts-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -50px;
+            color: var(--primary-pink);
+            opacity: 0;
+            user-select: none;
+            animation: floatUp linear infinite;
+            filter: drop-shadow(0 2px 6px rgba(255, 77, 121, 0.3));
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.6) rotate(0deg);
+            }
+            15% {
+                opacity: 0.75;
+            }
+            85% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-110dvh) scale(1.1) rotate(var(--rot, 45deg));
+            }
+        }
+
+        /* ========================================================
+           🎵 FLOATING MUSIC BUTTON
+        ======================================================== */
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: #ffffff;
+            border: 2px solid var(--soft-pink);
+            border-radius: 30px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 77, 121, 0.18);
+            transition: all 0.25s ease;
+        }
+
+        .music-btn:active {
+            transform: scale(0.94);
+        }
+
+        .music-icon {
+            font-size: 16px;
+        }
+
+        .music-text {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--deep-pink);
+        }
+
+        .music-btn.playing .music-icon {
+            animation: rotateDisc 2.5s linear infinite;
+        }
+
+        @keyframes rotateDisc {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========================================================
+           📱 MAIN CONTAINER (MOBILE FIRST)
+        ======================================================== */
+        .main-card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 440px;
+            background: var(--pink-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid #ffffff;
+            border-radius: 28px;
+            padding: 36px 22px;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+            transition: all 0.4s ease;
+        }
+
+        /* Birthday Headline */
+        .gift-icon-top {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: inline-block;
+            animation: bounceGift 2s infinite ease-in-out;
+        }
+
+        @keyframes bounceGift {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.08); }
+        }
+
+        .birthday-title {
+            font-family: var(--font-cursive);
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--deep-pink);
+            line-height: 1.25;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(255, 77, 121, 0.2);
+        }
+
+        .birthday-subtitle {
+            font-size: 14.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 26px;
+        }
+
+        /* "Mở quà" Button */
+        .btn-open-gift {
+            background: linear-gradient(135deg, #ff4d79 0%, #e0245e 100%);
+            color: #ffffff;
+            font-family: var(--font-main);
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 36px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 77, 121, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-open-gift::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: btnShine 2.5s infinite;
+        }
+
+        @keyframes btnShine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .btn-open-gift:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(255, 77, 121, 0.3);
+        }
+
+        /* ========================================================
+           🖼️ SLIDESHOW ẢNH KỶ NIỆM (HIỆN KHI BẤM "MỞ QUÀ")
+        ======================================================== */
+        .gift-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+            margin-top: 24px;
+        }
+
+        .gift-content.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slideshow-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border: 3px solid #ffffff;
+            margin-bottom: 14px;
+        }
+
+        .slide-container {
+            position: relative;
+            width: 100%;
+            height: 290px;
+            overflow: hidden;
+        }
+
+        .slide-item {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-item.active {
+            opacity: 1;
+        }
+
+        .slide-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Navigation Arrows */
+        .slide-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.85);
+            border: none;
+            font-size: 16px;
+            color: var(--deep-pink);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: background 0.2s;
+            z-index: 5;
+        }
+
+        .slide-btn:active {
+            transform: translateY(-50%) scale(0.92);
+        }
+
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+
+        /* Caption Text */
+        .slide-caption {
+            font-family: var(--font-cursive);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--deep-pink);
+            min-height: 32px;
+            margin-bottom: 10px;
+            padding: 0 8px;
+        }
+
+        /* Dots Pagination */
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #ffd1dc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary-pink);
+            transform: scale(1.3);
+        }
+
+        /* Heartfelt Birthday Message */
+        .birthday-letter-box {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px dashed var(--soft-pink);
+            border-radius: 18px;
+            padding: 20px 16px;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .letter-content {
+            font-family: var(--font-cursive);
+            font-size: 19px;
+            line-height: 1.75;
+            color: var(--text-dark);
+            white-space: pre-line;
+        }
+
+        .letter-signature {
+            text-align: right;
+            margin-top: 12px;
+            font-family: var(--font-cursive);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--deep-pink);
+        }
+    </style>
 </head>
-<body data-page="1">
+<body>
 
-    <!-- ========================================================
-         🌌 3 HỆ THỐNG BACKGROUND ĐỘC BẢN & SỐNG ĐỘNG
-    ======================================================== -->
-    <div class="scene-backgrounds">
-        <!-- NỀN TRANG 1: Lụa Ngọc Trai & Tia Nắng Sáng Bồng Bềnh -->
-        <div class="bg-layer layer-1 active" id="bg-layer-1">
-            <div class="pearl-mesh"></div>
-            <div class="sunbeam-light"></div>
-            <div class="silk-ribbon-decor decor-1"></div>
-            <div class="silk-ribbon-decor decor-2"></div>
-            <div class="particle-field" id="particles-p1"></div>
-        </div>
+    <!-- 💖 Floating Hearts Background -->
+    <div class="hearts-container" id="hearts-container"></div>
 
-        <!-- NỀN TRANG 2: Hoàng Hôn Lãng Mạn & Bokeh Ấm Cúng -->
-        <div class="bg-layer layer-2" id="bg-layer-2">
-            <div class="sunset-warmth"></div>
-            <div class="bokeh-orbs-wrap" id="bokeh-wrap"></div>
-            <div class="rose-petals-field" id="petals-p2"></div>
-        </div>
-
-        <!-- NỀN TRANG 3: Dạ Tiệc Đêm Sao & Bầu Trời Huyền Ảo -->
-        <div class="bg-layer layer-3" id="bg-layer-3">
-            <div class="midnight-sky"></div>
-            <div class="starfield" id="stars-p3"></div>
-            <div class="shooting-star ss-1"></div>
-            <div class="shooting-star ss-2"></div>
-            <div class="shooting-star ss-3"></div>
-            <div class="cake-spotlight"></div>
-        </div>
-    </div>
-
-    <!-- Music Player Pill -->
-    <button class="music-pill" id="music-btn" aria-label="Bật/Tắt nhạc">
+    <!-- 🎵 Floating Music Button -->
+    <button class="music-btn" id="music-toggle-btn" aria-label="Bật/Tắt nhạc">
         <span class="music-icon">🎵</span>
-        <span class="music-label" id="music-status">Giai điệu</span>
-        <div class="sound-wave">
-            <span></span><span></span><span></span>
-        </div>
+        <span class="music-text" id="music-text">Bật nhạc</span>
     </button>
 
-    <!-- App Viewport (Mobile-First 430px) -->
-    <main class="app-viewport">
+    <!-- 📱 Main Birthday Card -->
+    <main class="main-card">
+        <div class="gift-icon-top">🎁</div>
 
-        <!-- ========================================================
-             TRANG 1: THIỆP MỜI HOÀNG GIA & MÃ QR NGHỆ THUẬT SIÊU XINH
-        ======================================================== -->
-        <section class="page active" id="page-1">
-            <div class="page-content">
-                <!-- Royal Invitation Envelope & Card -->
-                <div class="envelope-outer-card" id="invitation-card">
-                    <div class="gold-foil-trim"></div>
-                    <div class="ornate-corner top-left">❦</div>
-                    <div class="ornate-corner top-right">❦</div>
-                    <div class="ornate-corner btm-left">❦</div>
-                    <div class="ornate-corner btm-right">❦</div>
+        <!-- Lời chúc nổi bật -->
+        <h1 class="birthday-title">Chúc mừng sinh nhật em yêu 💖</h1>
+        <p class="birthday-subtitle" id="birthday-subtitle">
+            Hôm nay là một ngày thật đặc biệt! Anh có một món quà nho nhỏ dành riêng cho em, mở ra ngay nhé!
+        </p>
 
-                    <div class="invitation-header">
-                        <div class="wax-seal-badge" id="wax-seal">
-                            <span>💌</span>
-                        </div>
-                        <span class="royal-kicker">✦ DÀNH RIÊNG CHO NÀNG THƠ ✦</span>
-                        <h1 class="royal-girl-name" id="display-girl-name">Ngọc Ánh</h1>
-                        <p class="royal-invitation-sub">
-                            Hôm nay là một ngày vô cùng đặc biệt. Một món quà bí mật đang chờ em mở ra...
-                        </p>
+        <!-- Nút bấm "Mở quà" -->
+        <div id="button-container">
+            <button class="btn-open-gift" id="btn-open-gift">
+                <span>Mở quà</span>
+                <span>✨</span>
+            </button>
+        </div>
+
+        <!-- 🖼️ Slideshow ảnh kỷ niệm (Hiện ra khi bấm "Mở quà") -->
+        <section class="gift-content" id="gift-content">
+            <div class="slideshow-wrapper">
+                <div class="slide-container" id="slide-container">
+                    <!-- Ảnh 1 -->
+                    <div class="slide-item active">
+                        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=600&fit=crop" alt="Kỷ niệm 1">
                     </div>
-
-                    <!-- Luxury QR Stage -->
-                    <div class="qr-aesthetic-box" id="qr-tap-trigger">
-                        <div class="qr-glow-aura"></div>
-                        <div class="qr-render-area" id="qr-code-slot"></div>
-                        <div class="qr-scan-line"></div>
-                        <div class="qr-hover-tag">CHẠM ĐỂ MỞ</div>
+                    <!-- Ảnh 2 -->
+                    <div class="slide-item">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=600&fit=crop" alt="Kỷ niệm 2">
                     </div>
-
-                    <!-- Progress bar when scanning -->
-                    <div class="scan-progress-box" id="scan-progress-box" style="display: none;">
-                        <div class="progress-track">
-                            <div class="progress-indicator" id="scan-progress-fill"></div>
-                        </div>
-                        <span class="progress-text" id="scan-progress-text">Đang mở cánh cổng... 0%</span>
+                    <!-- Ảnh 3 -->
+                    <div class="slide-item">
+                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&h=600&fit=crop" alt="Kỷ niệm 3">
                     </div>
-
-                    <div class="qr-action-area">
-                        <p class="qr-guidance">Chạm trực tiếp vào mã hoặc quét bằng camera</p>
-                        
-                        <button class="btn-royal" id="btn-open-gift">
-                            <span class="btn-sparkle">✨</span>
-                            <span>Mở Cánh Cổng Bí Mật</span>
-                            <span class="btn-sparkle">✨</span>
-                        </button>
-                    </div>
-
-                    <div class="card-footer-stamp">
-                        <span>EST. 2026 — EXCLUSIVELY FOR YOUR BIRTHDAY</span>
+                    <!-- Ảnh 4 -->
+                    <div class="slide-item">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=600&fit=crop" alt="Kỷ niệm 4">
                     </div>
                 </div>
+
+                <!-- Nút điều hướng ảnh -->
+                <button class="slide-btn prev-btn" id="prev-btn" aria-label="Ảnh trước">‹</button>
+                <button class="slide-btn next-btn" id="next-btn" aria-label="Ảnh sau">›</button>
+            </div>
+
+            <!-- Chú thích từng ảnh -->
+            <p class="slide-caption" id="slide-caption">Nụ cười của em luôn là điều đẹp nhất 💕</p>
+
+            <!-- Chấm tròn vị trí ảnh -->
+            <div class="dots-container" id="dots-container">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+                <span class="dot" data-index="3"></span>
+            </div>
+
+            <!-- Bức thư sinh nhật ngọt ngào -->
+            <div class="birthday-letter-box">
+                <div class="letter-content">Gửi em yêu! 🌸
+
+Chúc em có một ngày sinh nhật thật nhiều niềm vui, luôn rạng rỡ và hạnh phúc. Cảm ơn em vì đã đến bên anh, mang lại cho anh thật nhiều tiếng cười và những khoảnh khắc dịu dàng nhất.
+
+Tuổi mới chúc em luôn xinh đẹp, đạt được mọi ước mơ và luôn mỉm cười em nhé! Anh yêu em thật nhiều! 💖</div>
+                <div class="letter-signature">Yêu em mãi mãi 💌</div>
             </div>
         </section>
-
-        <!-- ========================================================
-             TRANG 2: NHẬT KÝ KỶ NIỆM & 3 THẺ ĐẶC QUYỀN VÔ HẠN
-        ======================================================== -->
-        <section class="page" id="page-2">
-            <div class="page-content">
-                <div class="section-badge-row">
-                    <span class="section-badge">CHAPTER 02 — KÝ ỨC NGỌT NGÀO</span>
-                </div>
-                
-                <h2 class="page-headline">Gửi Em, Nàng Thơ Của Anh</h2>
-                <p class="page-subline">Những điều dịu dàng nhất được gom lại trọn vẹn dành tặng em</p>
-
-                <!-- 3 Stats Pill -->
-                <div class="memory-stats-grid">
-                    <div class="stat-bubble">
-                        <span class="stat-digit">365+</span>
-                        <span class="stat-caption">Ngày Tỏa Sáng</span>
-                    </div>
-                    <div class="stat-bubble highlight-bubble">
-                        <span class="stat-digit">1000%</span>
-                        <span class="stat-caption">Độ Đáng Yêu</span>
-                    </div>
-                    <div class="stat-bubble">
-                        <span class="stat-digit">01</span>
-                        <span class="stat-caption">Bản Vô Giá</span>
-                    </div>
-                </div>
-
-                <!-- Interactive Polaroid Gallery -->
-                <div class="polaroid-gallery" id="polaroid-gallery">
-                    <!-- Injected by script.js -->
-                </div>
-
-                <p class="polaroid-flip-hint">Chạm vào từng bức ảnh để lật mặt sau đọc lời nhắn 💌</p>
-
-                <!-- 3 Golden VIP Privilege Vouchers -->
-                <div class="golden-vouchers-box">
-                    <div class="vouchers-header">
-                        <span class="crown-stamp">👑</span>
-                        <div class="vh-text">
-                            <h3>3 Thẻ Đặc Quyền Vô Hạn</h3>
-                            <p>Chạm vào từng thẻ để dập dấu kích hoạt ngay</p>
-                        </div>
-                    </div>
-                    
-                    <div class="voucher-ticket-list" id="voucher-list">
-                        <!-- Injected by script.js -->
-                    </div>
-                </div>
-
-                <!-- Page 2 Action Button -->
-                <div class="page-bottom-action">
-                    <button class="btn-royal btn-grand-transition" id="btn-go-to-cake">
-                        <span class="btn-sparkle">🎂</span>
-                        <span>Đi Đến Điều Bất Ngờ Lớn Nhất</span>
-                        <span class="btn-sparkle">✨</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========================================================
-             TRANG 3: QUYẾT ĐỊNH SIÊU LỚN — BÁNH KEM 3D DẠ TIỆC HOÀNG GIA
-        ======================================================== -->
-        <section class="page" id="page-3">
-            <div class="page-content cake-stage">
-                <div class="section-badge-row">
-                    <span class="section-badge badge-gold">THE GRAND FINALE — ĐÊM SINH NHẬT</span>
-                </div>
-
-                <h2 class="page-headline headline-gold" id="cake-headline">Ước Một Điều Thật Đẹp Em Nhé</h2>
-                <p class="page-subline subline-gold" id="cake-subline">Vuốt tay để xoay bánh kem 360° và thổi nến để gửi ước nguyện tới các vì sao</p>
-
-                <!-- Three.js 3D WebGL Canvas Arena -->
-                <div class="canvas-3d-wrapper" id="cake-3d-container">
-                    <div class="drag-hint">
-                        <span>👆 Vuốt ngón tay để xoay bánh 360°</span>
-                    </div>
-                </div>
-
-                <!-- Candle Blow Interaction Panel -->
-                <div class="candle-control-box" id="candle-controls">
-                    <button class="btn-royal btn-candle-blow" id="btn-blow-candle">
-                        <span class="btn-icon">🕯️</span>
-                        <span>Thổi Nến Sinh Nhật</span>
-                        <span class="btn-icon">💨</span>
-                    </button>
-
-                    <!-- Mic volume visualizer bar -->
-                    <div class="blow-meter-wrap" id="blow-meter" style="display: none;">
-                        <div class="blow-meter-bar" id="blow-meter-fill"></div>
-                    </div>
-                    
-                    <p class="hint-mic" id="blow-hint-text">Bấm nút trên hoặc thổi mạnh vào micro của điện thoại</p>
-                </div>
-
-                <!-- Grand Birthday Letter Modal (Unfolded After Blow) -->
-                <div class="birthday-letter-modal" id="letter-modal" style="display: none;">
-                    <div class="letter-inner-card">
-                        <div class="letter-ribbon-tag">🎉 HAPPY BIRTHDAY PRINCESS 🎉</div>
-                        <div class="letter-text" id="final-letter-text"></div>
-                        <div class="letter-signature">
-                            <p>Yêu thương em mãi mãi,</p>
-                            <span>💖✨🌸</span>
-                        </div>
-                        <div class="final-actions-row">
-                            <button class="btn-royal btn-gold-outline" id="btn-replay" onclick="location.reload()">
-                                <span>Xem Lại Từ Đầu</span>
-                                <span>🔄</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
 
-    <!-- Application Script -->
-    <script src="script.js"></script>
+    <!-- ========================================================
+       JAVASCRIPT LOGIC TRONG CÙNG FILE
+    ======================================================== -->
+    <script>
+        // --- 1. TẠO HIỆU ỨNG TRÁI TIM BAY LƠ LỬNG ---
+        function createFloatingHearts() {
+            const container = document.getElementById("hearts-container");
+            const hearts = ["💖", "💗", "💕", "🌸", "✨", "❤️"];
+            const count = 18;
+
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement("span");
+                heart.className = "floating-heart";
+                heart.textContent = hearts[i % hearts.length];
+
+                const left = Math.random() * 100;
+                const duration = 6 + Math.random() * 8;
+                const delay = Math.random() * 8;
+                const size = 16 + Math.random() * 18;
+                const rotation = (Math.random() - 0.5) * 90;
+
+                heart.style.left = `${left}%`;
+                heart.style.fontSize = `${size}px`;
+                heart.style.animationDuration = `${duration}s`;
+                heart.style.animationDelay = `${delay}s`;
+                heart.style.setProperty("--rot", `${rotation}deg`);
+
+                container.appendChild(heart);
+            }
+        }
+
+        // --- 2. DỮ LIỆU SLIDESHOW & LOGIC ---
+        const captions = [
+            "Nụ cười của em luôn là điều đẹp nhất 💕",
+            "Mỗi khoảnh khắc bên em đều là một ngày tuyệt vời 🌸",
+            "Chúc em tuổi mới luôn rực rỡ và bình yên ✨",
+            "Công chúa của anh, chúc em sinh nhật thật hạnh phúc 👑"
+        ];
+
+        let currentSlide = 0;
+        let slideInterval = null;
+        const slides = document.querySelectorAll(".slide-item");
+        const dots = document.querySelectorAll(".dot");
+        const captionEl = document.getElementById("slide-caption");
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle("active", i === index);
+                dots[i].classList.toggle("active", i === index);
+            });
+            captionEl.textContent = captions[index];
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        }
+
+        function prevSlide() {
+            const prev = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(prev);
+        }
+
+        function startAutoSlide() {
+            if (!slideInterval) {
+                slideInterval = setInterval(nextSlide, 3500);
+            }
+        }
+
+        function stopAutoSlide() {
+            if (slideInterval) {
+                clearInterval(slideInterval);
+                slideInterval = null;
+            }
+        }
+
+        // --- 3. NÚT "MỞ QUÀ" & PHÁO GIẤY CONFETTI ---
+        const btnOpenGift = document.getElementById("btn-open-gift");
+        const giftContent = document.getElementById("gift-content");
+
+        btnOpenGift.addEventListener("click", () => {
+            // Bắn pháo giấy chúc mừng
+            fireConfettiBurst();
+
+            // Hiện slideshow ảnh
+            giftContent.classList.add("show");
+            btnOpenGift.style.display = "none";
+            document.getElementById("birthday-subtitle").textContent = "Món quà kỷ niệm ngọt ngào dành riêng cho em hôm nay:";
+
+            // Bật tự động chuyển slide
+            startAutoSlide();
+
+            // Tự động bật nhạc nhẹ nhàng nếu chưa bật
+            if (!isMusicPlaying) {
+                startSynthesizerMusic();
+            }
+
+            // Cuộn xuống xem quà
+            setTimeout(() => {
+                giftContent.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }, 300);
+        });
+
+        function fireConfettiBurst() {
+            if (typeof confetti === "function") {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ["#ff4d79", "#ffb8c6", "#ffd1dc", "#ffffff", "#ffd700"]
+                });
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 50,
+                        spread: 100,
+                        origin: { y: 0.5 },
+                        colors: ["#ff4d79", "#ffb8c6", "#ffffff"]
+                    });
+                }, 300);
+            }
+        }
+
+        // Navigation Events
+        document.getElementById("next-btn").addEventListener("click", () => {
+            nextSlide();
+            stopAutoSlide();
+            startAutoSlide();
+        });
+
+        document.getElementById("prev-btn").addEventListener("click", () => {
+            prevSlide();
+            stopAutoSlide();
+            startAutoSlide();
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener("click", () => {
+                showSlide(index);
+                stopAutoSlide();
+                startAutoSlide();
+            });
+        });
+
+        // --- 4. PHÁT NHẠC NỀN NHẸ NHÀNG (WEB AUDIO API) ---
+        // Sử dụng Web Audio API tổng hợp giai điệu Happy Birthday êm dịu
+        // Không phụ thuộc vào link MP3 bên ngoài, không lo chết link!
+        let isMusicPlaying = false;
+        let musicTimeout = null;
+        const musicToggleBtn = document.getElementById("music-toggle-btn");
+        const musicText = document.getElementById("music-text");
+
+        musicToggleBtn.addEventListener("click", () => {
+            if (isMusicPlaying) {
+                stopSynthesizerMusic();
+            } else {
+                startSynthesizerMusic();
+            }
+        });
+
+        function startSynthesizerMusic() {
+            if (isMusicPlaying) return;
+            isMusicPlaying = true;
+            musicToggleBtn.classList.add("playing");
+            musicText.textContent = "Tắt nhạc";
+            playHappyBirthdayMelody();
+        }
+
+        function stopSynthesizerMusic() {
+            isMusicPlaying = false;
+            musicToggleBtn.classList.remove("playing");
+            musicText.textContent = "Bật nhạc";
+            if (musicTimeout) {
+                clearTimeout(musicTimeout);
+                musicTimeout = null;
+            }
+        }
+
+        function playHappyBirthdayMelody() {
+            // Nốt giai điệu Happy Birthday nhẹ nhàng kiểu hộp nhạc (Music Box)
+            const notes = [
+                { f: 261.63, d: 0.4 },
+                { f: 261.63, d: 0.2 },
+                { f: 293.66, d: 0.5 },
+                { f: 261.63, d: 0.5 },
+                { f: 349.23, d: 0.5 },
+                { f: 329.63, d: 0.9 },
+
+                { f: 261.63, d: 0.4 },
+                { f: 261.63, d: 0.2 },
+                { f: 293.66, d: 0.5 },
+                { f: 261.63, d: 0.5 },
+                { f: 392.00, d: 0.5 },
+                { f: 349.23, d: 0.9 },
+
+                { f: 261.63, d: 0.4 },
+                { f: 261.63, d: 0.2 },
+                { f: 523.25, d: 0.5 },
+                { f: 440.00, d: 0.5 },
+                { f: 349.23, d: 0.5 },
+                { f: 329.63, d: 0.5 },
+                { f: 293.66, d: 0.9 }
+            ];
+
+            let noteIndex = 0;
+
+            function playNextNote() {
+                if (!isMusicPlaying) return;
+
+                const note = notes[noteIndex % notes.length];
+                playTone(note.f, note.d);
+
+                noteIndex++;
+                const delay = (noteIndex % notes.length === 0) ? 1200 : 70;
+                musicTimeout = setTimeout(playNextNote, note.d * 1000 + delay);
+            }
+
+            playNextNote();
+        }
+
+        function playTone(freq, duration) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+                gain.gain.setValueAtTime(0, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + duration + 0.05);
+
+                osc.onended = () => ctx.close();
+            } catch (e) {
+                // Ignore browser autoplay limitations before user gesture
+            }
+        }
+
+        // Khởi động khi tải xong trang
+        document.addEventListener("DOMContentLoaded", () => {
+            createFloatingHearts();
+        });
+    </script>
 </body>
 </html>
