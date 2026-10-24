@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Happy Birthday — Dành Riêng Cho Em</title>
+    <title>🎂 Happy Birthday — Dành Riêng Cho Em</title>
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Luxury Serif & Romantic Handwriting -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Dancing+Script:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Dancing+Script:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
     
-    <!-- External Libraries: Confetti, QR Code Styling, and Three.js for 3D Cake -->
+    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -20,10 +20,10 @@
 <body data-page="1">
 
     <!-- ========================================================
-         🌌 3 HỆ THỐNG NỀN RIÊNG BIỆT CHO 3 TRANG
+         🌌 3 HỆ THỐNG BACKGROUND ĐỘC BẢN & SỐNG ĐỘNG
     ======================================================== -->
     <div class="scene-backgrounds">
-        <!-- NỀN TRANG 1: Lụa Ngọc Trai & Bụi Vàng Nắng Sớm (Silk Pearl & Sunlight Dust) -->
+        <!-- NỀN TRANG 1: Lụa Ngọc Trai & Tia Nắng Sáng Bồng Bềnh -->
         <div class="bg-layer layer-1 active" id="bg-layer-1">
             <div class="pearl-mesh"></div>
             <div class="sunbeam-light"></div>
@@ -32,19 +32,20 @@
             <div class="particle-field" id="particles-p1"></div>
         </div>
 
-        <!-- NỀN TRANG 2: Hoàng Hôn Lãng Mạn & Bokeh Đèn Vàng Ấm Áp (Warm Amber Sunset & Bokeh) -->
+        <!-- NỀN TRANG 2: Hoàng Hôn Lãng Mạn & Bokeh Ấm Cúng -->
         <div class="bg-layer layer-2" id="bg-layer-2">
             <div class="sunset-warmth"></div>
             <div class="bokeh-orbs-wrap" id="bokeh-wrap"></div>
             <div class="rose-petals-field" id="petals-p2"></div>
         </div>
 
-        <!-- NỀN TRANG 3: Bầu Trời Đêm Sao & Sao Băng Dạ Tiệc (Velvet Midnight Gala & Shooting Stars) -->
+        <!-- NỀN TRANG 3: Dạ Tiệc Đêm Sao & Bầu Trời Huyền Ảo -->
         <div class="bg-layer layer-3" id="bg-layer-3">
             <div class="midnight-sky"></div>
             <div class="starfield" id="stars-p3"></div>
             <div class="shooting-star ss-1"></div>
             <div class="shooting-star ss-2"></div>
+            <div class="shooting-star ss-3"></div>
             <div class="cake-spotlight"></div>
         </div>
     </div>
@@ -52,113 +53,144 @@
     <!-- Music Player Pill -->
     <button class="music-pill" id="music-btn" aria-label="Bật/Tắt nhạc">
         <span class="music-icon">🎵</span>
-        <span class="music-label">Giai điệu</span>
+        <span class="music-label" id="music-status">Giai điệu</span>
+        <div class="sound-wave">
+            <span></span><span></span><span></span>
+        </div>
     </button>
 
-    <!-- Main Viewport (Mobile-First 430px) -->
+    <!-- App Viewport (Mobile-First 430px) -->
     <main class="app-viewport">
 
         <!-- ========================================================
-             TRANG 1: THIỆP MỜI MÃ QR TINH TẾ (AESTHETIC INVITATION)
+             TRANG 1: THIỆP MỜI HOÀNG GIA & MÃ QR NGHỆ THUẬT SIÊU XINH
         ======================================================== -->
         <section class="page active" id="page-1">
             <div class="page-content">
-                <div class="invitation-card" id="invitation-tilt-card">
-                    <div class="card-foil-border"></div>
-                    <div class="card-shimmer-highlight"></div>
-                    
+                <!-- Royal Invitation Envelope & Card -->
+                <div class="envelope-outer-card" id="invitation-card">
+                    <div class="gold-foil-trim"></div>
+                    <div class="ornate-corner top-left">❦</div>
+                    <div class="ornate-corner top-right">❦</div>
+                    <div class="ornate-corner btm-left">❦</div>
+                    <div class="ornate-corner btm-right">❦</div>
+
                     <div class="invitation-header">
-                        <div class="wax-seal-badge">
+                        <div class="wax-seal-badge" id="wax-seal">
                             <span>💌</span>
                         </div>
-                        <span class="invite-tag">SPECIAL INVITATION</span>
-                        <h1 class="invite-name" id="display-girl-name">Ngọc Ánh</h1>
-                        <p class="invite-subtitle">Có một món quà nhỏ đã được chuẩn bị riêng cho em hôm nay</p>
+                        <span class="royal-kicker">✦ DÀNH RIÊNG CHO NÀNG THƠ ✦</span>
+                        <h1 class="royal-girl-name" id="display-girl-name">Ngọc Ánh</h1>
+                        <p class="royal-invitation-sub">
+                            Hôm nay là một ngày vô cùng đặc biệt. Một món quà bí mật đang chờ em mở ra...
+                        </p>
                     </div>
 
-                    <!-- Clean Elegant QR Container -->
+                    <!-- Luxury QR Stage -->
                     <div class="qr-aesthetic-box" id="qr-tap-trigger">
                         <div class="qr-glow-aura"></div>
-                        <div class="qr-render-area" id="qr-code-slot">
-                            <!-- Canvas QR injected by JS -->
-                        </div>
+                        <div class="qr-render-area" id="qr-code-slot"></div>
                         <div class="qr-scan-line"></div>
+                        <div class="qr-hover-tag">CHẠM ĐỂ MỞ</div>
+                    </div>
+
+                    <!-- Progress bar when scanning -->
+                    <div class="scan-progress-box" id="scan-progress-box" style="display: none;">
+                        <div class="progress-track">
+                            <div class="progress-indicator" id="scan-progress-fill"></div>
+                        </div>
+                        <span class="progress-text" id="scan-progress-text">Đang mở cánh cổng... 0%</span>
                     </div>
 
                     <div class="qr-action-area">
-                        <p class="qr-guidance">Chạm nhẹ vào mã hoặc quét bằng camera điện thoại</p>
+                        <p class="qr-guidance">Chạm trực tiếp vào mã hoặc quét bằng camera</p>
                         
-                        <button class="btn-aesthetic btn-pearl" id="btn-open-gift">
-                            <span>Mở Món Quà Bí Mật</span>
-                            <span class="btn-arrow">✨</span>
+                        <button class="btn-royal" id="btn-open-gift">
+                            <span class="btn-sparkle">✨</span>
+                            <span>Mở Cánh Cổng Bí Mật</span>
+                            <span class="btn-sparkle">✨</span>
                         </button>
                     </div>
 
                     <div class="card-footer-stamp">
-                        <span>✦ EXCLUSIVELY FOR YOUR SPECIAL DAY ✦</span>
+                        <span>EST. 2026 — EXCLUSIVELY FOR YOUR BIRTHDAY</span>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ========================================================
-             TRANG 2: PHONG BÌ THƯ TÌNH & KỶ NIỆM (MEMORY & PRIVILEGES)
+             TRANG 2: NHẬT KÝ KỶ NIỆM & 3 THẺ ĐẶC QUYỀN VÔ HẠN
         ======================================================== -->
         <section class="page" id="page-2">
             <div class="page-content">
-                <div class="section-tag-row">
-                    <span class="section-tag tag-sunset">CHAPTER 02 — KHOẢNH KHẮC</span>
+                <div class="section-badge-row">
+                    <span class="section-badge">CHAPTER 02 — KÝ ỨC NGỌT NGÀO</span>
                 </div>
                 
-                <h2 class="page-headline headline-sunset">Gửi Nàng Thơ Của Anh</h2>
-                <p class="page-subline subline-sunset">Những điều dịu dàng nhất được gom lại dành tặng em</p>
+                <h2 class="page-headline">Gửi Em, Nàng Thơ Của Anh</h2>
+                <p class="page-subline">Những điều dịu dàng nhất được gom lại trọn vẹn dành tặng em</p>
 
-                <!-- 3D Interactive Envelope -->
-                <div class="love-envelope-box">
-                    <div class="envelope-top-bar">
-                        <span class="stamp-icon">🌸</span>
-                        <span class="envelope-title">Lá Thư Gửi Từ Trái Tim</span>
+                <!-- 3 Stats Pill -->
+                <div class="memory-stats-grid">
+                    <div class="stat-bubble">
+                        <span class="stat-digit">365+</span>
+                        <span class="stat-caption">Ngày Tỏa Sáng</span>
                     </div>
-                    
-                    <!-- Polaroid Cards with Realistic Shadow -->
-                    <div class="polaroid-row" id="polaroid-row">
-                        <!-- Injected by script.js -->
+                    <div class="stat-bubble highlight-bubble">
+                        <span class="stat-digit">1000%</span>
+                        <span class="stat-caption">Độ Đáng Yêu</span>
                     </div>
-
-                    <!-- 3 VIP Privilege Vouchers -->
-                    <div class="voucher-collection">
-                        <div class="voucher-title-row">
-                            <span class="v-spark">✨</span>
-                            <span>3 Tấm Thẻ Đặc Quyền Vô Hạn</span>
-                            <span class="v-spark">✨</span>
-                        </div>
-                        <div class="voucher-ticket-list" id="voucher-list">
-                            <!-- Injected by script.js -->
-                        </div>
+                    <div class="stat-bubble">
+                        <span class="stat-digit">01</span>
+                        <span class="stat-caption">Bản Vô Giá</span>
                     </div>
                 </div>
 
-                <!-- Progress action to page 3 -->
+                <!-- Interactive Polaroid Gallery -->
+                <div class="polaroid-gallery" id="polaroid-gallery">
+                    <!-- Injected by script.js -->
+                </div>
+
+                <p class="polaroid-flip-hint">Chạm vào từng bức ảnh để lật mặt sau đọc lời nhắn 💌</p>
+
+                <!-- 3 Golden VIP Privilege Vouchers -->
+                <div class="golden-vouchers-box">
+                    <div class="vouchers-header">
+                        <span class="crown-stamp">👑</span>
+                        <div class="vh-text">
+                            <h3>3 Thẻ Đặc Quyền Vô Hạn</h3>
+                            <p>Chạm vào từng thẻ để dập dấu kích hoạt ngay</p>
+                        </div>
+                    </div>
+                    
+                    <div class="voucher-ticket-list" id="voucher-list">
+                        <!-- Injected by script.js -->
+                    </div>
+                </div>
+
+                <!-- Page 2 Action Button -->
                 <div class="page-bottom-action">
-                    <button class="btn-aesthetic btn-sunset" id="btn-go-to-cake">
-                        <span>Bước Vào Bữa Tiệc Sinh Nhật</span>
-                        <span class="btn-arrow">🎂</span>
+                    <button class="btn-royal btn-grand-transition" id="btn-go-to-cake">
+                        <span class="btn-sparkle">🎂</span>
+                        <span>Đi Đến Điều Bất Ngờ Lớn Nhất</span>
+                        <span class="btn-sparkle">✨</span>
                     </button>
                 </div>
             </div>
         </section>
 
         <!-- ========================================================
-             TRANG 3: QUYẾT ĐỊNH SIÊU LỚN — BÁNH KEM 3D DẠ TIỆC SAO
+             TRANG 3: QUYẾT ĐỊNH SIÊU LỚN — BÁNH KEM 3D DẠ TIỆC HOÀNG GIA
         ======================================================== -->
         <section class="page" id="page-3">
             <div class="page-content cake-stage">
-                <div class="section-tag-row">
-                    <span class="section-tag tag-night">THE GRAND FINALE — ĐÊM SINH NHẬT</span>
+                <div class="section-badge-row">
+                    <span class="section-badge badge-gold">THE GRAND FINALE — ĐÊM SINH NHẬT</span>
                 </div>
 
-                <h2 class="page-headline headline-night" id="cake-headline">Ước Một Điều Thật Đẹp Em Nhé</h2>
-                <p class="page-subline subline-night" id="cake-subline">Dùng tay vuốt xoay 360° ngắm bánh kem và chạm nến để thổi ước nguyện</p>
+                <h2 class="page-headline headline-gold" id="cake-headline">Ước Một Điều Thật Đẹp Em Nhé</h2>
+                <p class="page-subline subline-gold" id="cake-subline">Vuốt tay để xoay bánh kem 360° và thổi nến để gửi ước nguyện tới các vì sao</p>
 
                 <!-- Three.js 3D WebGL Canvas Arena -->
                 <div class="canvas-3d-wrapper" id="cake-3d-container">
@@ -169,29 +201,35 @@
 
                 <!-- Candle Blow Interaction Panel -->
                 <div class="candle-control-box" id="candle-controls">
-                    <button class="btn-aesthetic btn-night-gold" id="btn-blow-candle">
+                    <button class="btn-royal btn-candle-blow" id="btn-blow-candle">
                         <span class="btn-icon">🕯️</span>
                         <span>Thổi Nến Sinh Nhật</span>
                         <span class="btn-icon">💨</span>
                     </button>
-                    <p class="hint-mic">Chạm nút trên hoặc chạm trực tiếp vào cây nến 3D</p>
+
+                    <!-- Mic volume visualizer bar -->
+                    <div class="blow-meter-wrap" id="blow-meter" style="display: none;">
+                        <div class="blow-meter-bar" id="blow-meter-fill"></div>
+                    </div>
+                    
+                    <p class="hint-mic" id="blow-hint-text">Bấm nút trên hoặc thổi mạnh vào micro của điện thoại</p>
                 </div>
 
-                <!-- Birthday Letter Unfolded After Blow -->
+                <!-- Grand Birthday Letter Modal (Unfolded After Blow) -->
                 <div class="birthday-letter-modal" id="letter-modal" style="display: none;">
                     <div class="letter-inner-card">
                         <div class="letter-ribbon-tag">🎉 HAPPY BIRTHDAY PRINCESS 🎉</div>
-                        <div class="letter-text" id="final-letter-text">
-                            <!-- Injected by script.js -->
-                        </div>
+                        <div class="letter-text" id="final-letter-text"></div>
                         <div class="letter-signature">
                             <p>Yêu thương em mãi mãi,</p>
                             <span>💖✨🌸</span>
                         </div>
-                        <button class="btn-aesthetic btn-night-gold" id="btn-replay" onclick="location.reload()">
-                            <span>Xem Lại Từ Đầu</span>
-                            <span>🔄</span>
-                        </button>
+                        <div class="final-actions-row">
+                            <button class="btn-royal btn-gold-outline" id="btn-replay" onclick="location.reload()">
+                                <span>Xem Lại Từ Đầu</span>
+                                <span>🔄</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

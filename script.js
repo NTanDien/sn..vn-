@@ -1,5 +1,5 @@
 /* ==========================================================================
-   🎂 AESTHETIC MULTI-SCENE LOGIC (3 UNIQUE BACKGROUNDS & 3D CAKE)
+   🎂 ULTRA-LUXURY AESTHETIC ENGINE (MULTI-SCENE & 3D INTERACTIVE CAKE)
    ========================================================================== */
 
 const CONFIG = {
@@ -9,40 +9,42 @@ const CONFIG = {
     memories: [
         {
             img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=600&fit=crop",
-            caption: "“Nụ cười của em luôn là điều dịu dàng nhất sưởi ấm anh.”",
+            caption: "“Nụ cười của em luôn là ánh sáng đẹp nhất sưởi ấm anh.”",
+            secret: "Dù ngày mưa hay ngày nắng, chỉ cần nhìn thấy em cười là mọi muộn phiền đều tan biến hết! 🌸",
             rot: -2
         },
         {
             img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=600&fit=crop",
             caption: "“Chúc em một tuổi mới luôn rực rỡ và bình yên như chính em.”",
+            secret: "Mong em luôn được yêu thương, được nâng niu và luôn là phiên bản hạnh phúc nhất của chính mình! 💖",
             rot: 2
         }
     ],
 
-    // Thẻ đặc quyền (Vouchers VIP)
+    // 3 Thẻ đặc quyền VIP
     vouchers: [
         {
-            icon: "☕",
-            text: "Thẻ Bao Trà Sữa — Có hiệu lực bất cứ lúc nào em thèm hoặc thấy mệt mỏi."
+            icon: "🧋",
+            text: "Thẻ Bao Trà Sữa Trọn Đời — Có hiệu lực bất cứ lúc nào em thèm hoặc thấy mệt mỏi, không giới hạn số ly!"
         },
         {
-            icon: "🤍",
-            text: "Thẻ Luôn Được Cưng Chiều — Em luôn luôn đúng trong mọi cuộc trò chuyện."
+            icon: "👑",
+            text: "Thẻ Luôn Được Cưng Chiều — Em luôn luôn đúng trong mọi cuộc tranh luận, miễn trừ mọi hình phạt hờn dỗi!"
         },
         {
-            icon: "✨",
-            text: "Thẻ Một Điều Ước — Một điều ước bất kỳ sẽ được thực hiện vô điều kiện."
+            icon: "💎",
+            text: "Thẻ Một Điều Ước Thần Kỳ — Một điều ước bất kỳ sẽ được thực hiện ngay lập tức vô điều kiện!"
         }
     ],
 
     // Bức thư sinh nhật sau khi thổi nến 3D
-    finalLetter: `Gửi người con gái anh yêu nhất,
+    finalLetter: `Gửi người con gái anh yêu thương nhất,
 
-Chúc mừng sinh nhật em! Cảm ơn em vì đã đến bên anh, mang theo nụ cười trong trẻo và sự ấm áp sưởi ấm những ngày tháng qua.
+Chúc mừng sinh nhật tuổi mới của em! Cảm ơn định mệnh đã mang em đến bên anh, mang theo nụ cười trong veo và trái tim dịu dàng sưởi ấm những ngày tháng qua.
 
-Tuổi mới, anh chỉ mong em luôn an yên, luôn tự tin bước tiếp trên con đường em chọn, và nụ cười rạng rỡ ấy sẽ không bao giờ tắt trên môi. Dù ngày mai có ra sao, anh vẫn luôn ở đây, đồng hành và yêu thương em nhiều hơn mỗi ngày.
+Bước sang tuổi mới, anh chỉ mong em luôn an yên, luôn tự tin tỏa sáng trên con đường em chọn, và nụ cười rạng rỡ ấy sẽ không bao giờ tắt trên môi. Nhớ rằng, dù thế giới ngoài kia có bộn bề ra sao, em vẫn luôn là công chúa nhỏ được anh yêu thương và nâng niu nhất!
 
-Happy Birthday Công Chúa Của Anh! 🎂✨💖`
+Happy Birthday Nàng Thơ Của Anh! 🎂✨💖`
 };
 
 /* Application State */
@@ -51,6 +53,8 @@ let isMusicPlaying = false;
 let musicNoteTimeout = null;
 let threeScene, threeCamera, threeRenderer, cakeGroup, flameMesh, flameLight;
 let isCandleBlown = false;
+let micAudioStream = null;
+let micAudioContext = null;
 
 /* ==========================================================================
    INITIALIZATION
@@ -63,7 +67,7 @@ function initApp() {
     // 1. Tên bạn nữ
     document.getElementById("display-girl-name").textContent = CONFIG.girlName;
 
-    // 2. Khởi tạo hiệu ứng động cho 3 Background riêng biệt
+    // 2. Khởi tạo 3 Background độc bản
     setupPage1Background();
     setupPage2Background();
     setupPage3Background();
@@ -71,10 +75,10 @@ function initApp() {
     // 3. Render mã QR nghệ thuật
     renderAestheticQR();
 
-    // 4. Render nội dung trang 2
+    // 4. Render nội dung trang 2 (Polaroids & Vouchers)
     renderPage2Content();
 
-    // 5. Gán sự kiện nút bấm & 3D Card Tilt
+    // 5. Gán sự kiện nút bấm & 3D Tilt thiệp mời
     setupEvents();
     setupInvitationTilt();
 }
@@ -82,11 +86,10 @@ function initApp() {
 /* ==========================================================================
    🌌 3 HỆ THỐNG BACKGROUND CHÂN THẬT
    ========================================================================== */
-// Trang 1: Bụi vàng bay lên trong nắng sớm
 function setupPage1Background() {
     const container = document.getElementById("particles-p1");
     const symbols = ["✦", "✧", "⋆", "•", "✨"];
-    const count = 16;
+    const count = 18;
 
     for (let i = 0; i < count; i++) {
         const star = document.createElement("span");
@@ -96,7 +99,7 @@ function setupPage1Background() {
         const left = Math.random() * 100;
         const dur = 5 + Math.random() * 7;
         const delay = Math.random() * 6;
-        const size = 10 + Math.random() * 10;
+        const size = 10 + Math.random() * 12;
 
         star.style.left = `${left}%`;
         star.style.setProperty("--dur", `${dur}s`);
@@ -107,7 +110,6 @@ function setupPage1Background() {
     }
 }
 
-// Trang 2: Quả cầu Bokeh hoàng hôn & Cánh hoa rơi
 function setupPage2Background() {
     const bokehWrap = document.getElementById("bokeh-wrap");
     const petalsWrap = document.getElementById("petals-p2");
@@ -133,7 +135,7 @@ function setupPage2Background() {
 
     // Floating Petals
     const icons = ["🌸", "💮", "🌺"];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 12; i++) {
         const petal = document.createElement("span");
         petal.className = "p2-petal";
         petal.textContent = icons[i % icons.length];
@@ -141,7 +143,7 @@ function setupPage2Background() {
         const left = Math.random() * 100;
         const dur = 6 + Math.random() * 6;
         const delay = Math.random() * 8;
-        const size = 14 + Math.random() * 12;
+        const size = 14 + Math.random() * 14;
 
         petal.style.left = `${left}%`;
         petal.style.setProperty("--p-dur", `${dur}s`);
@@ -152,10 +154,9 @@ function setupPage2Background() {
     }
 }
 
-// Trang 3: Bầu trời đêm sao nhấp nháy
 function setupPage3Background() {
     const starfield = document.getElementById("stars-p3");
-    const starCount = 38;
+    const starCount = 42;
 
     for (let i = 0; i < starCount; i++) {
         const star = document.createElement("div");
@@ -178,7 +179,6 @@ function setupPage3Background() {
     }
 }
 
-// Chuyển đổi Background tương ứng với từng Trang
 function switchBackground(pageIndex) {
     document.body.setAttribute("data-page", pageIndex);
 
@@ -193,7 +193,7 @@ function switchBackground(pageIndex) {
 }
 
 /* ==========================================================================
-   💌 TRANG 1: RENDER MÃ QR & 3D TILT TƯƠNG TÁC
+   💌 TRANG 1: RENDER MÃ QR & TIẾN TRÌNH QUÉT
    ========================================================================== */
 function renderAestheticQR() {
     const qrUrl = window.location.origin + window.location.pathname + "?vip=true";
@@ -201,14 +201,14 @@ function renderAestheticQR() {
     const heartSvg = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
             <path d="M50 88 C25 65 5 50 5 30 C5 15 17 5 30 5 C38 5 45 9 50 16 C55 9 62 5 70 5 C83 5 95 15 95 30 C95 50 75 65 50 88Z" 
-                  fill="#c98897" stroke="#ffffff" stroke-width="6"/>
+                  fill="#c98897" stroke="#ffffff" stroke-width="5"/>
         </svg>
     `;
     const heartData = "data:image/svg+xml;base64," + btoa(heartSvg.trim());
 
     const qrCode = new QRCodeStyling({
-        width: 196,
-        height: 196,
+        width: 200,
+        height: 200,
         type: "canvas",
         data: qrUrl,
         image: heartData,
@@ -254,9 +254,38 @@ function renderAestheticQR() {
     }
 }
 
-// Hiệu ứng nghiêng 3D (Tilt) chân thật khi di chuột / chạm vào thiệp
+function runScanProcess() {
+    const scanBox = document.getElementById("scan-progress-box");
+    const fill = document.getElementById("scan-progress-fill");
+    const text = document.getElementById("scan-progress-text");
+
+    scanBox.style.display = "flex";
+    let progress = 0;
+    const duration = 750;
+    const intervalTime = 20;
+    const step = 100 / (duration / intervalTime);
+
+    const timer = setInterval(() => {
+        progress += step;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(timer);
+            fill.style.width = "100%";
+            text.textContent = "✨ Cánh cổng kỳ diệu đã mở!";
+
+            setTimeout(() => {
+                goToPage(2);
+                startSoftPianoMusic();
+            }, 350);
+        } else {
+            fill.style.width = `${progress}%`;
+            text.textContent = `Đang mở cánh cổng... ${Math.round(progress)}%`;
+        }
+    }, intervalTime);
+}
+
 function setupInvitationTilt() {
-    const card = document.getElementById("invitation-tilt-card");
+    const card = document.getElementById("invitation-card");
     if (!card) return;
 
     card.addEventListener("mousemove", (e) => {
@@ -276,52 +305,74 @@ function setupInvitationTilt() {
 }
 
 /* ==========================================================================
-   📸 TRANG 2: POLAROIDS & VOUCHERS
+   📸 TRANG 2: POLAROIDS 3D & GOLDEN VOUCHERS
    ========================================================================== */
 function renderPage2Content() {
-    const polaroidContainer = document.getElementById("polaroid-row");
+    // 1. Polaroid Gallery
+    const polaroidContainer = document.getElementById("polaroid-gallery");
     polaroidContainer.innerHTML = "";
 
-    CONFIG.memories.forEach((item) => {
-        const card = document.createElement("div");
-        card.className = "polaroid-item";
-        card.style.setProperty("--rot", `${item.rot || 0}deg`);
+    CONFIG.memories.forEach((item, index) => {
+        const wrap = document.createElement("div");
+        wrap.className = "polaroid-card-wrap";
+        wrap.setAttribute("data-index", index);
 
-        card.innerHTML = `
-            <div class="polaroid-img-wrap">
-                <img src="${item.img}" alt="Kỷ niệm" loading="lazy">
+        wrap.innerHTML = `
+            <div class="polaroid-card-inner">
+                <!-- Mặt trước -->
+                <div class="polaroid-face polaroid-face-front" style="--rot: ${item.rot || 0}deg">
+                    <div class="washi-tape-decor"></div>
+                    <img class="polaroid-photo" src="${item.img}" alt="Kỷ niệm" loading="lazy">
+                    <p class="polaroid-quote">${item.caption}</p>
+                </div>
+                <!-- Mặt sau -->
+                <div class="polaroid-face polaroid-face-back">
+                    <span class="back-stamp">💌</span>
+                    <p class="back-secret-note">${item.secret}</p>
+                </div>
             </div>
-            <p class="polaroid-text">${item.caption}</p>
         `;
 
-        polaroidContainer.appendChild(card);
+        wrap.addEventListener("click", () => {
+            wrap.classList.toggle("flipped");
+            playChimeSound(659.25, 0.2);
+        });
+
+        polaroidContainer.appendChild(wrap);
     });
 
+    // 2. 3 Golden VIP Privilege Vouchers
     const voucherContainer = document.getElementById("voucher-list");
     voucherContainer.innerHTML = "";
 
-    CONFIG.vouchers.forEach((v) => {
+    CONFIG.vouchers.forEach((v, idx) => {
         const ticket = document.createElement("div");
-        ticket.className = "voucher-ticket";
+        ticket.className = "golden-ticket-item";
 
         ticket.innerHTML = `
-            <span class="v-icon">${v.icon}</span>
-            <span class="v-content">${v.text}</span>
+            <span class="gt-icon">${v.icon}</span>
+            <span class="gt-content">${v.text}</span>
         `;
+
+        ticket.addEventListener("click", () => {
+            ticket.classList.toggle("claimed");
+            playChimeSound(880.00, 0.25);
+            triggerMiniConfetti();
+        });
 
         voucherContainer.appendChild(ticket);
     });
 }
 
 /* ==========================================================================
-   🎂 TRANG 3: BÁNH KEM 3D THREE.JS ĐÊM SAO DẠ TIỆC
+   🎂 TRANG 3: BÁNH KEM 3D THREE.JS (INTERACTIVE WEBGL)
    ========================================================================== */
 function initThreeJSCake() {
     const container = document.getElementById("cake-3d-container");
     if (!container || threeRenderer) return;
 
     const width = container.clientWidth || 380;
-    const height = container.clientHeight || 350;
+    const height = container.clientHeight || 360;
 
     // Scene
     threeScene = new THREE.Scene();
@@ -339,17 +390,18 @@ function initThreeJSCake() {
     threeRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(threeRenderer.domElement);
 
-    // Ambient & Directional Lights
-    const ambientLight = new THREE.AmbientLight(0xfff5ea, 1.2);
+    // Ambient Light
+    const ambientLight = new THREE.AmbientLight(0xfff5ea, 1.25);
     threeScene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
+    // Directional Key Light
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
     dirLight.position.set(6, 12, 8);
     dirLight.castShadow = true;
     threeScene.add(dirLight);
 
     // Warm Candle Glow Light
-    flameLight = new THREE.PointLight(0xffb74d, 2.5, 9);
+    flameLight = new THREE.PointLight(0xffb74d, 2.6, 9.5);
     flameLight.position.set(0, 2.5, 0);
     threeScene.add(flameLight);
 
@@ -371,7 +423,7 @@ function build3DCakeGeometry() {
     const goldPlateMat = new THREE.MeshStandardMaterial({
         color: 0xffdf85,
         roughness: 0.25,
-        metalness: 0.8
+        metalness: 0.85
     });
 
     const creamMat = new THREE.MeshStandardMaterial({
@@ -418,7 +470,7 @@ function build3DCakeGeometry() {
     tier1.receiveShadow = true;
     cakeGroup.add(tier1);
 
-    // Drip Ring 1 (Sugar Pearls around Tier 1)
+    // Sugar Pearls around Tier 1
     const countPearls = 22;
     for (let i = 0; i < countPearls; i++) {
         const angle = (i / countPearls) * Math.PI * 2;
@@ -520,23 +572,84 @@ function animateThree() {
 }
 
 /* ==========================================================================
-   🕯️ THỔI NẾN BÁNH KEM 3D
+   🎤 THỔI NẾN BẰNG MICROPHONE HOẶC CHẠM
    ========================================================================== */
+function activateMicrophoneBlow() {
+    const hintText = document.getElementById("blow-hint-text");
+    const meterWrap = document.getElementById("blow-meter");
+    const meterFill = document.getElementById("blow-meter-fill");
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+            micAudioStream = stream;
+            meterWrap.style.display = "block";
+            hintText.textContent = "Đang lắng nghe... Thổi thật mạnh vào micro nhé!";
+
+            micAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const source = micAudioContext.createMediaStreamSource(stream);
+            const analyser = micAudioContext.createAnalyser();
+            analyser.fftSize = 256;
+            source.connect(analyser);
+
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+            function listenToBlow() {
+                if (isCandleBlown) return;
+
+                analyser.getByteFrequencyData(dataArray);
+                let sum = 0;
+                for (let i = 0; i < dataArray.length; i++) {
+                    sum += dataArray[i];
+                }
+                const avgVolume = sum / dataArray.length;
+                meterFill.style.width = `${Math.min(100, avgVolume * 2.2)}%`;
+
+                if (avgVolume > 48) {
+                    stopMicrophoneStream();
+                    executeBlowCandle();
+                    return;
+                }
+
+                requestAnimationFrame(listenToBlow);
+            }
+
+            listenToBlow();
+        }).catch((err) => {
+            console.log("Mic blocked:", err);
+            executeBlowCandle();
+        });
+    } else {
+        executeBlowCandle();
+    }
+}
+
+function stopMicrophoneStream() {
+    if (micAudioStream) {
+        micAudioStream.getTracks().forEach((track) => track.stop());
+        micAudioStream = null;
+    }
+    if (micAudioContext) {
+        micAudioContext.close();
+        micAudioContext = null;
+    }
+}
+
 function executeBlowCandle() {
     if (isCandleBlown) return;
     isCandleBlown = true;
+    stopMicrophoneStream();
 
-    // 1. Tắt ngọn lửa và ánh sáng nến
+    // 1. Tắt ngọn lửa 3D
     if (flameMesh) cakeGroup.remove(flameMesh);
     if (flameLight) threeScene.remove(flameLight);
 
-    // 2. Ẩn nút thổi & cập nhật tiêu đề
+    // 2. Ẩn nút thổi
     document.getElementById("candle-controls").style.display = "none";
     document.getElementById("cake-headline").textContent = "✨ Nguyện Ước Đã Được Gửi Tới Các Vì Sao ✨";
-    document.getElementById("cake-subline").textContent = "Chúc công chúa của anh một sinh nhật ngập tràn hạnh phúc và bình yên!";
+    document.getElementById("cake-subline").textContent = "Chúc công chúa của anh một tuổi mới ngập tràn hạnh phúc và bình yên!";
 
-    // 3. Bắn pháo hoa Confetti hoàng gia đêm sao
-    triggerLuxuryConfetti();
+    // 3. Bắn pháo hoa Confetti hoàng gia 4 đợt liên tiếp
+    triggerGrandFireworks();
 
     // 4. Mở lá thư sinh nhật
     setTimeout(() => {
@@ -551,33 +664,31 @@ function executeBlowCandle() {
     }, 1200);
 }
 
-function triggerLuxuryConfetti() {
+function triggerGrandFireworks() {
     const colors = ["#ffdf85", "#dfb387", "#c98897", "#ffffff", "#f5cad3", "#ba68c8"];
-    
+    let wave = 0;
+
+    const fireInterval = setInterval(() => {
+        confetti({
+            particleCount: 85,
+            spread: 90,
+            origin: { y: 0.55 + (wave % 2 === 0 ? 0.05 : -0.05) },
+            colors: colors
+        });
+        wave++;
+        if (wave >= 4) {
+            clearInterval(fireInterval);
+        }
+    }, 380);
+}
+
+function triggerMiniConfetti() {
     confetti({
-        particleCount: 100,
-        spread: 85,
+        particleCount: 25,
+        spread: 50,
         origin: { y: 0.6 },
-        colors: colors
+        colors: ["#d4a359", "#c98897", "#ffffff"]
     });
-
-    setTimeout(() => {
-        confetti({
-            particleCount: 110,
-            spread: 110,
-            origin: { y: 0.5 },
-            colors: colors
-        });
-    }, 400);
-
-    setTimeout(() => {
-        confetti({
-            particleCount: 90,
-            spread: 75,
-            origin: { y: 0.55 },
-            colors: colors
-        });
-    }, 850);
 }
 
 /* ==========================================================================
@@ -618,25 +729,21 @@ function goToPage(targetPage) {
    🎵 WEB AUDIO API: PIANO HAPPY BIRTHDAY
    ========================================================================== */
 function setupEvents() {
-    document.getElementById("btn-open-gift").addEventListener("click", () => {
-        goToPage(2);
-        startSoftPianoMusic();
-    });
+    // Trang 1: Chạm mở quà & Quét QR
+    document.getElementById("btn-open-gift").addEventListener("click", runScanProcess);
+    document.getElementById("qr-tap-trigger").addEventListener("click", runScanProcess);
 
-    document.getElementById("qr-tap-trigger").addEventListener("click", () => {
-        goToPage(2);
-        startSoftPianoMusic();
-    });
-
+    // Trang 2: Chuyển sang Trang 3 (Bánh kem 3D)
     document.getElementById("btn-go-to-cake").addEventListener("click", () => {
         goToPage(3);
     });
 
-    document.getElementById("btn-blow-candle").addEventListener("click", executeBlowCandle);
-
+    // Trang 3: Thổi nến mic & chạm
+    document.getElementById("btn-blow-candle").addEventListener("click", activateMicrophoneBlow);
     const cakeContainer = document.getElementById("cake-3d-container");
     cakeContainer.addEventListener("dblclick", executeBlowCandle);
 
+    // Bật tắt nhạc
     document.getElementById("music-btn").addEventListener("click", toggleMusic);
 }
 
@@ -653,12 +760,14 @@ function startSoftPianoMusic() {
     isMusicPlaying = true;
 
     document.getElementById("music-btn").classList.add("playing");
+    document.getElementById("music-status").textContent = "Đang phát";
     playSoftHappyBirthdayLoop();
 }
 
 function stopSoftPianoMusic() {
     isMusicPlaying = false;
     document.getElementById("music-btn").classList.remove("playing");
+    document.getElementById("music-status").textContent = "Giai điệu";
 
     if (musicNoteTimeout) {
         clearTimeout(musicNoteTimeout);
@@ -721,6 +830,31 @@ function playPianoTone(freq, duration) {
 
         gain.gain.setValueAtTime(0, ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0.09, ctx.currentTime + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + duration + 0.05);
+
+        osc.onended = () => ctx.close();
+    } catch (e) {
+        // Ignored
+    }
+}
+
+function playChimeSound(freq, duration) {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.04);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
 
         osc.start(ctx.currentTime);
