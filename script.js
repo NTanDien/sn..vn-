@@ -1,818 +1,604 @@
 /* ==========================================================================
-   🎂 KÉT SẮT NÀNG THƠ — INTERACTIVE LOGIC & SOUND ENGINE
+   🎂 AESTHETIC LUXURY BIRTHDAY ENGINE (THREE.JS 3D CAKE & INTERACTIONS)
    ========================================================================== */
 
-/* ==========================================================================
-   1. CONFIGURATION OBJECT
-   ========================================================================== */
 const CONFIG = {
-    girlName: "Nguyễn Ngọc Ánh", // Tên bạn nữ
-    secretCode: ["2", "4", "1", "0"], // Mật mã 4 số mở két sắt
+    girlName: "Nguyễn Ngọc Ánh",
 
-    // 9 hình ảnh chất lượng cao cho Chiếc Gương Thần (Captcha)
-    captchaPhotos: [
-        "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&h=500&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=500&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&h=500&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&h=500&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&h=500&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=500&h=500&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&h=500&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&h=500&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1521146764736-56c929d59c83?w=500&h=500&fit=crop&crop=face"
-    ],
-
-    // 3 Tấm ảnh Polaroid 3D & Lời nhắn bí mật ở mặt sau
-    polaroids: [
+    // Polaroid Memories (Trang 2)
+    memories: [
         {
-            img: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&h=600&fit=crop",
-            label: "Nụ cười rạng ngời nhất 💕",
-            secret: "Nụ cười của em chính là điều dịu dàng nhất sưởi ấm cả thế giới này ✨"
+            img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=600&fit=crop",
+            caption: "“Nụ cười của em luôn là điều dịu dàng nhất sưởi ấm anh.”"
         },
         {
-            img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=600&fit=crop",
-            label: "Khoảnh khắc tỏa sáng 🌟",
-            secret: "Dù ở bất kỳ đâu, em vẫn luôn là vì tinh tú lấp lánh và nổi bật nhất 🌸"
-        },
-        {
-            img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=600&fit=crop",
-            label: "Bản độc quyền vô giá 👑",
-            secret: "Trên thế gian 8 tỷ người, chỉ có một em duy nhất — và em là điều vô giá nhất! 💖"
+            img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=600&fit=crop",
+            caption: "“Chúc em một tuổi mới luôn rực rỡ và bình yên như chính em.”"
         }
     ],
 
-    // 3 Thẻ đặc quyền Gacha VIP
+    // Thẻ đặc quyền (Vouchers VIP)
     vouchers: [
-        "🏆 THẺ LUÔN ĐÚNG — Em luôn luôn đúng trong mọi cuộc trò chuyện, vĩnh viễn không hết hạn!",
-        "🧋 THẺ BAO TRÀ SỮA TRỌN ĐỜI — Được bao trà sữa full topping bất cứ lúc nào thèm, không giới hạn số ly!",
-        "💎 THẺ KHO BÁU ƯỚC NGUYỆN — Một điều ước bất kỳ sẽ được thực hiện ngay lập tức vô điều kiện!"
+        {
+            icon: "☕",
+            text: "Thẻ Bao Trà Sữa — Có hiệu lực bất cứ lúc nào em thèm hoặc thấy mệt mỏi."
+        },
+        {
+            icon: "🤍",
+            text: "Thẻ Luôn Được Cưng Chiều — Em luôn luôn đúng trong mọi cuộc trò chuyện."
+        },
+        {
+            icon: "✨",
+            text: "Thẻ Một Điều Ước — Một điều ước bất kỳ sẽ được thực hiện vô điều kiện."
+        }
     ],
 
-    // Bức thư chúc mừng sinh nhật thiêng liêng ở cuối trang
-    finalLetter: `Gửi người con gái tuyệt vời nhất thế gian! 🌸
+    // Bức thư sinh nhật sau khi thổi nến 3D
+    finalLetter: `Gửi người con gái anh yêu nhất,
 
-Chúc mừng sinh nhật tuổi mới của em! Cảm ơn định mệnh đã mang em đến và thắp sáng cuộc sống này bằng những nụ cười trong veo, bằng sự ấm áp và trái tim dịu dàng của em.
+Chúc mừng sinh nhật em! Cảm ơn em vì đã đến bên anh, mang theo nụ cười trong trẻo và sự ấm áp sưởi ấm những ngày tháng qua.
 
-Chúc em tuổi mới luôn rực rỡ như hoa mùa xuân, luôn bình an, hạnh phúc và chạm tay đến mọi giấc mơ mà em ấp ủ. Nhớ rằng, dù thế giới ngoài kia có bộn bề ra sao, em vẫn luôn là công chúa nhỏ được yêu thương và nâng niu nhất!
+Tuổi mới, anh chỉ mong em luôn an yên, luôn tự tin bước tiếp trên con đường em chọn, và nụ cười rạng rỡ ấy sẽ không bao giờ tắt trên môi. Dù ngày mai có ra sao, anh vẫn luôn ở đây, đồng hành và yêu thương em nhiều hơn mỗi ngày.
 
-Happy Birthday Nàng Thơ Của Anh! 🎂✨💖`
+Happy Birthday Công Chúa Của Anh! 🎂✨💖`
 };
 
-/* ==========================================================================
-   2. APPLICATION STATE
-   ========================================================================== */
-let currentScreenIndex = 0;
-let unlockedSlots = [false, false, false, false];
-let selectedCaptchaIndexes = new Set();
-let flippedPolaroidIndexes = new Set();
-let openedGachaBoxes = new Set();
-let isCandleExtinguished = false;
-
-// Audio & Mic Context
-let isMusicActive = false;
-let audioMelodyTimeout = null;
-let micAudioStream = null;
-let micAudioContext = null;
+/* Application State */
+let currentPage = 1;
+let isMusicPlaying = false;
+let musicNoteTimeout = null;
+let threeScene, threeCamera, threeRenderer, cakeGroup, flameMesh, flameLight;
+let isCandleBlown = false;
 
 /* ==========================================================================
-   3. INITIALIZATION ON DOM READY
+   INITIALIZATION
    ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
     initApp();
 });
 
 function initApp() {
-    // 1. Cập nhật tên bạn nữ
-    document.getElementById("topbar-name").textContent = CONFIG.girlName;
+    // 1. Hiển thị tên bạn nữ
+    document.getElementById("display-girl-name").textContent = CONFIG.girlName;
 
-    // 2. Tạo hiệu ứng không gian lơ lửng (Petals & Stars)
-    generateSakuraPetals();
-    generateSparklingStars();
+    // 2. Tạo hạt bụi hoa bay nhẹ
+    createSakuraDust();
 
-    // 3. Render mã QR nghệ thuật Hologram
-    renderArtisticQRCode();
+    // 3. Render mã QR màu Rose-Gold thanh lịch
+    renderAestheticQR();
 
-    // 4. Render Captcha 9 ô ảnh
-    renderCaptchaGrid();
+    // 4. Render nội dung trang 2 (Polaroids & Vouchers)
+    renderPage2Content();
 
-    // 5. Render 3 Polaroid 3D
-    renderPolaroidCards();
-
-    // 6. Gán các sự kiện tương tác
-    attachEventListeners();
-
-    // 7. Kiểm tra tự động đăng nhập khi quét camera (VIP Login via URL query)
-    checkVipLoginParameter();
+    // 5. Gán sự kiện nút bấm
+    setupEvents();
 }
 
 /* ==========================================================================
-   4. ATMOSPHERIC PARTICLES GENERATOR
+   🌸 SAKURA DUST PARTICLES
    ========================================================================== */
-function generateSakuraPetals() {
-    const container = document.getElementById("petal-container");
-    const icons = ["🌸", "💗", "✨", "💖", "🎀", "🌺", "💕"];
-    const petalCount = 18;
+function createSakuraDust() {
+    const container = document.getElementById("petal-dust");
+    const icons = ["🌸", "✨", "🤍", "🌷"];
+    const count = 12;
 
-    for (let i = 0; i < petalCount; i++) {
-        const petal = document.createElement("span");
-        petal.className = "floating-petal";
-        petal.textContent = icons[i % icons.length];
+    for (let i = 0; i < count; i++) {
+        const span = document.createElement("span");
+        span.className = "dust-particle";
+        span.textContent = icons[i % icons.length];
 
-        const leftPos = Math.random() * 100;
-        const animDuration = 7 + Math.random() * 8;
-        const animDelay = Math.random() * 10;
-        const drift = (Math.random() - 0.5) * 100;
-        const rotation = (Math.random() - 0.5) * 720;
-        const size = 14 + Math.random() * 16;
+        const left = Math.random() * 100;
+        const dur = 8 + Math.random() * 8;
+        const delay = Math.random() * 8;
+        const size = 12 + Math.random() * 8;
 
-        petal.style.left = `${leftPos}%`;
-        petal.style.fontSize = `${size}px`;
-        petal.style.animationDuration = `${animDuration}s`;
-        petal.style.animationDelay = `${animDelay}s`;
-        petal.style.setProperty("--drift", `${drift}px`);
-        petal.style.setProperty("--rot", `${rotation}deg`);
+        span.style.left = `${left}%`;
+        span.style.animationDuration = `${dur}s`;
+        span.style.animationDelay = `${delay}s`;
+        span.style.fontSize = `${size}px`;
 
-        container.appendChild(petal);
-    }
-}
-
-function generateSparklingStars() {
-    const layer = document.getElementById("sparkle-layer");
-    const starCount = 20;
-
-    for (let i = 0; i < starCount; i++) {
-        const star = document.createElement("span");
-        star.className = "twinkle-star";
-        star.textContent = "✦";
-
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        const duration = 2 + Math.random() * 3;
-        const delay = Math.random() * 3;
-        const size = 10 + Math.random() * 12;
-
-        star.style.left = `${posX}%`;
-        star.style.top = `${posY}%`;
-        star.style.fontSize = `${size}px`;
-        star.style.setProperty("--p-dur", `${duration}s`);
-        star.style.animationDelay = `${delay}s`;
-
-        layer.appendChild(star);
+        container.appendChild(span);
     }
 }
 
 /* ==========================================================================
-   5. MÀN HÌNH 0: QR CODE NGHỆ THUẬT & ĐĂNG NHẬP VIP
+   💌 TRANG 1: RENDER MÃ QR ROSE-GOLD
    ========================================================================== */
-function renderArtisticQRCode() {
-    // Địa chỉ trang hiện tại cộng thêm param VIP
-    const qrTargetUrl = window.location.origin + window.location.pathname + "?vip_login=true";
+function renderAestheticQR() {
+    const qrUrl = window.location.origin + window.location.pathname + "?vip=true";
 
-    // Trái tim SVG màu hồng lấp lánh đặt ở tâm QR
+    // Trái tim SVG tối giản màu Rose Gold
     const heartSvg = `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
             <path d="M50 88 C25 65 5 50 5 30 C5 15 17 5 30 5 C38 5 45 9 50 16 C55 9 62 5 70 5 C83 5 95 15 95 30 C95 50 75 65 50 88Z" 
-                  fill="#d81b60" stroke="#ffd54f" stroke-width="4"/>
+                  fill="#c98897" stroke="#ffffff" stroke-width="6"/>
         </svg>
     `;
-    const heartDataUrl = "data:image/svg+xml;base64," + btoa(heartSvg.trim());
+    const heartData = "data:image/svg+xml;base64," + btoa(heartSvg.trim());
 
-    // Khởi tạo QRCodeStyling với gradient hồng ruby sang trọng
-    const qrStyling = new QRCodeStyling({
-        width: 210,
-        height: 210,
+    const qrCode = new QRCodeStyling({
+        width: 196,
+        height: 196,
         type: "canvas",
-        data: qrTargetUrl,
-        image: heartDataUrl,
+        data: qrUrl,
+        image: heartData,
         dotsOptions: {
-            color: "#d81b60",
+            color: "#a6586b",
             type: "extra-rounded",
             gradient: {
                 type: "linear",
                 rotation: 45,
                 colorStops: [
-                    { offset: 0, color: "#d81b60" },
-                    { offset: 0.5, color: "#ec407a" },
-                    { offset: 1, color: "#8e24aa" }
+                    { offset: 0, color: "#a6586b" },
+                    { offset: 1, color: "#dfb387" }
                 ]
             }
         },
         cornersSquareOptions: {
-            color: "#ad1457",
+            color: "#a6586b",
             type: "extra-rounded"
         },
         cornersDotOptions: {
-            color: "#ad1457",
+            color: "#dfb387",
             type: "dot"
         },
         backgroundOptions: {
-            color: "#fff9fb"
+            color: "#ffffff"
         },
         imageOptions: {
             crossOrigin: "anonymous",
-            margin: 6,
+            margin: 4,
             imageSize: 0.35
         }
     });
 
-    const container = document.getElementById("qr-code-render");
-    qrStyling.append(container);
-}
+    qrCode.append(document.getElementById("qr-code-slot"));
 
-// Kiểm tra nếu người dùng quét từ Camera điện thoại có kèm ?vip_login=true
-function checkVipLoginParameter() {
+    // Check if opened from camera QR
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("vip_login") === "true") {
+    if (urlParams.get("vip") === "true") {
         setTimeout(() => {
-            triggerSparkleConfetti();
-            startMusicSynthesizer();
-            navigateToScreen(1);
-        }, 800);
+            goToPage(2);
+            startSoftPianoMusic();
+        }, 600);
     }
 }
 
-// Hiệu ứng thanh tiến trình quét từ 0% đến 100% trong 0.8 giây
-function executeScanProcess() {
-    const progressWrap = document.getElementById("unlock-progress-wrap");
-    const progressFill = document.getElementById("unlock-progress-fill");
-    const progressText = document.getElementById("unlock-progress-text");
+/* ==========================================================================
+   📸 TRANG 2: POLAROIDS & VOUCHERS
+   ========================================================================== */
+function renderPage2Content() {
+    // 1. Polaroids
+    const polaroidContainer = document.getElementById("polaroid-row");
+    polaroidContainer.innerHTML = "";
 
-    progressWrap.style.display = "flex";
-    let progress = 0;
-    const duration = 800;
-    const intervalTime = 20;
-    const increment = 100 / (duration / intervalTime);
+    CONFIG.memories.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "polaroid-item";
 
-    const scanInterval = setInterval(() => {
-        progress += increment;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(scanInterval);
+        card.innerHTML = `
+            <div class="polaroid-img-wrap">
+                <img src="${item.img}" alt="Kỷ niệm" loading="lazy">
+            </div>
+            <p class="polaroid-text">${item.caption}</p>
+        `;
 
-            progressFill.style.width = "100%";
-            progressText.textContent = "✨ Xác thực công chúa thành công!";
+        polaroidContainer.appendChild(card);
+    });
 
-            setTimeout(() => {
-                triggerSparkleConfetti();
-                startMusicSynthesizer();
-                navigateToScreen(1);
-            }, 400);
-        } else {
-            progressFill.style.width = `${progress}%`;
-            progressText.textContent = `Đang mở cổng kỳ diệu... ${Math.round(progress)}%`;
+    // 2. Vouchers
+    const voucherContainer = document.getElementById("voucher-list");
+    voucherContainer.innerHTML = "";
+
+    CONFIG.vouchers.forEach((v) => {
+        const ticket = document.createElement("div");
+        ticket.className = "voucher-ticket";
+
+        ticket.innerHTML = `
+            <span class="v-icon">${v.icon}</span>
+            <span class="v-content">${v.text}</span>
+        `;
+
+        voucherContainer.appendChild(ticket);
+    });
+}
+
+/* ==========================================================================
+   🎂 TRANG 3: BÁNH KEM 3D BẰNG THREE.JS (INTERACTIVE WEBGL)
+   ========================================================================== */
+function initThreeJSCake() {
+    const container = document.getElementById("cake-3d-container");
+    if (!container || threeRenderer) return; // Tránh khởi tạo 2 lần
+
+    const width = container.clientWidth || 380;
+    const height = container.clientHeight || 340;
+
+    // 1. Scene
+    threeScene = new THREE.Scene();
+
+    // 2. Camera
+    threeCamera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+    threeCamera.position.set(0, 4.5, 9);
+    threeCamera.lookAt(0, 0.5, 0);
+
+    // 3. Renderer with soft shadow & transparency
+    threeRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    threeRenderer.setSize(width, height);
+    threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    threeRenderer.shadowMap.enabled = true;
+    threeRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(threeRenderer.domElement);
+
+    // 4. Lighting
+    const ambientLight = new THREE.AmbientLight(0xfff7f2, 0.9);
+    threeScene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 10, 7);
+    dirLight.castShadow = true;
+    threeScene.add(dirLight);
+
+    // Light from candle
+    flameLight = new THREE.PointLight(0xffaa33, 1.8, 8);
+    flameLight.position.set(0, 2.5, 0);
+    threeScene.add(flameLight);
+
+    // 5. Cake Group
+    cakeGroup = new THREE.Group();
+    threeScene.add(cakeGroup);
+
+    build3DCakeGeometry();
+
+    // 6. Interaction: Drag to rotate cake 360°
+    setupCakeTouchRotation(container);
+
+    // 7. Render Loop
+    animateThree();
+}
+
+function build3DCakeGeometry() {
+    // Materials
+    const goldPlateMat = new THREE.MeshStandardMaterial({
+        color: 0xdfb387,
+        roughness: 0.3,
+        metalness: 0.7
+    });
+
+    const tierCreamMat = new THREE.MeshStandardMaterial({
+        color: 0xfdf7f2,
+        roughness: 0.5,
+        metalness: 0.05
+    });
+
+    const tierPinkMat = new THREE.MeshStandardMaterial({
+        color: 0xf5d3db,
+        roughness: 0.45,
+        metalness: 0.05
+    });
+
+    const strawberryMat = new THREE.MeshStandardMaterial({
+        color: 0xd93853,
+        roughness: 0.3,
+        metalness: 0.1
+    });
+
+    const candleMat = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.4
+    });
+
+    // --- Plate ---
+    const plateGeo = new THREE.CylinderGeometry(3.2, 2.9, 0.15, 48);
+    const plate = new THREE.Mesh(plateGeo, goldPlateMat);
+    plate.position.y = -1.0;
+    plate.receiveShadow = true;
+    cakeGroup.add(plate);
+
+    // --- Tier 1 (Bottom) ---
+    const tier1Geo = new THREE.CylinderGeometry(2.6, 2.6, 1.1, 48);
+    const tier1 = new THREE.Mesh(tier1Geo, tierPinkMat);
+    tier1.position.y = -0.4;
+    tier1.castShadow = true;
+    tier1.receiveShadow = true;
+    cakeGroup.add(tier1);
+
+    // --- Tier 2 (Middle) ---
+    const tier2Geo = new THREE.CylinderGeometry(1.9, 1.9, 0.95, 48);
+    const tier2 = new THREE.Mesh(tier2Geo, tierCreamMat);
+    tier2.position.y = 0.5;
+    tier2.castShadow = true;
+    tier2.receiveShadow = true;
+    cakeGroup.add(tier2);
+
+    // --- Tier 3 (Top) ---
+    const tier3Geo = new THREE.CylinderGeometry(1.2, 1.2, 0.75, 48);
+    const tier3 = new THREE.Mesh(tier3Geo, tierPinkMat);
+    tier3.position.y = 1.25;
+    tier3.castShadow = true;
+    tier3.receiveShadow = true;
+    cakeGroup.add(tier3);
+
+    // --- Strawberries on Tier 2 ---
+    const strawGeo = new THREE.ConeGeometry(0.18, 0.35, 16);
+    const countStraw = 8;
+    for (let i = 0; i < countStraw; i++) {
+        const angle = (i / countStraw) * Math.PI * 2;
+        const straw = new THREE.Mesh(strawGeo, strawberryMat);
+        straw.position.set(Math.cos(angle) * 1.55, 1.05, Math.sin(angle) * 1.55);
+        straw.rotation.x = Math.PI;
+        cakeGroup.add(straw);
+    }
+
+    // --- Candle Stick ---
+    const candleGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.8, 16);
+    const candle = new THREE.Mesh(candleGeo, candleMat);
+    candle.position.set(0, 1.9, 0);
+    candle.castShadow = true;
+    cakeGroup.add(candle);
+
+    // --- Candle Flame 3D ---
+    const flameGeo = new THREE.SphereGeometry(0.12, 16, 16);
+    flameGeo.scale(1, 2.2, 1);
+    const flameMat = new THREE.MeshBasicMaterial({ color: 0xffaa22 });
+    flameMesh = new THREE.Mesh(flameGeo, flameMat);
+    flameMesh.position.set(0, 2.45, 0);
+    cakeGroup.add(flameMesh);
+}
+
+function setupCakeTouchRotation(container) {
+    let isDragging = false;
+    let previousX = 0;
+
+    const onStart = (clientX) => {
+        isDragging = true;
+        previousX = clientX;
+    };
+
+    const onMove = (clientX) => {
+        if (!isDragging || !cakeGroup) return;
+        const deltaX = clientX - previousX;
+        cakeGroup.rotation.y += deltaX * 0.008;
+        previousX = clientX;
+    };
+
+    const onEnd = () => {
+        isDragging = false;
+    };
+
+    // Touch
+    container.addEventListener("touchstart", (e) => onStart(e.touches[0].clientX), { passive: true });
+    window.addEventListener("touchmove", (e) => { if (e.touches && e.touches[0]) onMove(e.touches[0].clientX); }, { passive: true });
+    window.addEventListener("touchend", onEnd);
+
+    // Mouse
+    container.addEventListener("mousedown", (e) => onStart(e.clientX));
+    window.addEventListener("mousemove", (e) => onMove(e.clientX));
+    window.addEventListener("mouseup", onEnd);
+}
+
+function animateThree() {
+    requestAnimationFrame(animateThree);
+
+    // Gentle auto-rotation when not interacting
+    if (cakeGroup) {
+        cakeGroup.rotation.y += 0.003;
+    }
+
+    // Flame flickering effect
+    if (flameMesh && !isCandleBlown) {
+        const time = Date.now() * 0.015;
+        const scaleFlicker = 1 + Math.sin(time) * 0.12;
+        flameMesh.scale.set(scaleFlicker, scaleFlicker * 2.2, scaleFlicker);
+        if (flameLight) {
+            flameLight.intensity = 1.6 + Math.sin(time * 2) * 0.4;
         }
-    }, intervalTime);
+    }
+
+    if (threeRenderer && threeScene && threeCamera) {
+        threeRenderer.render(threeScene, threeCamera);
+    }
 }
 
 /* ==========================================================================
-   6. MÀN HÌNH 1: CHIẾC GƯƠNG THẦN (CAPTCHA 9 ẢNH)
+   🕯️ INTERACTION: BLOW OUT 3D CANDLE
    ========================================================================== */
-function renderCaptchaGrid() {
-    const grid = document.getElementById("captcha-grid");
+function executeBlowCandle() {
+    if (isCandleBlown) return;
+    isCandleBlown = true;
 
-    CONFIG.captchaPhotos.forEach((photoUrl, index) => {
-        const cell = document.createElement("div");
-        cell.className = "mirror-cell";
-        cell.setAttribute("data-index", index);
-
-        const img = document.createElement("img");
-        img.src = photoUrl;
-        img.alt = `Nhan sắc nàng thơ ${index + 1}`;
-        img.loading = "lazy";
-
-        cell.appendChild(img);
-
-        cell.addEventListener("click", () => {
-            if (cell.classList.contains("selected")) {
-                cell.classList.remove("selected");
-                selectedCaptchaIndexes.delete(index);
-            } else {
-                cell.classList.add("selected");
-                selectedCaptchaIndexes.add(index);
-                playChimeSound(659.25, 0.15); // Âm thanh nốt nhạc khi chọn
-            }
-            updateCaptchaFeedback();
-        });
-
-        grid.appendChild(cell);
-    });
-}
-
-function updateCaptchaFeedback() {
-    const feedback = document.getElementById("captcha-feedback");
-    const count = selectedCaptchaIndexes.size;
-
-    if (count === 0) {
-        feedback.className = "mirror-feedback";
-        feedback.textContent = "Chạm vào ảnh để chọn những khoảnh khắc rạng rỡ nhất ✨";
-    } else if (count < 3) {
-        feedback.className = "mirror-feedback";
-        feedback.textContent = `Đã chọn ${count}/3 tấm — Chọn thêm chút nữa nhé! 💖`;
-    } else {
-        feedback.className = "mirror-feedback success";
-        feedback.textContent = `Đã chọn ${count} tấm xinh đẹp! Bấm nút bên dưới để xác nhận nào! 👑`;
+    // 1. Tắt ngọn lửa 3D và nguồn sáng
+    if (flameMesh) {
+        cakeGroup.remove(flameMesh);
     }
-}
-
-function confirmCaptchaSelection() {
-    const feedback = document.getElementById("captcha-feedback");
-
-    if (selectedCaptchaIndexes.size < 3) {
-        feedback.className = "mirror-feedback error";
-        feedback.textContent = "Hãy chạm chọn ít nhất 3 bức ảnh xinh nhất nhé! 💗";
-        return;
+    if (flameLight) {
+        threeScene.remove(flameLight);
     }
 
-    // Luôn luôn vượt qua 100% vì góc nào cũng xinh
-    feedback.className = "mirror-feedback success";
-    feedback.textContent = "Chính xác 100%! Không có bức nào sai vì góc nào nàng cũng rạng ngời! 🥰";
+    // 2. Ẩn nút thổi
+    document.getElementById("candle-controls").style.display = "none";
+    document.getElementById("cake-headline").textContent = "✨ Điều Ước Đang Thành Hiện Thực ✨";
+    document.getElementById("cake-subline").textContent = "Chúc công chúa của anh một sinh nhật ngập tràn hạnh phúc!";
 
-    unlockSecretSlot(0);
+    // 3. Bắn pháo hoa Confetti sang xịn (Pastel & Gold)
+    triggerLuxuryConfetti();
 
+    // 4. Mở bức thư chúc mừng
     setTimeout(() => {
-        navigateToScreen(2);
-    }, 1300);
+        const letterModal = document.getElementById("letter-modal");
+        document.getElementById("final-letter-text").textContent = CONFIG.finalLetter;
+        letterModal.style.display = "block";
+
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth"
+        });
+    }, 1200);
 }
 
-/* ==========================================================================
-   7. MÀN HÌNH 2: BẢO TÀNG KÝ ỨC (POLAROID 3D & WRAPPED)
-   ========================================================================== */
-function renderPolaroidCards() {
-    const container = document.getElementById("polaroid-container");
-    const randomAngles = [-2, 2, -1.5];
-
-    CONFIG.polaroids.forEach((item, index) => {
-        const frame = document.createElement("div");
-        frame.className = "polaroid-frame";
-        frame.setAttribute("data-index", index);
-
-        const inner = document.createElement("div");
-        inner.className = "polaroid-inner";
-
-        // Mặt trước
-        const front = document.createElement("div");
-        front.className = "polaroid-front";
-        front.style.setProperty("--angle", `${randomAngles[index % 3]}deg`);
-
-        const tape = document.createElement("div");
-        tape.className = "polaroid-tape";
-
-        const img = document.createElement("img");
-        img.src = item.img;
-        img.alt = item.label;
-        img.loading = "lazy";
-
-        const caption = document.createElement("div");
-        caption.className = "polaroid-caption";
-        caption.textContent = item.label;
-
-        front.appendChild(tape);
-        front.appendChild(img);
-        front.appendChild(caption);
-
-        // Mặt sau
-        const back = document.createElement("div");
-        back.className = "polaroid-back";
-
-        const seal = document.createElement("div");
-        seal.className = "wax-seal";
-        seal.textContent = "💌";
-
-        const text = document.createElement("div");
-        text.className = "secret-handwriting";
-        text.textContent = item.secret;
-
-        back.appendChild(seal);
-        back.appendChild(text);
-
-        inner.appendChild(front);
-        inner.appendChild(back);
-        frame.appendChild(inner);
-
-        // Sự kiện lật 3D khi chạm
-        frame.addEventListener("click", () => {
-            frame.classList.toggle("flipped");
-            playChimeSound(783.99, 0.25);
-
-            if (frame.classList.contains("flipped")) {
-                flippedPolaroidIndexes.add(index);
-                triggerSmallConfetti();
-            } else {
-                flippedPolaroidIndexes.delete(index);
-            }
-
-            checkPolaroidAlbumProgress();
-        });
-
-        container.appendChild(frame);
+function triggerLuxuryConfetti() {
+    const colors = ["#dfb387", "#c98897", "#a6586b", "#ffffff", "#f5d3db"];
+    
+    // Wave 1
+    confetti({
+        particleCount: 90,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: colors
     });
-}
 
-function checkPolaroidAlbumProgress() {
-    const counterText = document.getElementById("polaroid-counter-text");
-    const nextBtn = document.getElementById("btn-next-to-gacha");
-    const flippedCount = flippedPolaroidIndexes.size;
-
-    counterText.textContent = `Đã khám phá ${flippedCount}/3 bức ảnh ký ức 💌`;
-
-    if (flippedCount >= 3) {
-        counterText.textContent = "✨ Nàng đã mở toàn bộ ký ức! Chìa khóa thứ 2 đã mở! ✨";
-        unlockSecretSlot(1);
-
-        nextBtn.classList.remove("btn-disabled");
-        nextBtn.removeAttribute("disabled");
-        nextBtn.innerHTML = `
-            <span class="btn-icon">🎁</span>
-            <span class="btn-text">Tiếp Tục Rút Quà Đặc Quyền</span>
-            <span class="btn-icon">✨</span>
-        `;
-    }
-}
-
-/* ==========================================================================
-   8. MÀN HÌNH 3: RƯƠNG GACHA PHA LÊ (3 VOUCHERS)
-   ========================================================================== */
-function handleOpenGacha(index) {
-    if (openedGachaBoxes.has(index)) {
-        return;
-    }
-
-    openedGachaBoxes.add(index);
-    playChimeSound(1046.5, 0.35); // Âm thanh chuông vàng
-
-    // Làm mờ hộp quà đã mở
-    const boxElements = document.querySelectorAll(".gacha-item");
-    boxElements[index].classList.add("opened");
-
-    // Thêm thẻ voucher vào danh sách bên dưới
-    const voucherList = document.getElementById("voucher-cards-list");
-    const voucherIcons = ["🏆", "🧋", "💎"];
-
-    const card = document.createElement("div");
-    card.className = "vip-voucher-ticket";
-
-    const iconSpan = document.createElement("span");
-    iconSpan.className = "ticket-icon";
-    iconSpan.textContent = voucherIcons[index];
-
-    const textSpan = document.createElement("span");
-    textSpan.className = "ticket-text";
-    textSpan.textContent = CONFIG.vouchers[index];
-
-    card.appendChild(iconSpan);
-    card.appendChild(textSpan);
-    voucherList.appendChild(card);
-
-    triggerSmallConfetti();
-
-    // Mở đủ 3 hộp -> mở ô mật mã thứ 3
-    if (openedGachaBoxes.size >= 3) {
-        unlockSecretSlot(2);
-
-        const nextBtn = document.getElementById("btn-next-to-cake");
-        nextBtn.classList.remove("btn-disabled");
-        nextBtn.removeAttribute("disabled");
-        nextBtn.innerHTML = `
-            <span class="btn-icon">🎂</span>
-            <span class="btn-text">Đến Nghi Thức Thổi Nến Cuối Cùng</span>
-            <span class="btn-icon">🎉</span>
-        `;
-    }
-}
-
-/* ==========================================================================
-   9. MÀN HÌNH 4: THỔI NẾN MICROPHONE & MỞ TOANG KÉT SẮT
-   ========================================================================== */
-function activateMicrophoneForCandle() {
-    const btnLabel = document.getElementById("mic-btn-label");
-    const meter = document.getElementById("mic-meter");
-    const meterFill = document.getElementById("meter-fill");
-
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-            micAudioStream = stream;
-            meter.style.display = "block";
-            btnLabel.textContent = "Đang lắng nghe... Hãy thổi thật mạnh vào mic!";
-
-            micAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const source = micAudioContext.createMediaStreamSource(stream);
-            const analyser = micAudioContext.createAnalyser();
-            analyser.fftSize = 256;
-            source.connect(analyser);
-
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-            function analyzeSound() {
-                if (isCandleExtinguished) return;
-
-                analyser.getByteFrequencyData(dataArray);
-                let sum = 0;
-                for (let i = 0; i < dataArray.length; i++) {
-                    sum += dataArray[i];
-                }
-                const averageVolume = sum / dataArray.length;
-
-                // Cập nhật thanh hiển thị volume âm thanh
-                meterFill.style.width = `${Math.min(100, averageVolume * 2)}%`;
-
-                // Ngưỡng phát hiện tiếng thổi nến (> 48)
-                if (averageVolume > 48) {
-                    extinguishCandleCeremony();
-                    return;
-                }
-
-                requestAnimationFrame(analyzeSound);
-            }
-
-            analyzeSound();
-        }).catch((err) => {
-            console.warn("Microphone không thể truy cập:", err);
-            btnLabel.textContent = "Micro bị chặn — Chạm vào nến để thổi nhé!";
-            // Tự động fallback sau 3 giây nếu chặn
-            setTimeout(() => {
-                if (!isCandleExtinguished) {
-                    extinguishCandleCeremony();
-                }
-            }, 3000);
-        });
-    } else {
-        btnLabel.textContent = "Hãy chạm thẳng vào ngọn nến nhé!";
-    }
-}
-
-function stopMicrophoneTracking() {
-    if (micAudioStream) {
-        micAudioStream.getTracks().forEach((track) => track.stop());
-        micAudioStream = null;
-    }
-    if (micAudioContext) {
-        micAudioContext.close();
-        micAudioContext = null;
-    }
-}
-
-function extinguishCandleCeremony() {
-    if (isCandleExtinguished) return;
-    isCandleExtinguished = true;
-    stopMicrophoneTracking();
-
-    // 1. Tắt ngọn lửa
-    document.getElementById("flame-element").classList.add("extinguished");
-    document.getElementById("flame-glow").classList.add("extinguished");
-
-    // 2. Tạo hiệu ứng khói trắng bay lên
-    emitSmokeParticles();
-
-    // 3. Mở ô mật mã thứ 4
-    unlockSecretSlot(3);
-
-    // 4. Bắn pháo confetti 4 đợt liên tiếp ăn mừng
-    triggerGrandFinaleConfetti();
-
-    // 5. Ẩn nút thổi, hiện hộp két sắt kho báu
-    document.getElementById("blow-action-area").style.display = "none";
-    document.getElementById("candle-instructions").textContent = "✨ Ước nguyện đã được gửi tới các vì sao! ✨";
-
+    // Wave 2
     setTimeout(() => {
-        revealFinalTreasure();
-    }, 1400);
+        confetti({
+            particleCount: 100,
+            spread: 100,
+            origin: { y: 0.5 },
+            colors: colors
+        });
+    }, 400);
+
+    // Wave 3
+    setTimeout(() => {
+        confetti({
+            particleCount: 80,
+            spread: 70,
+            origin: { y: 0.55 },
+            colors: colors
+        });
+    }, 800);
 }
 
-function emitSmokeParticles() {
-    const candleTarget = document.getElementById("candle-interact");
+/* ==========================================================================
+   🔄 PAGE NAVIGATION
+   ========================================================================== */
+function goToPage(targetPage) {
+    const currentPageEl = document.getElementById(`page-${currentPage}`);
+    const targetPageEl = document.getElementById(`page-${targetPage}`);
 
-    for (let i = 0; i < 8; i++) {
-        const smoke = document.createElement("div");
-        smoke.className = "smoke-particle";
-        smoke.style.left = `${45 + (Math.random() - 0.5) * 20}%`;
-        smoke.style.top = "-15px";
-        smoke.style.animationDelay = `${i * 0.1}s`;
-
-        candleTarget.appendChild(smoke);
+    if (currentPageEl) {
+        currentPageEl.classList.remove("active");
+        currentPageEl.classList.add("fade-out");
 
         setTimeout(() => {
-            if (smoke.parentNode) {
-                smoke.parentNode.removeChild(smoke);
-            }
-        }, 1600);
+            currentPageEl.classList.remove("fade-out");
+            currentPageEl.style.display = "none";
+        }, 400);
     }
-}
-
-function revealFinalTreasure() {
-    const finalBox = document.getElementById("final-box-reveal");
-    const codeRow = document.getElementById("final-code-display");
-    const letterContent = document.getElementById("final-letter-content");
-
-    codeRow.innerHTML = "";
-    CONFIG.secretCode.forEach((digit) => {
-        const cube = document.createElement("div");
-        cube.className = "code-cube";
-        cube.textContent = digit;
-        codeRow.appendChild(cube);
-    });
-
-    letterContent.textContent = CONFIG.finalLetter;
-    finalBox.style.display = "flex";
-
-    // Cuộn mượt mà xuống xem thư
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth"
-    });
-}
-
-function restartJourney() {
-    navigateToScreen(0);
-}
-
-/* ==========================================================================
-   10. CHUYỂN MÀN HÌNH & MỞ Ô MẬT MÃ (SLOT UNLOCK)
-   ========================================================================== */
-function navigateToScreen(targetIndex) {
-    const allScreens = document.querySelectorAll(".screen");
-
-    allScreens.forEach((scr) => {
-        if (scr.classList.contains("active")) {
-            scr.classList.remove("active");
-            scr.classList.add("fade-out");
-
-            setTimeout(() => {
-                scr.classList.remove("fade-out");
-                scr.style.display = "none";
-            }, 400);
-        }
-    });
 
     setTimeout(() => {
-        const targetScreen = document.getElementById(`screen-${targetIndex}`);
-        targetScreen.style.display = "block";
-
-        void targetScreen.offsetWidth; // Trigger reflow
-        targetScreen.classList.add("active");
-        currentScreenIndex = targetIndex;
+        targetPageEl.style.display = "block";
+        void targetPageEl.offsetWidth; // Reflow
+        targetPageEl.classList.add("active");
+        currentPage = targetPage;
 
         window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // Nếu chuyển sang trang 3: Khởi tạo bánh kem 3D
+        if (targetPage === 3) {
+            setTimeout(initThreeJSCake, 200);
+        }
     }, 450);
 }
 
-function unlockSecretSlot(slotIndex) {
-    if (unlockedSlots[slotIndex]) return;
-    unlockedSlots[slotIndex] = true;
-
-    const slot = document.getElementById(`slot-${slotIndex}`);
-    slot.classList.add("unlocked");
-    slot.querySelector(".gem-inner").textContent = CONFIG.secretCode[slotIndex];
-
-    triggerSmallConfetti();
-    playChimeSound(880.00, 0.3);
-}
-
 /* ==========================================================================
-   11. PHÁO GIẤY CONFETTI & HIỆU ỨNG RỰC RỠ
+   🎵 WEB AUDIO API: SOFT PIANO MELODY
    ========================================================================== */
-function triggerSparkleConfetti() {
-    confetti({
-        particleCount: 100,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ["#ff2d78", "#ec407a", "#fbbf24", "#ffd54f", "#8e24aa", "#ffffff"],
-        ticks: 140,
-        gravity: 0.9,
-        scalar: 1.15
+function setupEvents() {
+    // Trang 1: Chạm mở quà
+    document.getElementById("btn-open-gift").addEventListener("click", () => {
+        goToPage(2);
+        startSoftPianoMusic();
     });
+
+    document.getElementById("qr-tap-trigger").addEventListener("click", () => {
+        goToPage(2);
+        startSoftPianoMusic();
+    });
+
+    // Trang 2: Chuyển sang Trang 3 (Bánh kem 3D)
+    document.getElementById("btn-go-to-cake").addEventListener("click", () => {
+        goToPage(3);
+    });
+
+    // Trang 3: Thổi nến
+    document.getElementById("btn-blow-candle").addEventListener("click", executeBlowCandle);
+
+    // Chạm trực tiếp vào canvas bánh kem cũng kích hoạt thổi nến nếu chưa thổi
+    const cakeContainer = document.getElementById("cake-3d-container");
+    cakeContainer.addEventListener("dblclick", executeBlowCandle);
+
+    // Music Toggle
+    document.getElementById("music-btn").addEventListener("click", toggleMusic);
 }
 
-function triggerSmallConfetti() {
-    confetti({
-        particleCount: 35,
-        spread: 55,
-        origin: { y: 0.5 },
-        colors: ["#d81b60", "#ec407a", "#fbbf24"],
-        ticks: 70,
-        gravity: 1,
-        scalar: 0.9
-    });
-}
-
-function triggerGrandFinaleConfetti() {
-    const colors = ["#ff2d78", "#ec407a", "#ffd54f", "#f59e0b", "#8e24aa", "#ffffff"];
-    let count = 0;
-
-    const confettiInterval = setInterval(() => {
-        confetti({
-            particleCount: 80,
-            spread: 90,
-            origin: { y: 0.55 + (count % 2 === 0 ? 0.05 : -0.05) },
-            colors: colors,
-            ticks: 160,
-            gravity: 0.85,
-            scalar: 1.2
-        });
-        count++;
-        if (count >= 4) {
-            clearInterval(confettiInterval);
-        }
-    }, 350);
-}
-
-/* ==========================================================================
-   12. BỘ TẠO NHẠC SYNTHESIZER (WEB AUDIO API)
-   ========================================================================== */
-function attachEventListeners() {
-    // Screen 0: Quét QR
-    document.getElementById("btn-start-scan").addEventListener("click", executeScanProcess);
-    document.getElementById("qr-target-box").addEventListener("click", executeScanProcess);
-
-    // Screen 1: Xác nhận gương
-    document.getElementById("btn-confirm-mirror").addEventListener("click", confirmCaptchaSelection);
-
-    // Screen 2: Chuyển màn 3
-    document.getElementById("btn-next-to-gacha").addEventListener("click", () => {
-        navigateToScreen(3);
-    });
-
-    // Screen 3: Chuyển màn 4
-    document.getElementById("btn-next-to-cake").addEventListener("click", () => {
-        navigateToScreen(4);
-    });
-
-    // Screen 4: Thổi nến mic & chạm nến
-    document.getElementById("btn-activate-mic").addEventListener("click", activateMicrophoneForCandle);
-    document.getElementById("candle-interact").addEventListener("click", () => {
-        if (!isCandleExtinguished) {
-            extinguishCandleCeremony();
-        }
-    });
-
-    // Top Bar: Bật tắt nhạc
-    document.getElementById("music-btn").addEventListener("click", toggleMusicState);
-}
-
-function toggleMusicState() {
-    if (isMusicActive) {
-        stopMusicSynthesizer();
+function toggleMusic() {
+    if (isMusicPlaying) {
+        stopSoftPianoMusic();
     } else {
-        startMusicSynthesizer();
+        startSoftPianoMusic();
     }
 }
 
-function startMusicSynthesizer() {
-    if (isMusicActive) return;
-    isMusicActive = true;
+function startSoftPianoMusic() {
+    if (isMusicPlaying) return;
+    isMusicPlaying = true;
 
-    const musicBtn = document.getElementById("music-btn");
-    musicBtn.classList.add("playing");
-
-    playMusicBoxSequence();
+    document.getElementById("music-btn").classList.add("playing");
+    playSoftHappyBirthdayLoop();
 }
 
-function stopMusicSynthesizer() {
-    isMusicActive = false;
+function stopSoftPianoMusic() {
+    isMusicPlaying = false;
+    document.getElementById("music-btn").classList.remove("playing");
 
-    const musicBtn = document.getElementById("music-btn");
-    musicBtn.classList.remove("playing");
-
-    if (audioMelodyTimeout) {
-        clearTimeout(audioMelodyTimeout);
-        audioMelodyTimeout = null;
+    if (musicNoteTimeout) {
+        clearTimeout(musicNoteTimeout);
+        musicNoteTimeout = null;
     }
 }
 
-// Chuỗi giai điệu Happy Birthday nhẹ nhàng kiểu hộp nhạc thần tiên
-function playMusicBoxSequence() {
-    const melodyNotes = [
-        { f: 523.25, d: 0.35 },
-        { f: 659.25, d: 0.35 },
-        { f: 783.99, d: 0.35 },
-        { f: 1046.5, d: 0.50 },
-        { f: 783.99, d: 0.35 },
-        { f: 659.25, d: 0.35 },
-        { f: 523.25, d: 0.50 },
-        { f: 587.33, d: 0.35 },
-        { f: 698.46, d: 0.35 },
-        { f: 880.00, d: 0.35 },
-        { f: 783.99, d: 0.50 },
-        { f: 659.25, d: 0.35 },
-        { f: 523.25, d: 0.60 }
+function playSoftHappyBirthdayLoop() {
+    // Nốt nhạc Happy Birthday êm dịu
+    const melody = [
+        { f: 261.63, d: 0.4 },
+        { f: 261.63, d: 0.2 },
+        { f: 293.66, d: 0.5 },
+        { f: 261.63, d: 0.5 },
+        { f: 349.23, d: 0.5 },
+        { f: 329.63, d: 0.9 },
+
+        { f: 261.63, d: 0.4 },
+        { f: 261.63, d: 0.2 },
+        { f: 293.66, d: 0.5 },
+        { f: 261.63, d: 0.5 },
+        { f: 392.00, d: 0.5 },
+        { f: 349.23, d: 0.9 },
+
+        { f: 261.63, d: 0.4 },
+        { f: 261.63, d: 0.2 },
+        { f: 523.25, d: 0.5 },
+        { f: 440.00, d: 0.5 },
+        { f: 349.23, d: 0.5 },
+        { f: 329.63, d: 0.5 },
+        { f: 293.66, d: 0.9 }
     ];
 
-    let noteIndex = 0;
+    let index = 0;
 
-    function nextNote() {
-        if (!isMusicActive) return;
+    function playNext() {
+        if (!isMusicPlaying) return;
 
-        const note = melodyNotes[noteIndex % melodyNotes.length];
-        playChimeSound(note.f, note.d);
+        const note = melody[index % melody.length];
+        playPianoTone(note.f, note.d);
 
-        noteIndex++;
-        const pauseTime = (noteIndex % melodyNotes.length === 0) ? 800 : 60;
-        audioMelodyTimeout = setTimeout(nextNote, note.d * 1000 + pauseTime);
+        index++;
+        const gap = (index % melody.length === 0) ? 1200 : 80;
+        musicNoteTimeout = setTimeout(playNext, note.d * 1000 + gap);
     }
 
-    nextNote();
+    playNext();
 }
 
-function playChimeSound(freq, duration) {
+function playPianoTone(freq, duration) {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = ctx.createOscillator();
@@ -825,7 +611,7 @@ function playChimeSound(freq, duration) {
         osc.frequency.setValueAtTime(freq, ctx.currentTime);
 
         gain.gain.setValueAtTime(0, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.04);
+        gain.gain.linearRampToValueAtTime(0.09, ctx.currentTime + 0.05);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
 
         osc.start(ctx.currentTime);
@@ -833,6 +619,6 @@ function playChimeSound(freq, duration) {
 
         osc.onended = () => ctx.close();
     } catch (e) {
-        // Trình duyệt chưa cho phép audio interaction
+        // Ignored
     }
 }
