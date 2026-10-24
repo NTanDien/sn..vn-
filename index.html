@@ -65,18 +65,17 @@
 
     .red-heart-qr-wrap {
       position: relative;
-      width: 250px;
-      height: 240px;
+      width: 260px;
+      height: 250px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transform: rotate(16deg);
-      filter: drop-shadow(0 0 24px rgba(255, 25, 60, 0.65));
+      filter: drop-shadow(0 0 22px rgba(255, 20, 50, 0.75));
       animation: heartBeat 1.5s infinite ease-in-out;
     }
     @keyframes heartBeat {
-      0%, 100% { transform: rotate(16deg) scale(1); }
-      50% { transform: rotate(16deg) scale(1.05); }
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
     .red-heart-svg {
       position: absolute;
@@ -86,20 +85,22 @@
       pointer-events: none;
     }
     #heart-qr-box {
-      position: relative;
-      z-index: 2;
-      transform: rotate(45deg);
-      margin-top: -10px;
-      background: rgba(255, 255, 255, 0.94);
-      padding: 4px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 30, 60, 0.4), inset 0 0 4px rgba(255, 255, 255, 0.8);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) translateY(9.5px) rotate(45deg);
+      transform-origin: center center;
+      background: transparent;
+      padding: 0;
+      border: none;
+      box-shadow: none;
       display: flex;
       align-items: center;
       justify-content: center;
+      filter: drop-shadow(0 0 8px rgba(255, 30, 60, 0.7));
     }
     #heart-qr-box canvas, #heart-qr-box svg {
-      border-radius: 10px;
+      background: transparent !important;
       display: block;
     }
     .qr-hint {
@@ -443,15 +444,23 @@
       <div class="red-heart-qr-wrap">
         <svg class="red-heart-svg" viewBox="0 0 260 250">
           <defs>
-            <radialGradient id="redHeartGrad" cx="48%" cy="38%" r="62%">
-              <stop offset="0%" stop-color="#ff3b5c"/>
-              <stop offset="55%" stop-color="#e60029"/>
-              <stop offset="100%" stop-color="#ab001a"/>
+            <radialGradient id="redHeartInnerGlow" cx="50%" cy="40%" r="65%">
+              <stop offset="0%" stop-color="rgba(255, 40, 70, 0.18)"/>
+              <stop offset="70%" stop-color="rgba(220, 10, 40, 0.08)"/>
+              <stop offset="100%" stop-color="rgba(150, 0, 25, 0.02)"/>
             </radialGradient>
+            <filter id="redNeonFilter" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3.5" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
           </defs>
-          <!-- Trái tim màu đỏ tươi rực rỡ, viền sắc nét, đáy nhọn 90 độ ăn khớp góc vuông QR -->
-          <path fill="url(#redHeartGrad)" 
-                stroke="#ff4d6d" stroke-width="2" stroke-linejoin="round"
+          <!-- Ngoài viền là hình trái tim đỏ rực rỡ, bên trong chứa mã QR màu đỏ -->
+          <path fill="url(#redHeartInnerGlow)" 
+                stroke="#ff2046" stroke-width="3" stroke-linejoin="round"
+                filter="url(#redNeonFilter)"
                 d="M130,230 
                    L40,140 
                    C12,112 12,62 45,32 
@@ -559,13 +568,13 @@
         : window.location.href;
 
       const qr = new QRCodeStyling({
-        width: 120,
-        height: 120,
+        width: 135,
+        height: 135,
         data: liveUrl,
-        margin: 4,
-        dotsOptions: { color: "#c80028", type: "rounded" },
-        cornersSquareOptions: { color: "#b00020", type: "extra-rounded" },
-        cornersDotOptions: { color: "#d90029", type: "dot" },
+        margin: 2,
+        dotsOptions: { color: "#ff2042", type: "rounded" },
+        cornersSquareOptions: { color: "#ff2042", type: "extra-rounded" },
+        cornersDotOptions: { color: "#ff2042", type: "dot" },
         backgroundOptions: { color: "transparent" }
       });
       qr.append(document.getElementById("heart-qr-box"));
