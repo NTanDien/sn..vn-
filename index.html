@@ -66,17 +66,17 @@
     .red-heart-qr-wrap {
       position: relative;
       width: 250px;
-      height: 235px;
+      height: 240px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transform: rotate(12deg);
-      filter: drop-shadow(0 0 28px rgba(255, 20, 50, 0.95));
+      transform: rotate(16deg);
+      filter: drop-shadow(0 0 30px rgba(255, 20, 50, 0.95));
       animation: heartBeat 1.5s infinite ease-in-out;
     }
     @keyframes heartBeat {
-      0%, 100% { transform: rotate(12deg) scale(1); }
-      50% { transform: rotate(12deg) scale(1.05); }
+      0%, 100% { transform: rotate(16deg) scale(1); }
+      50% { transform: rotate(16deg) scale(1.05); }
     }
     .red-heart-svg {
       position: absolute;
@@ -88,15 +88,15 @@
     #heart-qr-box {
       position: relative;
       z-index: 2;
-      margin-top: -16px;
-      border-radius: 14px;
-      overflow: hidden;
-      background: #ffffff;
-      padding: 6px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+      transform: rotate(45deg);
+      margin-top: -12px;
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
       display: flex;
       align-items: center;
       justify-content: center;
+      filter: drop-shadow(0 0 10px rgba(255, 30, 60, 0.75));
     }
     .qr-hint {
       margin-top: 28px;
@@ -437,15 +437,30 @@
       <div class="corner br"></div>
 
       <div class="red-heart-qr-wrap">
-        <svg class="red-heart-svg" viewBox="0 0 260 240">
+        <svg class="red-heart-svg" viewBox="0 0 260 250">
           <defs>
-            <radialGradient id="redHeartGrad" cx="45%" cy="35%" r="65%">
+            <radialGradient id="redHeartGrad" cx="50%" cy="38%" r="65%">
               <stop offset="0%" stop-color="#ff3b56"/>
-              <stop offset="60%" stop-color="#e60026"/>
-              <stop offset="100%" stop-color="#b30018"/>
+              <stop offset="65%" stop-color="#e60026"/>
+              <stop offset="100%" stop-color="#990014"/>
             </radialGradient>
+            <filter id="redNeonGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="8" result="glow"/>
+              <feMerge>
+                <feMergeNode in="glow"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
           </defs>
-          <path fill="url(#redHeartGrad)" d="M130,225 C130,225 18,155 18,78 C18,34 54,10 92,10 C114,10 125,22 130,32 C135,22 146,10 168,10 C206,10 242,34 242,78 C242,155 130,225 130,225 Z"/>
+          <!-- Đáy trái tim là góc nhọn 90 độ chuẩn -->
+          <path fill="url(#redHeartGrad)" filter="url(#redNeonGlow)"
+                d="M130,230 
+                   L40,140 
+                   C12,112 12,62 45,32 
+                   C80,2 120,20 130,52 
+                   C140,20 180,2 215,32 
+                   C248,62 248,112 220,140 
+                   Z" />
         </svg>
         <div id="heart-qr-box"></div>
       </div>
@@ -539,21 +554,21 @@
     document.getElementById("cake-img").src = CONFIG.cakePhoto;
     document.getElementById("couple-img").src = CONFIG.couplePhoto;
 
-    // Tạo mã QR nằm gọn trong Trái Tim Đỏ chuẩn khoảng cách cho camera quét
+    // Tạo mã QR màu đỏ đồng bộ nằm khớp góc vuông với đáy nhọn trái tim
     if (window.QRCodeStyling) {
       const liveUrl = (window.location.protocol === "file:")
         ? "https://ntandien.github.io/sn..vn-/"
         : window.location.href;
 
       const qr = new QRCodeStyling({
-        width: 135,
-        height: 135,
+        width: 125,
+        height: 125,
         data: liveUrl,
-        margin: 4,
-        dotsOptions: { color: "#99001f", type: "rounded" },
-        cornersSquareOptions: { color: "#b30022", type: "extra-rounded" },
-        cornersDotOptions: { color: "#b30022", type: "dot" },
-        backgroundOptions: { color: "#ffffff" }
+        margin: 2,
+        dotsOptions: { color: "#ff2042", type: "rounded" },
+        cornersSquareOptions: { color: "#ff2042", type: "extra-rounded" },
+        cornersDotOptions: { color: "#ff2042", type: "dot" },
+        backgroundOptions: { color: "transparent" }
       });
       qr.append(document.getElementById("heart-qr-box"));
     }
