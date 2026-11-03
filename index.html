@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hành Trình Tuổi 18 Rực Rỡ ✨</title>
 
+    <!-- Favicon & Meta Tags -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎂</text></svg>">
+    <meta name="theme-color" content="#ffe8f0">
+    <meta property="og:title" content="Hành Trình Tuổi 18 Rực Rỡ ✨">
+    <meta property="og:description" content="Món quà không gian 3D đặc biệt chúc mừng sinh nhật tuổi 18!">
+    <meta property="og:image" content="hoa-hong.jpg">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -421,6 +428,58 @@
             box-shadow: 0 12px 32px rgba(194, 24, 91, 0.15);
         }
 
+        /* Khung ảnh kỷ niệm hoa hồng ở Trang 4 */
+        .letter-photo-card {
+            margin: 18px auto 22px auto;
+            text-align: center;
+            max-width: 260px;
+            background: #ffffff;
+            padding: 10px 10px 14px 10px;
+            border-radius: 14px;
+            box-shadow: 0 12px 28px rgba(194, 24, 91, 0.16), 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 182, 193, 0.45);
+            transform: rotate(-1.5deg);
+            transition: all 0.4s ease;
+        }
+
+        .letter-photo-card:hover {
+            transform: rotate(0deg) scale(1.03);
+            box-shadow: 0 16px 36px rgba(194, 24, 91, 0.26);
+        }
+
+        .letter-photo-card .photo-frame {
+            overflow: hidden;
+            border-radius: 8px;
+            aspect-ratio: 1 / 1;
+            background: #ffeef4;
+        }
+
+        .letter-photo-card .polaroid-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .letter-photo-card .photo-caption {
+            margin-top: 9px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.25rem;
+            color: #ad1457;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        /* Canvas pháo hoa / pháo giấy kim tuyến */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 45;
+            pointer-events: none;
+        }
+
         #audio-toggle {
             position: fixed;
             top: 16px;
@@ -438,6 +497,17 @@
             align-items: center;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(216, 27, 96, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        #audio-toggle.playing {
+            animation: audioPulse 1.8s infinite alternate ease-in-out;
+            border-color: #ff2a75;
+        }
+
+        @keyframes audioPulse {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 42, 117, 0.3); }
+            100% { transform: scale(1.08); box-shadow: 0 0 20px rgba(255, 42, 117, 0.7); }
         }
     </style>
 </head>
@@ -451,6 +521,9 @@
 
     <!-- Khung hạt bụi siêu nhỏ (Trang 2) -->
     <canvas id="particle-canvas"></canvas>
+
+    <!-- Khung pháo hoa & pháo giấy kim tuyến ăn mừng -->
+    <canvas id="confetti-canvas"></canvas>
 
     <!-- ================= TRANG 1: SÂN KHẤU NGỌC TRAI & PHA LÊ 3D ================= -->
     <div id="page-1" class="page active">
@@ -499,6 +572,14 @@
                 <!-- Đoạn 1: Lời chúc tuổi 18 (Gõ chữ từ từ) -->
                 <p id="type-p1"></p>
 
+                <!-- Khung ảnh kỷ niệm đóa hồng tuổi 18 -->
+                <div class="letter-photo-card" id="letter-photo-box">
+                    <div class="photo-frame">
+                        <img src="hoa-hong.jpg" alt="Đóa hoa tuổi 18 rực rỡ" class="polaroid-img">
+                    </div>
+                    <div class="photo-caption">Đóa hồng rực rỡ và thuần khiết nhất tuổi 18 🌸</div>
+                </div>
+
                 <!-- Đoạn 2: Học tập, ăn uống, sinh hoạt an toàn (Gõ chữ từ từ) -->
                 <div class="letter-highlight" id="highlight-box">
                     <p id="type-p2" style="margin-bottom: 0;"></p>
@@ -507,6 +588,11 @@
                 <!-- Đoạn 3 & 4: Lời chúc & tâm tình -->
                 <p id="type-p3"></p>
                 <p id="type-p4" style="margin-bottom: 0;"></p>
+
+                <!-- Góc nhỏ tính bằng ngôn ngữ Python -->
+                <div id="python-milestone" class="python-stat-box">
+                    ✨ <b>Góc nhỏ tính bằng ngôn ngữ Python:</b> Tính đến cột mốc tuổi 18 hôm nay, bạn đã đi qua hành trình <b>6,574 ngày</b> (tương đương <b>157,776 giờ</b> và <b>9,466,560 phút</b>) thanh xuân thật đẹp. Hãy bấm nút bên dưới để mở bầu trời ước nguyện dành riêng cho bạn nhé!
+                </div>
             </div>
 
             <div class="letter-footer" id="letter-footer-box">
@@ -532,6 +618,12 @@
             <div id="wish-message" class="wish-banner">
                 ✨ Chúc mọi điều ước tuổi 18 của bạn đều trở thành hiện thực! ✨
             </div>
+            <button id="btn-blow-candle" class="glow-btn" style="margin-top: 14px;">
+                <span>🎂 Nhắm mắt ước & Thổi nến 🕯️</span>
+            </button>
+            <button id="btn-replay" class="glow-btn" style="margin-top: 14px; display: none;">
+                <span>🔄 Xem lại từ đầu</span>
+            </button>
         </div>
     </div>
 
@@ -596,6 +688,8 @@ if milestone_box:
             constructor() {
                 this.ctx = null;
                 this.isSoundEnabled = true;
+                this.bgmTimer = null;
+                this.isBgmPlaying = false;
             }
 
             init() {
@@ -604,6 +698,67 @@ if milestone_box:
                     this.ctx = new AudioCtx();
                 }
                 if (this.ctx.state === 'suspended') this.ctx.resume();
+            }
+
+            // Chơi nốt nhạc hộp nhạc (Music Box Bell)
+            playTone(freq, time, duration, vol = 0.035) {
+                if (!this.ctx || !this.isSoundEnabled) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, time);
+
+                gain.gain.setValueAtTime(0.0001, time);
+                gain.gain.linearRampToValueAtTime(vol, time + 0.015);
+                gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(time);
+                osc.stop(time + duration + 0.05);
+            }
+
+            // Giai điệu "Happy Birthday" phong cách hộp nhạc lãng mạn nhẹ nhàng
+            playBGM() {
+                if (!this.isSoundEnabled || this.isBgmPlaying) return;
+                this.init();
+                this.isBgmPlaying = true;
+
+                const N = {
+                    C3: 130.81, E3: 164.81, G3: 196.00, A3: 220.00, B3: 246.94,
+                    C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+                    C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00
+                };
+
+                const score = [
+                    [N.G4, 0.75, N.C3], [N.G4, 0.25, null], [N.A4, 1.0, N.G3], [N.G4, 1.0, null], [N.C5, 1.0, N.E4], [N.B4, 2.0, N.G3],
+                    [N.G4, 0.75, N.G3], [N.G4, 0.25, null], [N.A4, 1.0, N.D4], [N.G4, 1.0, null], [N.D5, 1.0, N.B3], [N.C5, 2.0, N.C4],
+                    [N.G4, 0.75, N.C3], [N.G4, 0.25, null], [N.G5, 1.0, N.E4], [N.E5, 1.0, null], [N.C5, 1.0, N.A3], [N.B4, 1.0, null], [N.A4, 2.0, N.F3],
+                    [N.F5, 0.75, N.F3], [N.F5, 0.25, null], [N.E5, 1.0, N.C4], [N.C5, 1.0, null], [N.D5, 1.0, N.G3], [N.C5, 2.5, N.C3]
+                ];
+
+                const beatSec = 0.52;
+                let curTime = this.ctx.currentTime + 0.15;
+
+                score.forEach(([melodyNote, beatCount, bassNote]) => {
+                    const dur = beatCount * beatSec;
+                    this.playTone(melodyNote, curTime, dur * 1.4, 0.04);
+                    if (bassNote) {
+                        this.playTone(bassNote, curTime, dur * 1.8, 0.02);
+                    }
+                    curTime += dur;
+                });
+
+                const totalDuration = (curTime - this.ctx.currentTime + 2.5) * 1000;
+                this.bgmTimer = setTimeout(() => {
+                    this.isBgmPlaying = false;
+                    if (this.isSoundEnabled) this.playBGM();
+                }, totalDuration);
+            }
+
+            stopBGM() {
+                this.isBgmPlaying = false;
+                clearTimeout(this.bgmTimer);
             }
 
             // Âm thanh gõ chữ êm dịu ở Trang 4
@@ -646,6 +801,31 @@ if milestone_box:
                 });
             }
 
+            // Âm thanh thổi nến & chùm chuông ăn mừng
+            playCandleBlow() {
+                if (!this.isSoundEnabled) return;
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+
+                const osc = this.ctx.createOscillator();
+                const g = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.45);
+                g.gain.setValueAtTime(0.08, now);
+                g.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+                osc.connect(g);
+                g.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.48);
+
+                setTimeout(() => {
+                    this.playSparkleSound();
+                    this.playMagicChime();
+                }, 350);
+            }
+
             // Hiệu ứng âm thanh ánh sao lấp lánh (Sparkle Chime)
             playSparkleSound() {
                 if (!this.isSoundEnabled) return;
@@ -671,6 +851,7 @@ if milestone_box:
 
             start() {
                 this.init();
+                this.playBGM();
             }
 
             toggle() {
@@ -678,6 +859,9 @@ if milestone_box:
                 if (this.isSoundEnabled) {
                     this.init();
                     this.playMagicChime();
+                    this.playBGM();
+                } else {
+                    this.stopBGM();
                 }
                 return this.isSoundEnabled;
             }
@@ -687,7 +871,13 @@ if milestone_box:
         const musicBox = sfxManager;
         const audioBtn = document.getElementById('audio-toggle');
         audioBtn.addEventListener('click', () => {
-            audioBtn.textContent = sfxManager.toggle() ? '🔔' : '🔕';
+            const isEnabled = sfxManager.toggle();
+            audioBtn.textContent = isEnabled ? '🎵' : '🔇';
+            if (isEnabled) {
+                audioBtn.classList.add('playing');
+            } else {
+                audioBtn.classList.remove('playing');
+            }
         });
 
         /* -------------------------------------------------------------------------
@@ -1641,6 +1831,8 @@ if milestone_box:
         // TRANG 1 -> TRANG 2
         btnPage1.addEventListener('click', () => {
             musicBox.start();
+            audioBtn.textContent = '🎵';
+            audioBtn.classList.add('playing');
             musicBox.playMagicChime();
             currentStage = 2;
             page1.classList.remove('active');
@@ -1694,10 +1886,119 @@ if milestone_box:
             }, 650);
         });
 
+        /* -------------------------------------------------------------------------
+           HỆ THỐNG PHÁO HOA & PHÁO GIẤY KIM TUYẾN ĂN MỪNG (CONFETTI SYSTEM)
+           ------------------------------------------------------------------------- */
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const cCtx = confettiCanvas.getContext('2d');
+        let confettiParticles = [];
+        let confettiAnimId = null;
+
+        function resizeConfetti() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        resizeConfetti();
+        window.addEventListener('resize', resizeConfetti);
+
+        const confettiColors = ['#ff2a75', '#ff80ab', '#ffd57e', '#ffeb3b', '#69f0ae', '#b388ff', '#ffffff'];
+
+        function launchConfettiBurst(count = 140) {
+            const cx = confettiCanvas.width / 2;
+            const cy = confettiCanvas.height * 0.72;
+            for (let i = 0; i < count; i++) {
+                const angle = Math.PI * 1.5 + (Math.random() - 0.5) * 1.5;
+                const speed = 7 + Math.random() * 14;
+                confettiParticles.push({
+                    x: cx + (Math.random() - 0.5) * 80,
+                    y: cy,
+                    vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 4,
+                    vy: Math.sin(angle) * speed,
+                    size: 6 + Math.random() * 9,
+                    color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+                    rotX: Math.random() * Math.PI,
+                    rotY: Math.random() * Math.PI,
+                    rotSpeedX: 0.05 + Math.random() * 0.1,
+                    rotSpeedY: 0.03 + Math.random() * 0.08,
+                    shape: Math.random() > 0.4 ? 'rect' : (Math.random() > 0.5 ? 'heart' : 'circle'),
+                    opacity: 1,
+                    gravity: 0.22 + Math.random() * 0.12,
+                    drag: 0.985
+                });
+            }
+            if (!confettiAnimId) animateConfetti();
+        }
+
+        function drawHeart(ctx, x, y, size, color, opacity) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.fillStyle = color;
+            ctx.globalAlpha = opacity;
+            ctx.beginPath();
+            const topCurveHeight = size * 0.3;
+            ctx.moveTo(0, topCurveHeight);
+            ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+            ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
+            ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+            ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function animateConfetti() {
+            cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            for (let i = confettiParticles.length - 1; i >= 0; i--) {
+                const p = confettiParticles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += p.gravity;
+                p.vx *= p.drag;
+                p.vy *= p.drag;
+                p.rotX += p.rotSpeedX;
+                p.rotY += p.rotSpeedY;
+
+                if (p.y > confettiCanvas.height - 40) {
+                    p.opacity -= 0.02;
+                }
+
+                if (p.opacity <= 0 || p.y > confettiCanvas.height + 60) {
+                    confettiParticles.splice(i, 1);
+                    continue;
+                }
+
+                cCtx.save();
+                cCtx.translate(p.x, p.y);
+                cCtx.scale(Math.cos(p.rotX), Math.sin(p.rotY));
+
+                if (p.shape === 'rect') {
+                    cCtx.fillStyle = p.color;
+                    cCtx.globalAlpha = p.opacity;
+                    cCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.55);
+                } else if (p.shape === 'circle') {
+                    cCtx.fillStyle = p.color;
+                    cCtx.globalAlpha = p.opacity;
+                    cCtx.beginPath();
+                    cCtx.arc(0, 0, p.size / 2.5, 0, Math.PI * 2);
+                    cCtx.fill();
+                } else {
+                    drawHeart(cCtx, 0, 0, p.size, p.color, p.opacity);
+                }
+                cCtx.restore();
+            }
+
+            if (confettiParticles.length > 0) {
+                confettiAnimId = requestAnimationFrame(animateConfetti);
+            } else {
+                confettiAnimId = null;
+            }
+        }
+
         // DIỄN HOẠT MỞ HỘP QUÀ (TRANG 3 -> TRANG 4)
         function openHollowGiftBox() {
             isGiftOpened = true;
             musicBox.playMagicChime();
+            launchConfettiBurst(60);
             page3.classList.remove('active');
 
             const tl = gsap.timeline();
@@ -1745,6 +2046,108 @@ if milestone_box:
             }, 700);
         });
 
+        // TƯƠNG TÁC THỔI NẾN & XEM LẠI TRANG WEB
+        const btnBlowCandle = document.getElementById('btn-blow-candle');
+        const btnReplay = document.getElementById('btn-replay');
+        const wishMessageEl = document.getElementById('wish-message');
+
+        function blowOutCandle() {
+            if (isCandleBlown) return;
+            isCandleBlown = true;
+            musicBox.playCandleBlow();
+
+            // Diễn hoạt thổi tắt ngọn lửa 3D và giảm độ sáng ngọn nến
+            gsap.to(flameGroup.scale, {
+                x: 0, y: 0, z: 0,
+                duration: 0.65,
+                ease: "power2.in",
+                onComplete: () => {
+                    flameGroup.visible = false;
+                }
+            });
+            gsap.to(candleLight, { intensity: 0, duration: 0.8 });
+
+            // Bắn pháo hoa & pháo giấy kim tuyến ăn mừng liên tục
+            launchConfettiBurst(140);
+            setTimeout(() => launchConfettiBurst(100), 450);
+            setTimeout(() => launchConfettiBurst(90), 950);
+
+            // Cập nhật lời chúc sinh nhật bùng nổ
+            wishMessageEl.innerHTML = '🎉 <b>Ước nguyện đã được gửi tới các vì sao!</b><br>Chúc mừng sinh nhật tuổi 18 thật ngập tràn niềm vui & hạnh phúc! 🌟💖';
+            wishMessageEl.style.transform = 'scale(1.05)';
+            setTimeout(() => { wishMessageEl.style.transform = 'scale(1)'; }, 400);
+
+            // Chuyển nút thổi nến thành nút xem lại từ đầu
+            btnBlowCandle.style.display = 'none';
+            btnReplay.style.display = 'inline-flex';
+            gsap.fromTo(btnReplay, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 });
+        }
+
+        btnBlowCandle.addEventListener('click', blowOutCandle);
+
+        function replayFromStart() {
+            musicBox.playMagicChime();
+            currentStage = 1;
+            isGiftOpened = false;
+            isCandleBlown = false;
+
+            // Bật lại ngọn lửa nến
+            flameGroup.visible = true;
+            flameGroup.scale.set(1, 1, 1);
+            candleLight.intensity = 6.5;
+
+            // Reset hộp quà
+            lidGroup.position.set(0, boxH / 2 + 0.15, 0);
+            lidGroup.rotation.set(0, 0, 0);
+            innerBoxLight.intensity = 0;
+            letter3DGroup.position.set(0, -0.35, 0);
+            letter3DGroup.rotation.set(0, 0, 0);
+            giftStageGroup.position.set(0, -14, 0);
+            giftStageGroup.visible = false;
+
+            // Reset sân khấu bánh kem & các trang
+            finaleStageGroup.position.set(0, -16, 0);
+            finaleStageGroup.visible = false;
+
+            stage1Group.visible = true;
+            stage1Group.position.set(0, 0.15, 0);
+            stage1Group.rotation.set(0, 0, 0);
+
+            haloPlane.scale.set(1, 1, 1);
+            camera.position.set(0, 1.8, 10.5);
+            camera.lookAt(0, 0.2, 0);
+
+            [page2, page3, page4, page5].forEach(p => p.classList.remove('active'));
+            page1.classList.add('active');
+
+            // Reset trang 2
+            isPage2Active = false;
+            pCanvas.style.opacity = '0';
+            pCanvas.style.pointerEvents = 'none';
+            btnPage2.classList.remove('show');
+
+            // Reset typewriter trang 4
+            isTypingSkipped = false;
+            clearTimeout(typingTimer);
+            document.querySelectorAll('.typing-cursor').forEach(c => c.remove());
+            ['type-p1', 'type-p2', 'type-p3', 'type-p4'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = '';
+            });
+            document.getElementById('highlight-box').classList.remove('visible');
+            const pMile = document.getElementById('python-milestone');
+            if (pMile) pMile.classList.remove('visible');
+            document.getElementById('letter-footer-box').classList.remove('visible');
+            btnSkipTyping.style.display = 'inline-block';
+
+            // Reset điều khiển trang 5
+            btnBlowCandle.style.display = 'inline-flex';
+            btnReplay.style.display = 'none';
+            wishMessageEl.innerHTML = '✨ Chúc mọi điều ước tuổi 18 của bạn đều trở thành hiện thực! ✨';
+        }
+
+        btnReplay.addEventListener('click', replayFromStart);
+
         // Tương tác vuốt xoay 360 độ ở Trang 1, Trang 3, Trang 5
         const raycaster = new THREE.Raycaster();
         const pointer3D = new THREE.Vector2();
@@ -1783,6 +2186,12 @@ if milestone_box:
                     raycaster.setFromCamera(pointer3D, camera);
                     const hits = raycaster.intersectObjects(giftStageGroup.children, true);
                     if (hits.length > 0) openHollowGiftBox();
+                } else if (currentStage === 5 && !isCandleBlown) {
+                    pointer3D.x = (e.clientX / window.innerWidth) * 2 - 1;
+                    pointer3D.y = -(e.clientY / window.innerHeight) * 2 + 1;
+                    raycaster.setFromCamera(pointer3D, camera);
+                    const hits = raycaster.intersectObjects([cakeGroup, candleGroup, flameGroup], true);
+                    if (hits.length > 0) blowOutCandle();
                 }
             }
         });
