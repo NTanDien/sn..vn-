@@ -3,33 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hành Trình Tuổi 18 Rực Rỡ ✨</title>
-
-    <!-- Favicon & Meta Tags -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎂</text></svg>">
-    <meta name="theme-color" content="#ffe8f0">
-    <meta property="og:title" content="Hành Trình Tuổi 18 Rực Rỡ ✨">
-    <meta property="og:description" content="Món quà không gian 3D đặc biệt chúc mừng sinh nhật tuổi 18!">
-    <meta property="og:image" content="hoa-hong.jpg">
-
+    <title>KIA K3 | Khẳng Định Phong Cách Dẫn Đầu - 3D Experience</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🏎️</text></svg>">
+    
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- 1. Thư viện WebGL 3D (Three.js) & Động lực học (GSAP) -->
+    <!-- Three.js & Thư viện hỗ trợ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
-    <!-- 2. Trình biên dịch ngôn ngữ PYTHON trên trình duyệt (Brython) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.12.0/brython.min.js"></script>
 
     <style>
         :root {
-            --pink-soft: #ffe8f0;
-            --pink-mid: #ffc4d6;
-            --pink-deep: #c2185b;
-            --pink-neon: #ff2a75;
-            --gold-warm: #ffd57e;
-            --text-dark: #431227;
+            --kia-black: #05070a;
+            --kia-dark: #0c1017;
+            --kia-red: #ea0029;
+            --kia-red-glow: rgba(234, 0, 41, 0.45);
+            --kia-red-dark: #b3001b;
+            --kia-silver: #d1d5db;
+            --kia-white: #ffffff;
+            --glass-bg: rgba(12, 16, 24, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-hover: rgba(255, 255, 255, 0.18);
         }
 
         * {
@@ -40,2047 +43,1758 @@
             -webkit-user-select: none;
         }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Quicksand', sans-serif;
-            background: radial-gradient(circle at 50% 35%, #fff7fa 0%, var(--pink-soft) 48%, var(--pink-mid) 100%);
-            transition: background 1.8s ease;
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--kia-black);
+            color: #ffffff;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            scrollbar-width: thin;
+            scrollbar-color: var(--kia-red) #111;
         }
 
-        /* Khung kết xuất 3D PBR thời gian thực */
-        #webgl-container {
+        body::-webkit-scrollbar {
+            width: 7px;
+        }
+        body::-webkit-scrollbar-track {
+            background: #0a0d14;
+        }
+        body::-webkit-scrollbar-thumb {
+            background: var(--kia-red);
+            border-radius: 4px;
+        }
+
+        /* Canvas 3D chạy nền toàn màn hình cố định */
+        #webgl-canvas-container {
             position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             z-index: 1;
             pointer-events: auto;
         }
 
-        /* Khung hạt bụi siêu nhỏ 3D ở Trang 2 */
-        #particle-canvas {
-            position: fixed;
-            inset: 0;
+        #webgl-canvas {
             width: 100%;
             height: 100%;
-            z-index: 3;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-
-        /* Hệ thống 5 Trang */
-        .page {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            pointer-events: none;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-            padding: 6vh 20px 8vh 20px;
-        }
-
-        .page.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Khung tiêu đề kính mờ */
-        .glass-pill {
-            background: rgba(255, 255, 255, 0.62);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(255, 255, 255, 0.88);
-            box-shadow: 0 12px 32px rgba(194, 24, 91, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.9);
-            padding: 12px 28px;
-            border-radius: 40px;
-            text-align: center;
-            transition: all 0.6s ease;
-        }
-
-        .glass-pill h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(1.6rem, 4.2vw, 2.3rem);
-            color: #ad1457;
-            letter-spacing: 0.4px;
-        }
-
-        .hint-3d {
-            font-size: 0.84rem;
-            color: #880e4f;
-            margin-top: 4px;
-            font-weight: 600;
-            opacity: 0.85;
-        }
-
-        /* Giao diện kính mờ ban đêm cho Trang 5 */
-        .glass-pill.night-mode {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1.5px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 12px 35px rgba(194, 24, 91, 0.18), inset 0 1px 3px rgba(255, 255, 255, 0.95);
-        }
-
-        .glass-pill.night-mode h2 {
-            color: #ad1457;
-            text-shadow: 0 0 12px rgba(255, 64, 129, 0.25);
-        }
-
-        .glass-pill.night-mode .hint-3d {
-            color: #880e4f;
-        }
-
-        /* Nút bấm màu hồng đậm phát sáng nhẹ bên ngoài viền */
-        .glow-btn {
-            pointer-events: auto;
-            position: relative;
-            background: linear-gradient(135deg, #f01e68 0%, #c2185b 55%, #880e4f 100%);
-            color: #ffffff;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
-            font-size: clamp(1rem, 3.2vw, 1.2rem);
-            padding: 15px 36px;
-            border-radius: 50px;
-            border: 2px solid rgba(255, 210, 228, 0.92);
-            cursor: pointer;
-            box-shadow: 
-                0 0 18px rgba(255, 42, 117, 0.78),
-                0 0 38px rgba(194, 24, 91, 0.5),
-                0 10px 25px rgba(136, 14, 79, 0.35),
-                inset 0 2px 12px rgba(255, 255, 255, 0.42);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            letter-spacing: 0.4px;
-            animation: neonBorderPulse 2s infinite alternate;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .glow-btn:hover {
-            transform: translateY(-3px) scale(1.04);
-        }
-
-        .glow-btn:active {
-            transform: translateY(1px) scale(0.97);
-        }
-
-        @keyframes neonBorderPulse {
-            0% {
-                box-shadow: 0 0 14px rgba(255, 42, 117, 0.65), 0 0 28px rgba(194, 24, 91, 0.35), inset 0 0 10px rgba(255, 255, 255, 0.3);
-            }
-            100% {
-                box-shadow: 0 0 26px rgba(255, 42, 117, 0.98), 0 0 54px rgba(255, 105, 160, 0.75), inset 0 0 18px rgba(255, 255, 255, 0.55);
-            }
-        }
-
-        /* Mũi tên nhấp nháy phát sáng ở Trang 2 */
-        .blinking-arrows {
-            display: inline-flex;
-            align-items: center;
-            font-size: 1.3em;
-            line-height: 1;
-        }
-
-        .arrow-item {
-            display: inline-block;
-            color: #ffffff;
-            text-shadow: 0 0 10px #ffffff, 0 0 20px #ff80ab, 0 0 30px #ff2a75;
-            animation: arrowGlow 1.1s infinite;
-        }
-
-        .arrow-item:nth-child(2) { animation-delay: 0.18s; }
-        .arrow-item:nth-child(3) { animation-delay: 0.36s; }
-
-        @keyframes arrowGlow {
-            0%, 100% { opacity: 0.2; transform: translateX(0); }
-            50% { opacity: 1; transform: translateX(4px); filter: drop-shadow(0 0 8px #fff); }
-        }
-
-        #page-2 {
-            justify-content: flex-end;
-        }
-
-        #btn-page-2 {
-            opacity: 0;
-            transform: translateY(25px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        #btn-page-2.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Trang 4: Bức thư tâm tình gõ chữ từ từ */
-        #page-4 {
-            z-index: 25;
-            justify-content: center;
-            padding: 15px;
-            perspective: 1200px;
-        }
-
-        .letter-card {
-            pointer-events: auto;
-            width: 100%;
-            max-width: 650px;
-            max-height: 88vh;
-            overflow-y: auto;
-            background: linear-gradient(165deg, rgba(255, 253, 254, 0.96) 0%, rgba(255, 240, 246, 0.96) 100%);
-            backdrop-filter: blur(16px);
-            border-radius: 26px;
-            padding: clamp(20px, 4.5vw, 38px);
-            border: 2px solid rgba(255, 190, 215, 0.95);
-            box-shadow: 
-                0 25px 70px rgba(136, 14, 79, 0.28),
-                0 0 45px rgba(255, 128, 171, 0.45),
-                inset 0 0 30px rgba(255, 255, 255, 0.95);
-            transform: rotateX(18deg) scale(0.82) translateY(40px);
-            opacity: 0;
-            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
-            scroll-behavior: smooth;
-        }
-
-        .letter-card::-webkit-scrollbar { width: 6px; }
-        .letter-card::-webkit-scrollbar-thumb { background: #f48fb1; border-radius: 10px; }
-
-        #page-4.active .letter-card {
-            transform: rotateX(0deg) scale(1) translateY(0);
-            opacity: 1;
-        }
-
-        .letter-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .letter-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #ff4081, #ad1457);
-            color: #fff;
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 5px 14px;
-            border-radius: 20px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
-        }
-
-        .skip-type-btn {
-            background: rgba(216, 27, 96, 0.1);
-            color: #ad1457;
-            border: 1px solid rgba(216, 27, 96, 0.3);
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-family: 'Quicksand', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .skip-type-btn:hover {
-            background: rgba(216, 27, 96, 0.2);
-        }
-
-        .letter-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(1.9rem, 5vw, 2.6rem);
-            color: #ad1457;
-            margin-bottom: 14px;
-            line-height: 1.25;
-        }
-
-        .letter-divider {
-            width: 90px;
-            height: 3px;
-            background: linear-gradient(90deg, #ff4081, #ffd57e, transparent);
-            margin-bottom: 18px;
-            border-radius: 3px;
-        }
-
-        .letter-body p {
-            color: var(--text-dark);
-            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
-            line-height: 1.78;
-            margin-bottom: 15px;
-            text-align: justify;
-            font-weight: 500;
-            min-height: 1.2em;
-        }
-
-        .letter-highlight {
-            background: rgba(255, 198, 218, 0.38);
-            border-left: 4px solid #d81b60;
-            padding: 13px 16px;
-            border-radius: 0 14px 14px 0;
-            margin: 16px 0;
-            opacity: 0;
-            transform: translateY(8px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .letter-highlight.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Con trỏ gõ chữ lấp lánh */
-        .typing-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.1em;
-            background-color: #d81b60;
-            margin-left: 3px;
-            vertical-align: text-bottom;
-            animation: blinkCursor 0.7s infinite;
-        }
-
-        @keyframes blinkCursor {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .python-stat-box {
-            background: linear-gradient(135deg, rgba(255, 240, 246, 0.92), rgba(255, 224, 236, 0.92));
-            border: 1.5px dashed #d81b60;
-            border-radius: 14px;
-            padding: 12px 15px;
-            margin-top: 14px;
-            font-size: 0.92rem;
-            color: #880e4f;
-            line-height: 1.6;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.7s ease;
-        }
-
-        .python-stat-box.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .letter-footer {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-            border-top: 1px dashed rgba(216, 27, 96, 0.35);
-            padding-top: 16px;
-            opacity: 0;
-            transform: translateY(12px);
-            transition: all 0.8s ease;
-        }
-
-        .letter-footer.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .signature {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.55rem;
-            color: #c2185b;
-            align-self: flex-end;
-        }
-
-        /* Trang 5: Đại Tiệc Ánh Sáng 3D Cuối Cùng */
-        .page5-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .wish-banner {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
-            color: #c2185b;
-            text-shadow: 0 0 15px rgba(255, 64, 129, 0.35), 0 0 25px rgba(255, 213, 126, 0.4);
-            text-align: center;
-            opacity: 1;
-            transform: scale(1);
-            padding: 10px 24px;
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 40px;
-            border: 1.5px solid rgba(255, 255, 255, 0.88);
-            box-shadow: 0 12px 32px rgba(194, 24, 91, 0.15);
-        }
-
-        /* Khung ảnh kỷ niệm hoa hồng ở Trang 4 */
-        .letter-photo-card {
-            margin: 18px auto 22px auto;
-            text-align: center;
-            max-width: 260px;
-            background: #ffffff;
-            padding: 10px 10px 14px 10px;
-            border-radius: 14px;
-            box-shadow: 0 12px 28px rgba(194, 24, 91, 0.16), 0 2px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 182, 193, 0.45);
-            transform: rotate(-1.5deg);
-            transition: all 0.4s ease;
-        }
-
-        .letter-photo-card:hover {
-            transform: rotate(0deg) scale(1.03);
-            box-shadow: 0 16px 36px rgba(194, 24, 91, 0.26);
-        }
-
-        .letter-photo-card .photo-frame {
-            overflow: hidden;
-            border-radius: 8px;
-            aspect-ratio: 1 / 1;
-            background: #ffeef4;
-        }
-
-        .letter-photo-card .polaroid-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
             display: block;
         }
 
-        .letter-photo-card .photo-caption {
-            margin-top: 9px;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.25rem;
-            color: #ad1457;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-
-        /* Canvas pháo hoa / pháo giấy kim tuyến */
-        #confetti-canvas {
+        /* Lớp phủ Gradient mờ ảo tăng chiều sâu */
+        .ambient-overlay {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            z-index: 45;
+            z-index: 2;
             pointer-events: none;
+            background: radial-gradient(circle at 50% 40%, rgba(5, 7, 10, 0.1) 0%, rgba(5, 7, 10, 0.65) 70%, rgba(5, 7, 10, 0.95) 100%),
+                        linear-gradient(to bottom, rgba(5, 7, 10, 0.7) 0%, transparent 25%, transparent 65%, rgba(5, 7, 10, 0.92) 100%);
         }
 
+        /* Giao diện chính trên nền 3D */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            pointer-events: none; /* Các nút con có pointer-events: auto */
+        }
 
+        /* Header / Thanh điều hướng sang trọng */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 18px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(5, 7, 10, 0.85) 0%, rgba(5, 7, 10, 0) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        /* Logo KIA SVG mới */
+        .kia-svg-logo {
+            height: 28px;
+            fill: #ffffff;
+            transition: transform 0.3s ease;
+        }
+        .brand-logo:hover .kia-svg-logo {
+            transform: scale(1.05);
+            fill: var(--kia-red);
+        }
+
+        .model-badge {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 3.5px;
+            color: #ffffff;
+            border-left: 2px solid var(--kia-red);
+            padding-left: 14px;
+            text-transform: uppercase;
+        }
+
+        .model-badge span {
+            color: var(--kia-red);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.92rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+            position: relative;
+            padding: 6px 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: var(--kia-red);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px var(--kia-red);
+        }
+
+        nav a:hover, nav a.active {
+            color: #ffffff;
+        }
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-test-drive {
+            background: linear-gradient(135deg, var(--kia-red) 0%, #c40022 100%);
+            color: #ffffff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.86rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 18px var(--kia-red-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-test-drive:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(234, 0, 41, 0.65);
+        }
+
+        /* SECTION HERO */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 130px 60px 45px 60px;
+            position: relative;
+        }
+
+        .hero-title-box {
+            max-width: 650px;
+            pointer-events: auto;
+            animation: fadeInDown 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .tag-k3 {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(234, 0, 41, 0.15);
+            border: 1px solid rgba(234, 0, 41, 0.5);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: #ff3355;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            backdrop-filter: blur(8px);
+        }
+
+        .tag-k3 i {
+            font-size: 0.65rem;
+        }
+
+        h1.hero-heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.8rem;
+            font-weight: 900;
+            line-height: 1.08;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        h1.hero-heading .red-accent {
+            color: var(--kia-red);
+            display: inline-block;
+            text-shadow: 0 0 30px var(--kia-red-glow);
+        }
+
+        p.hero-desc {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 28px;
+            font-weight: 400;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+        }
+
+        /* 3D Controller Panel (Nằm góc trái hoặc góc phải) */
+        .car-control-widget {
+            position: fixed;
+            bottom: 30px;
+            left: 50px;
+            z-index: 50;
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--glass-border);
+            padding: 16px 22px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+
+        .widget-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .widget-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.55);
+            text-transform: uppercase;
+        }
+
+        /* Color Swatches */
+        .color-swatches {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.18);
+            border-color: #ffffff;
+        }
+
+        .color-dot.active {
+            transform: scale(1.22);
+            border-color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        }
+
+        .color-dot.red { background: radial-gradient(circle at 35% 35%, #ff2a4b, #9e0015); }
+        .color-dot.white { background: radial-gradient(circle at 35% 35%, #ffffff, #cfd8dc); }
+        .color-dot.black { background: radial-gradient(circle at 35% 35%, #37474f, #0d1117); }
+        .color-dot.blue { background: radial-gradient(circle at 35% 35%, #1e88e5, #0d47a1); }
+        .color-dot.grey { background: radial-gradient(circle at 35% 35%, #90a4ae, #455a64); }
+
+        .widget-divider {
+            width: 1px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Action Pill Buttons trong Widget */
+        .widget-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-widget {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-widget:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .btn-widget.active {
+            background: var(--kia-red);
+            border-color: var(--kia-red);
+            box-shadow: 0 0 14px var(--kia-red-glow);
+        }
+
+        /* Hero Specs Strip (Thanh thông số vắn tắt góc phải) */
+        .hero-specs-strip {
+            position: absolute;
+            bottom: 35px;
+            right: 50px;
+            display: flex;
+            gap: 32px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 18px 34px;
+            border-radius: 16px;
+            pointer-events: auto;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .spec-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .spec-value span {
+            font-size: 0.95rem;
+            color: var(--kia-red);
+            font-weight: 600;
+        }
+
+        .spec-title {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            color: rgba(255, 255, 255, 0.55);
+            text-transform: uppercase;
+        }
+
+        /* Gợi ý tương tác xoay 3D */
+        .drag-hint {
+            position: fixed;
+            top: 50%;
+            right: 40px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: pulseHint 2.4s infinite ease-in-out;
+            z-index: 20;
+        }
+
+        .drag-hint i {
+            font-size: 1.4rem;
+            color: var(--kia-silver);
+        }
+
+        .drag-hint span {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes pulseHint {
+            0%, 100% { opacity: 0.35; transform: translateY(-50%) scale(0.96); }
+            50% { opacity: 0.85; transform: translateY(-50%) scale(1.04); }
+        }
+
+        /* SECTION TIẾP THEO: NỘI THẤT & TÍNH NĂNG */
+        .features-section {
+            padding: 100px 60px;
+            max-width: 1360px;
+            margin: 0 auto;
+            pointer-events: auto;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto 60px auto;
+        }
+
+        .section-tag {
+            color: var(--kia-red);
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            color: rgba(255, 255, 255, 0.68);
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 34px 28px;
+            transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--kia-red), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(234, 0, 41, 0.4);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 20px rgba(234, 0, 41, 0.15);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            background: rgba(234, 0, 41, 0.12);
+            border: 1px solid rgba(234, 0, 41, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--kia-red);
+            margin-bottom: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: var(--kia-red);
+            color: #ffffff;
+            box-shadow: 0 0 20px var(--kia-red-glow);
+        }
+
+        .feature-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.94rem;
+            line-height: 1.6;
+        }
+
+        /* SECTION BẢNG GIÁ & PHIÊN BẢN */
+        .pricing-section {
+            padding: 80px 60px 120px 60px;
+            max-width: 1360px;
+            margin: 0 auto;
+            pointer-events: auto;
+        }
+
+        .versions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+            margin-top: 50px;
+        }
+
+        .version-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .version-card.highlight {
+            border-color: var(--kia-red);
+            background: linear-gradient(180deg, rgba(234, 0, 41, 0.12) 0%, var(--glass-bg) 60%);
+            box-shadow: 0 12px 35px rgba(234, 0, 41, 0.2);
+        }
+
+        .badge-hot {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--kia-red);
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px var(--kia-red-glow);
+        }
+
+        .version-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .version-engine {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.55);
+            margin-bottom: 22px;
+        }
+
+        .version-price {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--kia-red);
+            margin-bottom: 24px;
+        }
+
+        .version-price span {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .version-features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 20px;
+        }
+
+        .version-features-list li {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.75);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .version-features-list li i {
+            color: #00e676;
+            font-size: 0.8rem;
+        }
+
+        .btn-choose-version {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 12px 0;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .version-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .version-card.highlight .btn-choose-version,
+        .btn-choose-version:hover {
+            background: var(--kia-red);
+            border-color: var(--kia-red);
+            box-shadow: 0 4px 18px var(--kia-red-glow);
+        }
+
+        /* MODAL ĐĂNG KÝ LÁI THỬ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(12px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: #0f141d;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 520px;
+            padding: 38px 34px;
+            position: relative;
+            transform: scale(0.92);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .btn-close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .btn-close-modal:hover { color: #ffffff; }
+
+        .modal-box h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .modal-box p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.92rem;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.25s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--kia-red);
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        .form-select option {
+            background: #111;
+            color: #fff;
+        }
+
+        .btn-submit-form {
+            width: 100%;
+            padding: 14px;
+            background: var(--kia-red);
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            cursor: pointer;
+            box-shadow: 0 4px 18px var(--kia-red-glow);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-submit-form:hover {
+            background: #ff1943;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(5, 7, 10, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px 60px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.85rem;
+            pointer-events: auto;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .versions-grid { grid-template-columns: repeat(2, 1fr); }
+            h1.hero-heading { font-size: 2.8rem; }
+            .hero-specs-strip { display: none; }
+            .car-control-widget { left: 20px; bottom: 20px; padding: 12px 18px; }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 16px 20px; }
+            nav ul { display: none; }
+            .hero-section { padding: 100px 24px 30px 24px; }
+            h1.hero-heading { font-size: 2.2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .versions-grid { grid-template-columns: 1fr; }
+            .car-control-widget {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                justify-content: space-between;
+                gap: 12px;
+                padding: 10px 14px;
+            }
+            .features-section, .pricing-section { padding: 60px 20px; }
+        }
     </style>
 </head>
-<body onload="brython()">
+<body>
 
-    <!-- Khung 3D PBR -->
-    <div id="webgl-container"></div>
-
-    <!-- Khung hạt bụi siêu nhỏ (Trang 2) -->
-    <canvas id="particle-canvas"></canvas>
-
-    <!-- Khung pháo hoa & pháo giấy kim tuyến ăn mừng -->
-    <canvas id="confetti-canvas"></canvas>
-
-    <!-- ================= TRANG 1: SÂN KHẤU NGỌC TRAI & PHA LÊ 3D ================= -->
-    <div id="page-1" class="page active">
-        <div class="glass-pill">
-            <h2>Không Gian Kỷ Niệm Tuổi 18 ✨</h2>
-        </div>
-        <button id="btn-page-1" class="glow-btn">
-            <span>Bắt đầu</span>
-        </button>
+    <!-- 3D Canvas Container chạy nền toàn màn hình -->
+    <div id="webgl-canvas-container">
+        <canvas id="webgl-canvas"></canvas>
     </div>
 
-    <!-- ================= TRANG 2: HẠT BỤI SIÊU NHỎ GHÉP CHỮ 3D ================= -->
-    <div id="page-2" class="page">
-        <div></div>
-        <button id="btn-page-2" class="glow-btn">
-            <span>Tiếp tục</span>
-            <span class="blinking-arrows">
-                <span class="arrow-item">❯</span>
-                <span class="arrow-item">❯</span>
-                <span class="arrow-item">❯</span>
-            </span>
-        </button>
+    <!-- Lớp phủ chiều sâu & tương phản ánh sáng -->
+    <div class="ambient-overlay"></div>
+
+    <!-- Gợi ý xoay xe 3D -->
+    <div class="drag-hint">
+        <i class="fa-solid fa-arrows-spin"></i>
+        <span>Kéo chuột để xoay 360°</span>
     </div>
 
-    <!-- ================= TRANG 3: HỘP QUÀ LỤA 3D RỖNG RUỘT CHÂN THẬT ================= -->
-    <div id="page-3" class="page">
-        <div class="glass-pill">
-            <h2>Món quà dành riêng cho bạn 🎁</h2>
-        </div>
-        <button id="btn-open-gift" class="glow-btn">
-            <span>Mở hộp quà ngay</span>
-        </button>
-    </div>
-
-    <!-- ================= TRANG 4: BỨC THƯ TÂM TÌNH (HIỆN CHỮ TỪ TỪ) ================= -->
-    <div id="page-4" class="page">
-        <div class="letter-card" id="letter-scroll-box">
-            <div class="letter-top-bar">
-                <span class="letter-badge">Happy 18th Birthday</span>
-                <button id="btn-skip-typing" class="skip-type-btn">Hiện nhanh toàn bộ ⏩</button>
+    <!-- Thanh Widget tương tác xe 3D cố định phía dưới -->
+    <div class="car-control-widget">
+        <div class="widget-group">
+            <span class="widget-label">Màu ngoại thất</span>
+            <div class="color-swatches">
+                <div class="color-dot red active" data-color="#b3001b" title="Đỏ Runway Red"></div>
+                <div class="color-dot white" data-color="#f0f3f6" title="Trắng Ngọc Trai Glacier White"></div>
+                <div class="color-dot black" data-color="#0f1115" title="Đen Aurora Black Pearl"></div>
+                <div class="color-dot blue" data-color="#0e3a6a" title="Xanh Mineral Blue"></div>
+                <div class="color-dot grey" data-color="#464d53" title="Xám Bạc Steel Grey"></div>
             </div>
-            <h1 class="letter-title">Gửi cô gái tuổi 18 rực rỡ nhất hôm nay 🌸</h1>
-            <div class="letter-divider"></div>
+        </div>
 
-            <div class="letter-body">
-                <!-- Đoạn 1: Lời chúc tuổi 18 (Gõ chữ từ từ) -->
-                <p id="type-p1"></p>
+        <div class="widget-divider"></div>
 
-                <!-- Khung ảnh kỷ niệm đóa hồng tuổi 18 -->
-                <div class="letter-photo-card" id="letter-photo-box">
-                    <div class="photo-frame">
-                        <img src="hoa-hong.jpg" alt="Đóa hoa tuổi 18 rực rỡ" class="polaroid-img">
-                    </div>
-                    <div class="photo-caption">Đóa hồng rực rỡ và thuần khiết nhất tuổi 18 🌸</div>
-                </div>
-
-                <!-- Đoạn 2: Học tập, ăn uống, sinh hoạt an toàn (Gõ chữ từ từ) -->
-                <div class="letter-highlight" id="highlight-box">
-                    <p id="type-p2" style="margin-bottom: 0;"></p>
-                </div>
-
-                <!-- Đoạn 3 & 4: Lời chúc & tâm tình -->
-                <p id="type-p3"></p>
-                <p id="type-p4" style="margin-bottom: 0;"></p>
-
-                <!-- Góc nhỏ tính bằng ngôn ngữ Python -->
-                <div id="python-milestone" class="python-stat-box">
-                    ✨ <b>Góc nhỏ tính bằng ngôn ngữ Python:</b> Tính đến cột mốc tuổi 18 hôm nay, bạn đã đi qua hành trình <b>6,574 ngày</b> (tương đương <b>157,776 giờ</b> và <b>9,466,560 phút</b>) thanh xuân thật đẹp. Hãy bấm nút bên dưới để mở bầu trời ước nguyện dành riêng cho bạn nhé!
-                </div>
-            </div>
-
-            <div class="letter-footer" id="letter-footer-box">
-                <div class="signature">Từ một người luôn mong bạn vui vẻ 💖</div>
-                <button id="btn-to-page-5" class="glow-btn">
-                    <span>Mở điều bất ngờ cuối cùng ✨</span>
-                    <span class="blinking-arrows">
-                        <span class="arrow-item">❯</span>
-                        <span class="arrow-item">❯</span>
-                    </span>
+        <div class="widget-group">
+            <span class="widget-label">Điều khiển 3D</span>
+            <div class="widget-buttons">
+                <button class="btn-widget active" id="btn-toggle-drive" title="Bật/Tắt chế độ chạy cao tốc">
+                    <i class="fa-solid fa-gauge-high"></i> <span id="drive-text">Đang chạy</span>
+                </button>
+                <button class="btn-widget active" id="btn-toggle-lights" title="Bật/Tắt đèn pha LED">
+                    <i class="fa-regular fa-lightbulb"></i> <span>Đèn LED</span>
+                </button>
+                <button class="btn-widget" id="btn-turbo-boost" title="Tăng tốc Turbo">
+                    <i class="fa-solid fa-bolt"></i> <span>Turbo</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- ================= TRANG 5: SÂN KHẤU BÁNH KEM & KHÔNG GIAN HỒNG LẤP LÁNH ================= -->
-    <div id="page-5" class="page">
-        <div class="glass-pill night-mode">
-            <h2>Thiên Đường Ước Nguyện Tuổi 18 ✨</h2>
-        </div>
+    <!-- LỚP NỘI DUNG GIAO DIỆN CHÍNH -->
+    <div class="content-layer">
 
-        <div class="page5-controls">
-            <div id="wish-message" class="wish-banner">
-                ✨ Chúc mọi điều ước tuổi 18 của bạn đều trở thành hiện thực! ✨
+        <!-- Header -->
+        <header>
+            <a href="#" class="brand-logo">
+                <!-- SVG KIA Logo Hiện Đại -->
+                <svg class="kia-svg-logo" viewBox="0 0 280 90">
+                    <path d="M22 68 L22 22 L40 22 L40 45 L56 22 L76 22 L54 50 L78 68 L58 68 L42 54 L40 57 L40 68 Z"/>
+                    <path d="M96 22 L114 22 L114 68 L96 68 Z"/>
+                    <path d="M152 22 L186 22 L206 68 L186 68 L180 54 L158 54 L152 68 L132 68 Z M169 32 L163 45 L175 45 Z"/>
+                    <rect x="220" y="22" width="16" height="46" rx="3" fill="#ea0029"/>
+                </svg>
+                <div class="model-badge">K3 <span>2026</span></div>
+            </a>
+
+            <nav>
+                <ul>
+                    <li><a href="#hero" class="active">Trang chủ</a></li>
+                    <li><a href="#features">Thiết kế</a></li>
+                    <li><a href="#specs">Công nghệ</a></li>
+                    <li><a href="#pricing">Phiên bản & Giá</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <button class="btn-test-drive" id="btn-open-modal">
+                    <i class="fa-solid fa-steering-wheel"></i> Đăng Ký Lái Thử
+                </button>
             </div>
-            <button id="btn-blow-candle" class="glow-btn" style="margin-top: 14px;">
-                <span>🎂 Nhắm mắt ước & Thổi nến 🕯️</span>
-            </button>
-            <button id="btn-replay" class="glow-btn" style="margin-top: 14px; display: none;">
-                <span>🔄 Xem lại từ đầu</span>
-            </button>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section class="hero-section" id="hero">
+            <div class="hero-title-box">
+                <div class="tag-k3">
+                    <i class="fa-solid fa-sparkles"></i> Mẫu Sedan Thể Thao Thế Hệ Mới
+                </div>
+                <h1 class="hero-heading">
+                    KIA K3 <br><span class="red-accent">Bứt Phá</span> Mọi Giới Hạn
+                </h1>
+                <p class="hero-desc">
+                    Sự kết hợp hoàn hảo giữa ngôn ngữ thiết kế Opposites United đột phá, cảm giác lái thể thao đầy phấn khích cùng hệ thống an toàn thông minh Kia Drive Wise tiên tiến.
+                </p>
+                <div style="display: flex; gap: 16px;">
+                    <button class="btn-test-drive" id="btn-hero-order" style="padding: 14px 34px; font-size: 0.95rem;">
+                        Nhận Báo Giá Lăn Bánh
+                    </button>
+                    <a href="#pricing" class="btn-widget" style="padding: 14px 24px; text-decoration: none; font-size: 0.95rem; border-radius: 6px;">
+                        Xem Bảng Giá
+                    </a>
+                </div>
+            </div>
+
+            <!-- Thanh thông số nhanh góc phải -->
+            <div class="hero-specs-strip" id="specs">
+                <div class="spec-item">
+                    <div class="spec-value">201 <span>HP</span></div>
+                    <div class="spec-title">Công Suất Turbo</div>
+                </div>
+                <div class="widget-divider"></div>
+                <div class="spec-item">
+                    <div class="spec-value">10.25 <span>Inch</span></div>
+                    <div class="spec-title">Màn hình AVN kép</div>
+                </div>
+                <div class="widget-divider"></div>
+                <div class="spec-item">
+                    <div class="spec-value">6.1 <span>L/100km</span></div>
+                    <div class="spec-title">Tiết kiệm nhiên liệu</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION TÍNH NĂNG & THIẾT KẾ ĐỘT PHÁ -->
+        <section class="features-section" id="features">
+            <div class="section-header">
+                <span class="section-tag">Đỉnh Cao Thiết Kế</span>
+                <h2 class="section-title">Phong Cách Thể Thao Đầy Uy Lực</h2>
+                <p class="section-desc">Kia K3 khơi dậy niềm đam mê cầm lái với từng đường nét khí động học tinh xảo, tôn vinh khí chất của người dẫn đầu xu thế.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-car-side"></i></div>
+                    <h3>Lưới Tản Nhiệt Mũi Hổ</h3>
+                    <p>Thiết kế Tiger Nose thế hệ mới kết nối liền mạch với cụm đèn pha LED dạng đường kẻ thời thượng, mang lại diện mạo sắc sảo và hiện đại.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                    <h3>Đèn LED Chạy Ban Ngày</h3>
+                    <p>Hệ thống đèn LED DRL định vị hình tia chớp độc bản kết hợp dải đèn hậu LED liền mạch phía sau, tạo dấu ấn nhận diện không thể nhầm lẫn ban đêm.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-gauge"></i></div>
+                    <h3>Khoang Lái Kỹ Thuật Số</h3>
+                    <p>Màn hình giải trí đa phương tiện kích thước lớn 10.25 inch hỗ trợ Apple CarPlay & Android Auto không dây, âm thanh sống động vòm 6 loa đỉnh cao.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-wind"></i></div>
+                    <h3>Ghế Làm Mát & Sưởi</h3>
+                    <p>Ghế bọc da 2 tông màu cao cấp tích hợp tính năng sưởi ấm và thông gió làm mát hàng ghế trước, tạo sự thoải mái tối đa trong mọi điều kiện thời tiết.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Hệ Thống Kia Drive Wise</h3>
+                    <p>Trang bị công nghệ an toàn chủ động: Cảnh báo điểm mù (BCW), Hỗ trợ phanh khẩn cấp, Cảnh báo phương tiện cắt ngang và 6 túi khí bảo vệ toàn diện.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-fire"></i></div>
+                    <h3>Động Cơ 1.6 Turbo GT</h3>
+                    <p>Sức mạnh 201 mã lực kết hợp cùng hộp số ly hợp kép 7 cấp 7-DCT và hệ thống treo sau độc lập đa liên kết, mang lại cảm giác tăng tốc phấn khích.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION PHIÊN BẢN & BẢNG GIÁ -->
+        <section class="pricing-section" id="pricing">
+            <div class="section-header">
+                <span class="section-tag">Tùy Chọn Phiên Bản</span>
+                <h2 class="section-title">Bảng Giá Lăn Bánh Tham Khảo</h2>
+                <p class="section-desc">Đa dạng phiên bản phù hợp trọn vẹn với nhu cầu di chuyển gia đình, kinh doanh hoặc thể thao cá tính.</p>
+            </div>
+
+            <div class="versions-grid">
+                <!-- Bản 1.6 Deluxe -->
+                <div class="version-card">
+                    <div>
+                        <div class="version-name">1.6 Deluxe (MT)</div>
+                        <div class="version-engine">Xăng Gamma 1.6L MPI - Số sàn 6MT</div>
+                        <div class="version-price">549 <span>Triệu VNĐ</span></div>
+                        <ul class="version-features-list">
+                            <li><i class="fa-solid fa-circle-check"></i> Đèn Halogen Projector tự động</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Màn hình cảm ứng 8 inch</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Ga tự động Cruise Control</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Mâm đúc hợp kim 17 inch</li>
+                        </ul>
+                    </div>
+                    <button class="btn-choose-version btn-select-order" data-ver="1.6 Deluxe">Chọn Phiên Bản</button>
+                </div>
+
+                <!-- Bản 1.6 Luxury -->
+                <div class="version-card">
+                    <div>
+                        <div class="version-name">1.6 Luxury</div>
+                        <div class="version-engine">Xăng Gamma 1.6L MPI - Số tự động 6AT</div>
+                        <div class="version-price">585 <span>Triệu VNĐ</span></div>
+                        <ul class="version-features-list">
+                            <li><i class="fa-solid fa-circle-check"></i> Cửa sổ trời điều khiển điện</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Khởi động từ xa bằng chìa khóa</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Ghế lái chỉnh điện 8 hướng</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Điều hòa 2 vùng độc lập</li>
+                        </ul>
+                    </div>
+                    <button class="btn-choose-version btn-select-order" data-ver="1.6 Luxury">Chọn Phiên Bản</button>
+                </div>
+
+                <!-- Bản 1.6 Premium (Nổi bật) -->
+                <div class="version-card highlight">
+                    <div class="badge-hot">Bán chạy nhất</div>
+                    <div>
+                        <div class="version-name">1.6 Premium</div>
+                        <div class="version-engine">Xăng Gamma 1.6L MPI - Số tự động 6AT</div>
+                        <div class="version-price">619 <span>Triệu VNĐ</span></div>
+                        <ul class="version-features-list">
+                            <li><i class="fa-solid fa-circle-check"></i> Hệ thống đèn Full-LED cao cấp</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Màn hình AVN 10.25 inch</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Ghế có tính năng sưởi & làm mát</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Cảnh báo điểm mù BCW & 6 túi khí</li>
+                        </ul>
+                    </div>
+                    <button class="btn-choose-version btn-select-order" data-ver="1.6 Premium">Chọn Phiên Bản</button>
+                </div>
+
+                <!-- Bản 1.6 Turbo GT -->
+                <div class="version-card">
+                    <div>
+                        <div class="version-name">1.6 Turbo GT</div>
+                        <div class="version-engine">1.6 T-GDi Turbo 201HP - Hộp số 7-DCT</div>
+                        <div class="version-price">734 <span>Triệu VNĐ</span></div>
+                        <ul class="version-features-list">
+                            <li><i class="fa-solid fa-circle-check"></i> Bodykit thể thao GT độc quyền</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Ống xả kép thể thao uy lực</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Lẫy chuyển số trên vô lăng</li>
+                            <li><i class="fa-solid fa-circle-check"></i> Treo sau liên kết đa điểm</li>
+                        </ul>
+                    </div>
+                    <button class="btn-choose-version btn-select-order" data-ver="1.6 Turbo GT">Chọn Phiên Bản</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>© 2026 <strong>KIA VIETNAM</strong>. Khám phá trải nghiệm xe sedan thế hệ mới cùng KIA K3 3D Simulator.</p>
+            <p style="margin-top: 8px; font-size: 0.78rem;">Hình ảnh và mô hình 3D tương tác mô phỏng thời gian thực bằng công nghệ WebGL Three.js.</p>
+        </footer>
+
+    </div>
+
+    <!-- MODAL ĐĂNG KÝ LÁI THỬ / NHẬN ƯU ĐÃI -->
+    <div class="modal-overlay" id="booking-modal">
+        <div class="modal-box">
+            <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+            <h3>Đăng Ký Lái Thử KIA K3</h3>
+            <p>Trải nghiệm thực tế cảm giác lái phấn khích và nhận bảng giá khuyến mãi mới nhất từ đại lý chính hãng.</p>
+
+            <form id="drive-form" onsubmit="event.preventDefault(); submitBooking();">
+                <div class="form-group">
+                    <label>Họ và tên của bạn</label>
+                    <input type="text" class="form-input" id="cust-name" required placeholder="Nguyễn Văn A">
+                </div>
+                <div class="form-group">
+                    <label>Số điện thoại liên hệ</label>
+                    <input type="tel" class="form-input" id="cust-phone" required placeholder="0901 xxx xxx">
+                </div>
+                <div class="form-group">
+                    <label>Phiên bản quan tâm</label>
+                    <select class="form-select" id="cust-version">
+                        <option value="KIA K3 1.6 Premium">KIA K3 1.6 Premium (Khuyên dùng)</option>
+                        <option value="KIA K3 1.6 Turbo GT">KIA K3 1.6 Turbo GT Thể Thao</option>
+                        <option value="KIA K3 1.6 Luxury">KIA K3 1.6 Luxury</option>
+                        <option value="KIA K3 1.6 Deluxe">KIA K3 1.6 Deluxe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Khu vực lái thử</label>
+                    <select class="form-select" id="cust-location">
+                        <option>Hà Nội & Miền Bắc</option>
+                        <option selected>TP. Hồ Chí Minh & Miền Nam</option>
+                        <option>Đà Nẵng & Miền Trung</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit-form" id="btn-submit-booking">Xác Nhận Đăng Ký</button>
+            </form>
         </div>
     </div>
 
     <!-- =========================================================================
-         NGÔN NGỮ 1: GLSL (OPEN-GL SHADING LANGUAGE) CHẠY TRÊN CARD ĐỒ HỌA GPU
-         ========================================================================= -->
-    <script id="haloVertexShader" type="x-shader/x-vertex">
-        varying vec2 vUv;
-        void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-    </script>
-
-    <script id="haloFragmentShader" type="x-shader/x-fragment">
-        uniform float uTime;
-        uniform vec3 uColorInner;
-        uniform vec3 uColorOuter;
-        varying vec2 vUv;
-
-        void main() {
-            vec2 center = vUv - vec2(0.5);
-            float dist = length(center) * 2.0;
-            float wave = sin(dist * 10.0 - uTime * 3.0) * 0.04;
-            float alpha = smoothstep(1.0, 0.05, dist + wave);
-            float pulse = 0.75 + 0.25 * sin(uTime * 2.5);
-            vec3 finalColor = mix(uColorInner, uColorOuter, dist);
-            gl_FragColor = vec4(finalColor, alpha * 0.55 * pulse);
-        }
-    </script>
-
-    <!-- =========================================================================
-         NGÔN NGỮ 2: PYTHON (CHẠY TRỰC TIẾP TRÊN TRÌNH DUYỆT QUA BRYTHON)
-         ========================================================================= -->
-    <script type="text/python">
-from browser import document
-
-# Tính toán chính xác hành trình 18 năm bằng Python
-years = 18
-leap_days = 4
-total_days = years * 365 + leap_days
-total_hours = total_days * 24
-total_minutes = total_hours * 60
-
-milestone_box = document.getElementById("python-milestone")
-if milestone_box:
-    milestone_box.innerHTML = (
-        f"✨ <b>Góc nhỏ tính bằng ngôn ngữ Python:</b> Tính đến cột mốc tuổi {years} hôm nay, "
-        f"bạn đã đi qua hành trình <b>{total_days:,} ngày</b> (tương đương <b>{total_hours:,} giờ</b> "
-        f"và <b>{total_minutes:,} phút</b>) thanh xuân thật đẹp. Hãy bấm nút bên dưới để mở bầu trời ước nguyện dành riêng cho bạn nhé!"
-    )
-    </script>
-
-    <!-- =========================================================================
-         NGÔN NGỮ 3: JAVASCRIPT (ES6+) + THREE.JS PBR ENGINE
+         JAVASCRIPT ENGINE: THREE.JS PBR 3D CAR + REALTIME RUNNING HIGHWAY
          ========================================================================= -->
     <script>
         /* -------------------------------------------------------------------------
-           1. KHỞI TẠO ENGINE 3D PBR CHÂN THẬT
+           1. THIẾT LẬP SCENE, CAMERA, RENDERER PBR
            ------------------------------------------------------------------------- */
-        const container = document.getElementById('webgl-container');
+        const canvas = document.getElementById('webgl-canvas');
+        const container = document.getElementById('webgl-canvas-container');
+
         const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x05070a, 0.016);
 
-        const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 120);
-        camera.position.set(0, 1.8, 10.5);
-        camera.lookAt(0, 0.2, 0);
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 150);
+        // Đặt góc nhìn nghiêng 3/4 thể thao nhìn thấy toàn bộ thân xe KIA K3
+        camera.position.set(4.8, 1.85, 5.8);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            antialias: true,
+            alpha: false,
+            powerPreference: 'high-performance'
+        });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.physicallyCorrectLights = true;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.15;
-        container.appendChild(renderer.domElement);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-        // Môi trường phản chiếu Studio HDRI
-        const pmremGenerator = new THREE.PMREMGenerator(renderer);
-        pmremGenerator.compileEquirectangularShader();
+        // OrbitControls cho phép người dùng xoay, xem xe tự do
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2 - 0.03; // Không nhìn dưới mặt đất
+        controls.minDistance = 3.6;
+        controls.maxDistance = 14.0;
+        controls.target.set(0, 0.6, 0);
 
-        function createStudioEnvironment() {
-            const envScene = new THREE.Scene();
-            envScene.background = new THREE.Color(0xffe6f0);
-
-            const topLightBox = new THREE.Mesh(
-                new THREE.PlaneGeometry(20, 20),
-                new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
-            );
-            topLightBox.position.set(0, 10, 0);
-            topLightBox.rotation.x = Math.PI / 2;
-            envScene.add(topLightBox);
-
-            const warmSideBox = new THREE.Mesh(
-                new THREE.PlaneGeometry(14, 10),
-                new THREE.MeshBasicMaterial({ color: 0xffd1e3, side: THREE.DoubleSide })
-            );
-            warmSideBox.position.set(-10, 3, 5);
-            warmSideBox.rotation.y = Math.PI / 3;
-            envScene.add(warmSideBox);
-
-            const goldSideBox = new THREE.Mesh(
-                new THREE.PlaneGeometry(14, 10),
-                new THREE.MeshBasicMaterial({ color: 0xfff0c2, side: THREE.DoubleSide })
-            );
-            goldSideBox.position.set(10, 4, 5);
-            goldSideBox.rotation.y = -Math.PI / 3;
-            envScene.add(goldSideBox);
-
-            return pmremGenerator.fromScene(envScene, 0.04).texture;
-        }
-        scene.environment = createStudioEnvironment();
-
-        // Vân vải lụa và giấy mỹ thuật (Bump Map)
-        function createFabricBumpTexture() {
-            const c = document.createElement('canvas');
-            c.width = 256; c.height = 256;
-            const ctx = c.getContext('2d');
-            ctx.fillStyle = '#808080';
-            ctx.fillRect(0, 0, 256, 256);
-            for (let y = 0; y < 256; y += 2) {
-                for (let x = 0; x < 256; x += 2) {
-                    const v = 115 + Math.floor(Math.random() * 25) + ((x + y) % 4 === 0 ? 15 : -10);
-                    ctx.fillStyle = `rgb(${v},${v},${v})`;
-                    ctx.fillRect(x, y, 2, 2);
-                }
-            }
-            const tex = new THREE.CanvasTexture(c);
-            tex.wrapS = THREE.RepeatWrapping;
-            tex.wrapT = THREE.RepeatWrapping;
-            tex.repeat.set(6, 6);
-            return tex;
-        }
-        const fabricBumpMap = createFabricBumpTexture();
-
-        function createSoftDot() {
-            const c = document.createElement('canvas');
-            c.width = 64; c.height = 64;
-            const ctx = c.getContext('2d');
-            const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-            g.addColorStop(0, 'rgba(255,255,255,1)');
-            g.addColorStop(0.35, 'rgba(255,190,220,0.85)');
-            g.addColorStop(1, 'rgba(255,105,180,0)');
-            ctx.fillStyle = g;
-            ctx.fillRect(0, 0, 64, 64);
-            return new THREE.CanvasTexture(c);
-        }
-        const softDotTexture = createSoftDot();
-
-        // Texture ngôi sao lấp lánh 4 cánh (Sparkle Star)
-        function createSparkleTexture() {
-            const c = document.createElement('canvas');
-            c.width = 128; c.height = 128;
-            const ctx = c.getContext('2d');
-            ctx.clearRect(0, 0, 128, 128);
-
-            const cx = 64, cy = 64;
-            // Ánh hào quang tỏa tròn ở tâm
-            const radGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 32);
-            radGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-            radGrad.addColorStop(0.3, 'rgba(255, 220, 240, 0.8)');
-            radGrad.addColorStop(1, 'rgba(255, 180, 210, 0)');
-            ctx.fillStyle = radGrad;
-            ctx.beginPath();
-            ctx.arc(cx, cy, 32, 0, Math.PI * 2);
-            ctx.fill();
-
-            // 4 tia sáng kim cương nhọn hoắt lấp lánh
-            function drawRay(angle, length, width) {
-                ctx.save();
-                ctx.translate(cx, cy);
-                ctx.rotate(angle);
-                const rayGrad = ctx.createLinearGradient(0, -length, 0, length);
-                rayGrad.addColorStop(0, 'rgba(255,255,255,0)');
-                rayGrad.addColorStop(0.5, 'rgba(255,255,255,1)');
-                rayGrad.addColorStop(1, 'rgba(255,255,255,0)');
-                ctx.fillStyle = rayGrad;
-                ctx.beginPath();
-                ctx.moveTo(-width / 2, 0);
-                ctx.lineTo(0, -length);
-                ctx.lineTo(width / 2, 0);
-                ctx.lineTo(0, length);
-                ctx.closePath();
-                ctx.fill();
-                ctx.restore();
-            }
-
-            drawRay(0, 58, 7);
-            drawRay(Math.PI / 2, 58, 7);
-            drawRay(Math.PI / 4, 30, 4);
-            drawRay(-Math.PI / 4, 30, 4);
-
-            return new THREE.CanvasTexture(c);
-        }
-        const sparkleTexture = createSparkleTexture();
-
-        // Hệ thống ánh sáng
-        const ambientLight = new THREE.AmbientLight(0xfff0f5, 1.4);
+        /* -------------------------------------------------------------------------
+           2. HỆ THỐNG ÁNH SÁNG STUDIO & ĐƯỜNG ĐÊM THỂ THAO
+           ------------------------------------------------------------------------- */
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         scene.add(ambientLight);
 
-        const keyLight = new THREE.DirectionalLight(0xfffbf5, 3.2);
-        keyLight.position.set(6, 11, 8);
-        keyLight.castShadow = true;
-        keyLight.shadow.mapSize.width = 2048;
-        keyLight.shadow.mapSize.height = 2048;
-        keyLight.shadow.bias = -0.0005;
-        scene.add(keyLight);
+        // Đèn chính (Key Sun Light) tạo phản chiếu kim loại bóng bẩy
+        const mainLight = new THREE.DirectionalLight(0xfff5ea, 2.2);
+        mainLight.position.set(8, 12, 6);
+        mainLight.castShadow = true;
+        mainLight.shadow.mapSize.width = 2048;
+        mainLight.shadow.mapSize.height = 2048;
+        mainLight.shadow.camera.near = 0.5;
+        mainLight.shadow.camera.far = 30;
+        mainLight.shadow.camera.left = -6;
+        mainLight.shadow.camera.right = 6;
+        mainLight.shadow.camera.top = 6;
+        mainLight.shadow.camera.bottom = -6;
+        mainLight.shadow.bias = -0.0005;
+        scene.add(mainLight);
 
-        const rimLight = new THREE.PointLight(0xff2a75, 6, 18);
-        rimLight.position.set(-5, 4, -4);
+        // Đèn Rim Light phía sau tạo viền sáng tôn vinh dáng xe sedan
+        const rimLight = new THREE.DirectionalLight(0x2288ff, 1.6);
+        rimLight.position.set(-8, 7, -8);
         scene.add(rimLight);
 
-        const goldFillLight = new THREE.PointLight(0xffd57e, 4.5, 15);
-        goldFillLight.position.set(4, -1, 5);
-        scene.add(goldFillLight);
-
-        // Vòm ánh sáng GLSL Shader phía sau
-        const haloUniforms = {
-            uTime: { value: 0 },
-            uColorInner: { value: new THREE.Color(0xff5c97) },
-            uColorOuter: { value: new THREE.Color(0xffe6f0) }
-        };
-        const haloMat = new THREE.ShaderMaterial({
-            vertexShader: document.getElementById('haloVertexShader').textContent,
-            fragmentShader: document.getElementById('haloFragmentShader').textContent,
-            uniforms: haloUniforms,
-            transparent: true,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending
-        });
-        const haloPlane = new THREE.Mesh(new THREE.PlaneGeometry(9.5, 9.5), haloMat);
-        haloPlane.position.set(0, 0.3, -2.5);
-        scene.add(haloPlane);
+        // Đèn hắt dưới đường
+        const groundBounceLight = new THREE.DirectionalLight(0xea0029, 0.5);
+        groundBounceLight.position.set(0, -5, 0);
+        scene.add(groundBounceLight);
 
         /* -------------------------------------------------------------------------
-           3. TRANG 1: ĐÀI PHA LÊ, BÓNG NGỌC TRAI & VÒNG VÀNG 24K 3D
+           3. TẠO ĐƯỜNG CAO TỐC CHẠY VÔ TẬN (ENDLESS HIGHWAY)
            ------------------------------------------------------------------------- */
-        const stage1Group = new THREE.Group();
-        stage1Group.position.set(0, 0.15, 0);
-        scene.add(stage1Group);
+        const highwayGroup = new THREE.Group();
+        scene.add(highwayGroup);
 
-        const gold24KMat = new THREE.MeshStandardMaterial({ color: 0xffcf70, metalness: 0.92, roughness: 0.14 });
-        const pearlPinkMat = new THREE.MeshPhysicalMaterial({ color: 0xff80ab, roughness: 0.12, metalness: 0.08, clearcoat: 1.0, clearcoatRoughness: 0.08 });
-        const crystalGlassMat = new THREE.MeshPhysicalMaterial({ color: 0xfff0f6, roughness: 0.05, metalness: 0.1, transmission: 0.85, transparent: true, opacity: 0.92, clearcoat: 1.0 });
-        const marblePodiumMat = new THREE.MeshPhysicalMaterial({ color: 0xfff7fa, roughness: 0.18, metalness: 0.05, clearcoat: 0.8, bumpMap: fabricBumpMap, bumpScale: 0.008 });
+        // Mặt đường Asphalt đen bóng phản chiếu
+        const roadGeo = new THREE.PlaneGeometry(16, 200, 1, 1);
+        const roadMat = new THREE.MeshStandardMaterial({
+            color: 0x080a0f,
+            roughness: 0.35,
+            metalness: 0.25
+        });
+        const roadMesh = new THREE.Mesh(roadGeo, roadMat);
+        roadMesh.rotation.x = -Math.PI / 2;
+        roadMesh.receiveShadow = true;
+        highwayGroup.add(roadMesh);
 
-        const podiumBase1 = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.75, 0.35, 64), marblePodiumMat);
-        podiumBase1.position.y = -1.65;
-        podiumBase1.receiveShadow = true;
-        stage1Group.add(podiumBase1);
+        // Vạch kẻ đường giữa làn di chuyển liên tục
+        const dashLines = [];
+        const dashGeo = new THREE.PlaneGeometry(0.2, 3.5);
+        const dashMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-        const podiumRing1 = new THREE.Mesh(new THREE.TorusGeometry(2.52, 0.045, 24, 100), gold24KMat);
-        podiumRing1.rotation.x = Math.PI / 2;
-        podiumRing1.position.y = -1.48;
-        stage1Group.add(podiumRing1);
-
-        const podiumBase2 = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 2.05, 0.3, 64), marblePodiumMat);
-        podiumBase2.position.y = -1.35;
-        podiumBase2.receiveShadow = true;
-        stage1Group.add(podiumBase2);
-
-        const podiumRing2 = new THREE.Mesh(new THREE.TorusGeometry(1.92, 0.04, 24, 100), gold24KMat);
-        podiumRing2.rotation.x = Math.PI / 2;
-        podiumRing2.position.y = -1.2;
-        stage1Group.add(podiumRing2);
-
-        const crystalCoreGroup = new THREE.Group();
-        crystalCoreGroup.position.y = 0.25;
-        stage1Group.add(crystalCoreGroup);
-
-        const mainCrystal = new THREE.Mesh(new THREE.OctahedronGeometry(0.95, 2), crystalGlassMat);
-        mainCrystal.castShadow = true;
-        crystalCoreGroup.add(mainCrystal);
-
-        const innerPearlCore = new THREE.Mesh(new THREE.SphereGeometry(0.52, 32, 32), pearlPinkMat);
-        crystalCoreGroup.add(innerPearlCore);
-
-        const orbitRing1 = new THREE.Mesh(new THREE.TorusGeometry(1.45, 0.035, 24, 100), gold24KMat);
-        orbitRing1.rotation.set(Math.PI / 3, Math.PI / 6, 0);
-        crystalCoreGroup.add(orbitRing1);
-
-        const orbitRing2 = new THREE.Mesh(new THREE.TorusGeometry(1.78, 0.028, 24, 100), gold24KMat);
-        orbitRing2.rotation.set(-Math.PI / 4, 0, Math.PI / 5);
-        crystalCoreGroup.add(orbitRing2);
-
-        const floatingOrbs = [];
-        const orbColors = [0xff4081, 0xff80ab, 0xffb2cc, 0xffd57e, 0xe91e63, 0xffffff];
-        for (let i = 0; i < 14; i++) {
-            const angle = (i / 14) * Math.PI * 2;
-            const radius = 2.1 + (i % 3) * 0.45;
-            const yOffset = (Math.random() - 0.5) * 2.2;
-            const size = 0.16 + (i % 3) * 0.08;
-
-            const mat = new THREE.MeshPhysicalMaterial({
-                color: orbColors[i % orbColors.length],
-                roughness: 0.1,
-                metalness: i % 4 === 0 ? 0.85 : 0.08,
-                clearcoat: 1.0
-            });
-
-            const sphere = new THREE.Mesh(new THREE.SphereGeometry(size, 32, 32), mat);
-            sphere.position.set(Math.cos(angle) * radius, yOffset, Math.sin(angle) * radius);
-            sphere.castShadow = true;
-            stage1Group.add(sphere);
-
-            floatingOrbs.push({ mesh: sphere, baseY: yOffset, angle, radius, speed: 0.3 + Math.random() * 0.35, phase: Math.random() * Math.PI * 2 });
+        for (let i = 0; i < 28; i++) {
+            const dash = new THREE.Mesh(dashGeo, dashMat);
+            dash.rotation.x = -Math.PI / 2;
+            dash.position.set(0, 0.015, -90 + i * 7);
+            highwayGroup.add(dash);
+            dashLines.push(dash);
         }
 
-        /* -------------------------------------------------------------------------
-           4. TRANG 3: HỘP QUÀ LỤA 3D RỖNG RUỘT + NƠ 12 CÁNH + PHONG THƯ 3D
-           ------------------------------------------------------------------------- */
-        const giftStageGroup = new THREE.Group();
-        giftStageGroup.position.set(0, -14, 0);
-        giftStageGroup.visible = false;
-        scene.add(giftStageGroup);
-
-        const luxuryBoxMat = new THREE.MeshPhysicalMaterial({ color: 0xffd4e3, roughness: 0.24, metalness: 0.06, clearcoat: 0.55, bumpMap: fabricBumpMap, bumpScale: 0.015 });
-        const velvetInteriorMat = new THREE.MeshStandardMaterial({ color: 0x6a0dad, roughness: 0.85, bumpMap: fabricBumpMap, bumpScale: 0.02 });
-        const silkRibbonMat = new THREE.MeshPhysicalMaterial({ color: 0xd81b60, roughness: 0.16, metalness: 0.18, clearcoat: 0.95, bumpMap: fabricBumpMap, bumpScale: 0.012 });
-
-        const giftPedestal = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.5, 0.3, 64), marblePodiumMat);
-        giftPedestal.position.y = -1.65;
-        giftPedestal.receiveShadow = true;
-        giftStageGroup.add(giftPedestal);
-
-        const pedestalGoldTrim = new THREE.Mesh(new THREE.TorusGeometry(3.22, 0.05, 24, 100), gold24KMat);
-        pedestalGoldTrim.rotation.x = Math.PI / 2;
-        pedestalGoldTrim.position.y = -1.5;
-        giftStageGroup.add(pedestalGoldTrim);
-
-        const hollowBoxGroup = new THREE.Group();
-        giftStageGroup.add(hollowBoxGroup);
-
-        const boxW = 3.2, boxH = 2.5, wallT = 0.16;
-        const bottomWall = new THREE.Mesh(new THREE.BoxGeometry(boxW, wallT, boxW), luxuryBoxMat);
-        bottomWall.position.y = -boxH / 2 + wallT / 2;
-        hollowBoxGroup.add(bottomWall);
-
-        const velvetFloor = new THREE.Mesh(new THREE.PlaneGeometry(boxW - 0.34, boxW - 0.34), velvetInteriorMat);
-        velvetFloor.rotation.x = -Math.PI / 2;
-        velvetFloor.position.y = -boxH / 2 + wallT + 0.01;
-        hollowBoxGroup.add(velvetFloor);
-
-        const wallPositions = [
-            { x: 0, z: boxW / 2 - wallT / 2, w: boxW, d: wallT, rw: 0.52, rd: wallT + 0.04 },
-            { x: 0, z: -boxW / 2 + wallT / 2, w: boxW, d: wallT, rw: 0.52, rd: wallT + 0.04 },
-            { x: -boxW / 2 + wallT / 2, z: 0, w: wallT, d: boxW - wallT * 2, rw: wallT + 0.04, rd: 0.52 },
-            { x: boxW / 2 - wallT / 2, z: 0, w: wallT, d: boxW - wallT * 2, rw: wallT + 0.04, rd: 0.52 }
-        ];
-
-        wallPositions.forEach(wp => {
-            const wall = new THREE.Mesh(new THREE.BoxGeometry(wp.w, boxH, wp.d), luxuryBoxMat);
-            wall.position.set(wp.x, 0, wp.z);
-            wall.castShadow = true;
-            wall.receiveShadow = true;
-            hollowBoxGroup.add(wall);
-
-            const rib = new THREE.Mesh(new THREE.BoxGeometry(wp.rw, boxH + 0.02, wp.rd), silkRibbonMat);
-            rib.position.set(wp.x, 0, wp.z);
-            hollowBoxGroup.add(rib);
-
-            const goldEdge = new THREE.Mesh(new THREE.BoxGeometry(wp.rw * 1.08, boxH + 0.01, wp.rd * 1.08), gold24KMat);
-            goldEdge.position.set(wp.x, 0, wp.z);
-            hollowBoxGroup.add(goldEdge);
+        // Vạch phân làn hai bên
+        [-3.8, 3.8].forEach(xPos => {
+            const sideLineGeo = new THREE.PlaneGeometry(0.12, 200);
+            const sideLineMat = new THREE.MeshBasicMaterial({ color: 0x334455 });
+            const sideLine = new THREE.Mesh(sideLineGeo, sideLineMat);
+            sideLine.rotation.x = -Math.PI / 2;
+            sideLine.position.set(xPos, 0.012, 0);
+            highwayGroup.add(sideLine);
         });
 
-        // Phong thư 3D bên trong lòng hộp
-        const letter3DGroup = new THREE.Group();
-        letter3DGroup.position.set(0, -0.35, 0);
-        hollowBoxGroup.add(letter3DGroup);
-
-        const envPaperMat = new THREE.MeshPhysicalMaterial({ color: 0xfff8fa, roughness: 0.25, clearcoat: 0.5 });
-        const envelopeBody = new THREE.Mesh(new THREE.BoxGeometry(2.1, 1.35, 0.08), envPaperMat);
-        letter3DGroup.add(envelopeBody);
-
-        const envelopeGoldBorder = new THREE.Mesh(new THREE.BoxGeometry(2.16, 1.41, 0.05), gold24KMat);
-        letter3DGroup.add(envelopeGoldBorder);
-
-        const waxSeal = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.11, 32), silkRibbonMat);
-        waxSeal.rotation.x = Math.PI / 2;
-        waxSeal.position.z = 0.03;
-        letter3DGroup.add(waxSeal);
-
-        const innerBoxLight = new THREE.PointLight(0xffdf80, 0, 12);
-        innerBoxLight.position.set(0, 0.3, 0);
-        hollowBoxGroup.add(innerBoxLight);
-
-        // Nắp hộp & Nơ lụa 12 cánh
-        const lidGroup = new THREE.Group();
-        lidGroup.position.set(0, boxH / 2 + 0.15, 0);
-        giftStageGroup.add(lidGroup);
-
-        const lidW = 3.44, lidH = 0.58;
-        const lidTopMesh = new THREE.Mesh(new THREE.BoxGeometry(lidW, lidH, lidW), luxuryBoxMat);
-        lidTopMesh.castShadow = true;
-        lidGroup.add(lidTopMesh);
-
-        const lidRib1 = new THREE.Mesh(new THREE.BoxGeometry(lidW + 0.06, lidH + 0.04, 0.52), silkRibbonMat);
-        const lidRib2 = new THREE.Mesh(new THREE.BoxGeometry(0.52, lidH + 0.04, lidW + 0.06), silkRibbonMat);
-        const lidGold1 = new THREE.Mesh(new THREE.BoxGeometry(lidW + 0.04, lidH + 0.02, 0.58), gold24KMat);
-        const lidGold2 = new THREE.Mesh(new THREE.BoxGeometry(0.58, lidH + 0.02, lidW + 0.04), gold24KMat);
-        lidGroup.add(lidRib1, lidRib2, lidGold1, lidGold2);
-
-        const bowGroup = new THREE.Group();
-        bowGroup.position.set(0, lidH / 2 + 0.12, 0);
-        lidGroup.add(bowGroup);
-
-        const bowKnot = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), silkRibbonMat);
-        bowKnot.scale.set(1.2, 0.85, 1.2);
-        bowGroup.add(bowKnot);
-
-        const knotGoldRing = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.04, 16, 48), gold24KMat);
-        knotGoldRing.rotation.y = Math.PI / 2;
-        bowGroup.add(knotGoldRing);
-
-        for (let i = 0; i < 8; i++) {
-            const angle = (i / 8) * Math.PI * 2;
-            const loopMesh = new THREE.Mesh(new THREE.TorusGeometry(0.52, 0.15, 24, 48), silkRibbonMat);
-            loopMesh.position.set(Math.cos(angle) * 0.48, 0.16, Math.sin(angle) * 0.48);
-            loopMesh.rotation.y = -angle;
-            loopMesh.rotation.x = Math.PI / 5.5;
-            loopMesh.scale.set(1.05, 0.72, 1.35);
-            bowGroup.add(loopMesh);
-        }
-
-        for (let i = 0; i < 4; i++) {
-            const angle = (i / 4) * Math.PI * 2 + Math.PI / 4;
-            const upperLoop = new THREE.Mesh(new THREE.TorusGeometry(0.36, 0.11, 20, 40), silkRibbonMat);
-            upperLoop.position.set(Math.cos(angle) * 0.32, 0.36, Math.sin(angle) * 0.32);
-            upperLoop.rotation.y = -angle;
-            upperLoop.rotation.x = Math.PI / 3.2;
-            bowGroup.add(upperLoop);
-        }
-
-        /* -------------------------------------------------------------------------
-           5. TRANG 5: SÂN KHẤU BÁNH KEM TUỔI 18 + DẢI NGÂN HÀ + ĐÈN TRỜI & ÁNH SAO LẤP LÁNH
-           ------------------------------------------------------------------------- */
-        const finaleStageGroup = new THREE.Group();
-        finaleStageGroup.position.set(0, -16, 0);
-        finaleStageGroup.visible = false;
-        scene.add(finaleStageGroup);
-
-        // --- A. CHIẾC BÁNH KEM 3D 3 TẦNG HOÀNG GIA ---
-        const cakeGroup = new THREE.Group();
-        cakeGroup.position.y = -0.7;
-        finaleStageGroup.add(cakeGroup);
-
-        const creamWhiteMat = new THREE.MeshPhysicalMaterial({ color: 0xfff8fa, roughness: 0.25, clearcoat: 0.4, bumpMap: fabricBumpMap, bumpScale: 0.01 });
-        const strawberryCreamMat = new THREE.MeshPhysicalMaterial({ color: 0xff94b8, roughness: 0.22, clearcoat: 0.5, bumpMap: fabricBumpMap, bumpScale: 0.01 });
-        const velvetRoseMat = new THREE.MeshPhysicalMaterial({ color: 0xe91e63, roughness: 0.2, clearcoat: 0.8 });
-
-        // Đĩa sứ viền vàng đỡ bánh kem
-        const cakePlate = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.4, 0.18, 64), marblePodiumMat);
-        cakePlate.position.y = -0.9;
-        cakeGroup.add(cakePlate);
-
-        const plateGoldRim = new THREE.Mesh(new THREE.TorusGeometry(2.68, 0.045, 20, 100), gold24KMat);
-        plateGoldRim.rotation.x = Math.PI / 2;
-        plateGoldRim.position.y = -0.82;
-        cakeGroup.add(plateGoldRim);
-
-        // Tầng 1 (Đáy bánh lớn)
-        const tier1 = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.1, 1.05, 64), strawberryCreamMat);
-        tier1.position.y = -0.3;
-        cakeGroup.add(tier1);
-
-        // Tầng 2 (Giữa bánh)
-        const tier2 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.9, 64), creamWhiteMat);
-        tier2.position.y = 0.65;
-        cakeGroup.add(tier2);
-
-        // Tầng 3 (Đỉnh bánh)
-        const tier3 = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.95, 0.75, 64), strawberryCreamMat);
-        tier3.position.y = 1.45;
-        cakeGroup.add(tier3);
-
-        // Trang trí chuỗi hạt ngọc trai vàng & kem bông quanh 3 tầng bánh
-        function addCakePearls(radius, yPos, count, mat) {
-            for (let i = 0; i < count; i++) {
-                const a = (i / count) * Math.PI * 2;
-                const pearl = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), mat);
-                pearl.position.set(Math.cos(a) * radius, yPos, Math.sin(a) * radius);
-                cakeGroup.add(pearl);
-            }
-        }
-        addCakePearls(2.12, -0.75, 34, gold24KMat);
-        addCakePearls(2.05, 0.22, 28, creamWhiteMat);
-        addCakePearls(1.52, 0.22, 26, gold24KMat);
-        addCakePearls(1.46, 1.1, 20, velvetRoseMat);
-        addCakePearls(0.96, 1.1, 18, gold24KMat);
-        addCakePearls(0.9, 1.82, 14, creamWhiteMat);
-
-        // Cây Nến Tuổi 18 & Ngọn Lửa 3D Phát Sáng Trên Đỉnh Bánh
-        const candleGroup = new THREE.Group();
-        candleGroup.position.set(0, 1.82, 0);
-        cakeGroup.add(candleGroup);
-
-        const candleBody = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.08, 0.08, 0.75, 32),
-            new THREE.MeshPhysicalMaterial({ color: 0xfff0f5, clearcoat: 1.0 })
-        );
-        candleBody.position.y = 0.37;
-        candleGroup.add(candleBody);
-
-        const candleGoldRing = new THREE.Mesh(new THREE.TorusGeometry(0.095, 0.025, 16, 32), gold24KMat);
-        candleGoldRing.rotation.x = Math.PI / 2;
-        candleGoldRing.position.y = 0.05;
-        candleGroup.add(candleGoldRing);
-
-        // Ngọn lửa 3D nhiều lớp
-        const flameGroup = new THREE.Group();
-        flameGroup.position.y = 0.85;
-        candleGroup.add(flameGroup);
-
-        const outerFlame = new THREE.Mesh(
-            new THREE.ConeGeometry(0.13, 0.36, 24),
-            new THREE.MeshBasicMaterial({ color: 0xff9800, transparent: true, opacity: 0.9 })
-        );
-        const innerFlame = new THREE.Mesh(
-            new THREE.ConeGeometry(0.07, 0.22, 24),
-            new THREE.MeshBasicMaterial({ color: 0xffffcc })
-        );
-        innerFlame.position.y = -0.04;
-        flameGroup.add(outerFlame, innerFlame);
-
-        const candleLight = new THREE.PointLight(0xffaa33, 6.5, 14);
-        candleLight.position.set(0, 0.2, 0);
-        flameGroup.add(candleLight);
-
-        // --- B. HIỆU ỨNG ĐẶC BIỆT 3D: CÁNH HOA HỒNG PHA LÊ & BÓNG NGỌC TRAI QUANH BÁNH KEM ---
-        // Vòng quỹ đạo vàng 24K xoay quanh bánh kem
-        const cakeGoldOrbit1 = new THREE.Mesh(new THREE.TorusGeometry(2.85, 0.035, 24, 100), gold24KMat);
-        cakeGoldOrbit1.rotation.set(Math.PI / 3, Math.PI / 8, 0);
-        cakeGroup.add(cakeGoldOrbit1);
-
-        const cakeGoldOrbit2 = new THREE.Mesh(new THREE.TorusGeometry(3.1, 0.028, 24, 100), gold24KMat);
-        cakeGoldOrbit2.rotation.set(-Math.PI / 4, 0, Math.PI / 4);
-        cakeGroup.add(cakeGoldOrbit2);
-
-        // Hệ thống 16 hạt ngọc trai & tinh thể pha lê bay lơ lửng quanh bánh kem
-        const cakeFloatingOrbs = [];
-        const cakeOrbColors = [0xff4081, 0xff80ab, 0xffb2cc, 0xffd57e, 0xff6090, 0xffffff];
+        // Đèn đường / cột neon hai bên lướt qua tạo cảm giác tốc độ
+        const lightPillars = [];
+        const pillarGeo = new THREE.BoxGeometry(0.1, 4.5, 0.1);
         for (let i = 0; i < 16; i++) {
-            const angle = (i / 16) * Math.PI * 2;
-            const radius = 2.7 + (i % 3) * 0.55;
-            const yOffset = -0.5 + (i % 4) * 0.65;
-            const size = 0.14 + (i % 3) * 0.07;
-
-            const mat = new THREE.MeshPhysicalMaterial({
-                color: cakeOrbColors[i % cakeOrbColors.length],
-                roughness: 0.12,
-                metalness: i % 3 === 0 ? 0.85 : 0.08,
-                clearcoat: 1.0,
-                transmission: i % 4 === 0 ? 0.85 : 0.0
+            const zP = -80 + i * 12;
+            [-6.5, 6.5].forEach(xP => {
+                const pillarMat = new THREE.MeshStandardMaterial({
+                    color: 0x050810,
+                    emissive: (i % 2 === 0) ? 0xea0029 : 0x0088ff,
+                    emissiveIntensity: 0.6
+                });
+                const pillar = new THREE.Mesh(pillarGeo, pillarMat);
+                pillar.position.set(xP, 2.2, zP);
+                highwayGroup.add(pillar);
+                lightPillars.push(pillar);
             });
-
-            const sphere = new THREE.Mesh(new THREE.SphereGeometry(size, 32, 32), mat);
-            sphere.position.set(Math.cos(angle) * radius, yOffset, Math.sin(angle) * radius);
-            sphere.castShadow = true;
-            finaleStageGroup.add(sphere);
-
-            cakeFloatingOrbs.push({ mesh: sphere, baseY: yOffset, angle, radius, speed: 0.35 + (i % 3) * 0.15, phase: i * 0.4 });
         }
 
-        // 36 Cánh hoa hồng pha lê 3D bay lượn nhẹ nhàng trong không gian hồng
-        const rosePetals = [];
-        const petalGeo = new THREE.ConeGeometry(0.24, 0.48, 5);
-        petalGeo.scale(1, 0.15, 1.8);
-        const petalMat = new THREE.MeshPhysicalMaterial({
-            color: 0xff6699,
-            roughness: 0.25,
-            metalness: 0.05,
-            clearcoat: 0.8,
-            transmission: 0.65,
-            transparent: true,
-            opacity: 0.92,
-            side: THREE.DoubleSide
+        /* -------------------------------------------------------------------------
+           4. XÂY DỰNG MÔ HÌNH 3D CHI TIẾT CỦA KIA K3 (PROCEDURAL PBR SEDAN)
+           ------------------------------------------------------------------------- */
+        const carRoot = new THREE.Group();
+        scene.add(carRoot);
+
+        // Vật liệu nước sơn ngoại thất xe KIA K3 PBR cao cấp
+        const carPaintMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0xb3001b, // Đỏ Runway Red mặc định
+            metalness: 0.88,
+            roughness: 0.22,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.08,
+            reflectivity: 1.0
         });
 
-        for (let i = 0; i < 36; i++) {
-            const petal = new THREE.Mesh(petalGeo, petalMat);
-            const a = Math.random() * Math.PI * 2;
-            const r = 1.8 + Math.random() * 5.5;
-            petal.position.set(Math.cos(a) * r, Math.random() * 9 - 4, Math.sin(a) * r);
-            petal.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-            finaleStageGroup.add(petal);
-
-            rosePetals.push({
-                mesh: petal,
-                speedY: 0.007 + Math.random() * 0.012,
-                rotSpeedX: 0.01 + Math.random() * 0.02,
-                rotSpeedY: 0.012 + Math.random() * 0.025,
-                swaySpeed: 1.2 + Math.random() * 1.5,
-                swayAmp: 0.005 + Math.random() * 0.008,
-                phase: Math.random() * Math.PI * 2
-            });
-        }
-
-        // --- B. DẢI NGÂN HÀ XOẮN ỐC 3D (2.000 NGÔI SAO LẤP LÁNH) ---
-        const galaxyCount = 2000;
-        const galaxyPos = new Float32Array(galaxyCount * 3);
-        const galaxyColors = new Float32Array(galaxyCount * 3);
-        const cInside = new THREE.Color(0xff80ab);
-        const cOutside = new THREE.Color(0x7c4dff);
-
-        for (let i = 0; i < galaxyCount; i++) {
-            const i3 = i * 3;
-            const radius = Math.random() * 18 + 3.2;
-            const spinAngle = radius * 0.85;
-            const branchAngle = ((i % 4) / 4) * Math.PI * 2;
-
-            const randomX = (Math.random() - 0.5) * 2.5;
-            const randomY = (Math.random() - 0.5) * 4.5;
-            const randomZ = (Math.random() - 0.5) * 2.5;
-
-            galaxyPos[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-            galaxyPos[i3 + 1] = randomY + 1.0;
-            galaxyPos[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
-
-            const mixedColor = cInside.clone().lerp(cOutside, radius / 20);
-            galaxyColors[i3] = mixedColor.r;
-            galaxyColors[i3 + 1] = mixedColor.g;
-            galaxyColors[i3 + 2] = mixedColor.b;
-        }
-
-        const galaxyGeo = new THREE.BufferGeometry();
-        galaxyGeo.setAttribute('position', new THREE.BufferAttribute(galaxyPos, 3));
-        galaxyGeo.setAttribute('color', new THREE.BufferAttribute(galaxyColors, 3));
-
-        const galaxyMat = new THREE.PointsMaterial({
-            size: 0.26,
-            map: softDotTexture,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.9,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending
+        // Vật liệu nhựa bóng đen Tiger Nose & cản dưới
+        const glossBlackMat = new THREE.MeshStandardMaterial({
+            color: 0x0a0c10,
+            roughness: 0.12,
+            metalness: 0.85
         });
 
-        const galaxyPoints = new THREE.Points(galaxyGeo, galaxyMat);
-        finaleStageGroup.add(galaxyPoints);
-
-        // --- C. HỆ THỐNG ĐÈN TRỜI ƯỚC NGUYỆN 3D BAY LÊN BẦU TRỜI ---
-        const skyLanterns = [];
-        const lanternMat = new THREE.MeshBasicMaterial({ color: 0xffcfa3, transparent: true, opacity: 0.88 });
-        const lanternCoreMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-
-        for (let i = 0; i < 24; i++) {
-            const lGroup = new THREE.Group();
-            const shell = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.12, 0.42, 16), lanternMat);
-            const glowCore = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), lanternCoreMat);
-            glowCore.position.y = -0.1;
-            lGroup.add(shell, glowCore);
-
-            const angle = Math.random() * Math.PI * 2;
-            const dist = 3.8 + Math.random() * 8.5;
-            lGroup.position.set(
-                Math.cos(angle) * dist,
-                (Math.random() - 0.5) * 12,
-                Math.sin(angle) * dist - 2
-            );
-
-            finaleStageGroup.add(lGroup);
-            skyLanterns.push({
-                group: lGroup,
-                speedY: 0.012 + Math.random() * 0.018,
-                swaySpeed: 1 + Math.random() * 1.5,
-                phase: Math.random() * Math.PI * 2
-            });
-        }
-
-        // --- D. HỆ THỐNG MƯA SAO & HẠT LẤP LÁNH PHÉP MÀU (SPARKLES & GLITTER) ---
-        const sparkleCount = 650;
-        const sparklePos = new Float32Array(sparkleCount * 3);
-        const sparkleColors = new Float32Array(sparkleCount * 3);
-        const sparkleData = [];
-
-        const sparklePalette = [
-            new THREE.Color(0xffffff),
-            new THREE.Color(0xffd57e),
-            new THREE.Color(0xff80ab),
-            new THREE.Color(0xff2a75),
-            new THREE.Color(0x80d8ff),
-            new THREE.Color(0xe040fb)
-        ];
-
-        for (let i = 0; i < sparkleCount; i++) {
-            const i3 = i * 3;
-            sparklePos[i3] = (Math.random() - 0.5) * 18;
-            sparklePos[i3 + 1] = (Math.random() - 0.5) * 14 + 1;
-            sparklePos[i3 + 2] = (Math.random() - 0.5) * 14;
-
-            const col = sparklePalette[Math.floor(Math.random() * sparklePalette.length)];
-            sparkleColors[i3] = col.r;
-            sparkleColors[i3 + 1] = col.g;
-            sparkleColors[i3 + 2] = col.b;
-
-            sparkleData.push({
-                baseY: sparklePos[i3 + 1],
-                speedY: 0.003 + Math.random() * 0.006,
-                phase: Math.random() * Math.PI * 2,
-                twinkleSpeed: 2.5 + Math.random() * 4.0
-            });
-        }
-
-        const sparkleGeo = new THREE.BufferGeometry();
-        sparkleGeo.setAttribute('position', new THREE.BufferAttribute(sparklePos, 3));
-        sparkleGeo.setAttribute('color', new THREE.BufferAttribute(sparkleColors, 3));
-
-        const sparkleMat = new THREE.PointsMaterial({
-            size: 0.65,
-            map: sparkleTexture,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.95,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending
-        });
-
-        const magicSparkles = new THREE.Points(sparkleGeo, sparkleMat);
-        finaleStageGroup.add(magicSparkles);
-
-        // Mưa bụi sao lấp lánh rơi chầm chậm tự nhiên
-        const fallingStarsCount = 200;
-        const fallingStarsPos = new Float32Array(fallingStarsCount * 3);
-        const fallingStarsColors = new Float32Array(fallingStarsCount * 3);
-        const fallingStarsData = [];
-
-        for (let i = 0; i < fallingStarsCount; i++) {
-            const i3 = i * 3;
-            fallingStarsPos[i3] = (Math.random() - 0.5) * 16;
-            fallingStarsPos[i3 + 1] = Math.random() * 12 - 3;
-            fallingStarsPos[i3 + 2] = (Math.random() - 0.5) * 12;
-
-            const col = sparklePalette[Math.floor(Math.random() * sparklePalette.length)];
-            fallingStarsColors[i3] = col.r;
-            fallingStarsColors[i3 + 1] = col.g;
-            fallingStarsColors[i3 + 2] = col.b;
-
-            fallingStarsData.push({
-                speedY: 0.008 + Math.random() * 0.015,
-                swaySpeed: 1.5 + Math.random() * 2.0,
-                phase: Math.random() * Math.PI * 2
-            });
-        }
-
-        const fallingStarsGeo = new THREE.BufferGeometry();
-        fallingStarsGeo.setAttribute('position', new THREE.BufferAttribute(fallingStarsPos, 3));
-        fallingStarsGeo.setAttribute('color', new THREE.BufferAttribute(fallingStarsColors, 3));
-
-        const fallingStarsMat = new THREE.PointsMaterial({
-            size: 0.52,
-            map: sparkleTexture,
-            vertexColors: true,
+        // Vật liệu kính xe phản chiếu có độ trong suốt và tint tối màu
+        const glassMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x111622,
+            metalness: 0.9,
+            roughness: 0.05,
+            transmission: 0.5,
             transparent: true,
             opacity: 0.88,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending
+            reflectivity: 1.0
         });
 
-        const fallingStarsPoints = new THREE.Points(fallingStarsGeo, fallingStarsMat);
-        finaleStageGroup.add(fallingStarsPoints);
-
-        // Hạt sáng Bokeh nền chung
-        const bokehCount = 450;
-        const bokehPos = new Float32Array(bokehCount * 3);
-        for (let i = 0; i < bokehCount * 3; i += 3) {
-            bokehPos[i] = (Math.random() - 0.5) * 26;
-            bokehPos[i + 1] = (Math.random() - 0.5) * 18;
-            bokehPos[i + 2] = (Math.random() - 0.5) * 16 - 2;
-        }
-        const bokehGeo = new THREE.BufferGeometry();
-        bokehGeo.setAttribute('position', new THREE.BufferAttribute(bokehPos, 3));
-        const bokehPoints = new THREE.Points(bokehGeo, new THREE.PointsMaterial({
-            size: 0.42, map: sparkleTexture, transparent: true, opacity: 0.85, depthWrite: false, blending: THREE.AdditiveBlending
-        }));
-        scene.add(bokehPoints);
-
-        /* -------------------------------------------------------------------------
-           6. TRANG 2: ENGINE HẠT BỤI SIÊU NHỎ GHÉP THÀNH CHỮ
-           ------------------------------------------------------------------------- */
-        const pCanvas = document.getElementById('particle-canvas');
-        const pCtx = pCanvas.getContext('2d');
-        let dustParticles = [];
-        let dustAnimId = null;
-        let isPage2Active = false;
-        const pointer2D = { x: -9999, y: -9999, radius: 75 };
-
-        window.addEventListener('mousemove', e => { pointer2D.x = e.clientX; pointer2D.y = e.clientY; });
-        window.addEventListener('touchmove', e => {
-            if (e.touches.length > 0) {
-                pointer2D.x = e.touches[0].clientX;
-                pointer2D.y = e.touches[0].clientY;
-            }
+        // Vật liệu Chrome sáng bóng cho logo & viền cửa sổ
+        const chromeMaterial = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            metalness: 0.98,
+            roughness: 0.06
         });
-        window.addEventListener('touchend', () => { pointer2D.x = -9999; pointer2D.y = -9999; });
 
-        function initMicroDustText() {
-            pCanvas.width = window.innerWidth;
-            pCanvas.height = window.innerHeight;
-            dustParticles = [];
+        // 4.1 THÂN XE DƯỚI (LOWER BODY - KHÍ ĐỘNG HỌC FASTBACK)
+        const bodyGroup = new THREE.Group();
+        carRoot.add(bodyGroup);
 
-            const off = document.createElement('canvas');
-            off.width = pCanvas.width;
-            off.height = pCanvas.height;
-            const oCtx = off.getContext('2d');
+        // Khối thân xe chính
+        const lowerBodyGeo = new THREE.BoxGeometry(1.85, 0.6, 4.35);
+        const lowerBodyMesh = new THREE.Mesh(lowerBodyGeo, carPaintMaterial);
+        lowerBodyMesh.position.set(0, 0.48, 0);
+        lowerBodyMesh.castShadow = true;
+        lowerBodyMesh.receiveShadow = true;
+        bodyGroup.add(lowerBodyMesh);
 
-            const isMobile = pCanvas.width < 680;
-            const cx = pCanvas.width / 2;
-            const cy = pCanvas.height * 0.42;
+        // Mũi xe vát nhọn khí động học (Hood / Bonnet)
+        const hoodGeo = new THREE.CylinderGeometry(0.88, 0.93, 1.35, 16, 1, false, 0, Math.PI);
+        const hoodMesh = new THREE.Mesh(hoodGeo, carPaintMaterial);
+        hoodMesh.rotation.x = Math.PI / 2;
+        hoodMesh.rotation.z = Math.PI;
+        hoodMesh.scale.set(1.0, 1.0, 0.35);
+        hoodMesh.position.set(0, 0.72, 1.45);
+        hoodMesh.castShadow = true;
+        bodyGroup.add(hoodMesh);
 
-            oCtx.fillStyle = '#ffffff';
-            oCtx.textAlign = 'center';
-            oCtx.textBaseline = 'middle';
+        // Nóc cabin xe sedan vuốt dốc phong cách Coupe (Fastback Roof & Windshield)
+        const cabinGeo = new THREE.BoxGeometry(1.55, 0.52, 2.35);
+        const cabinMesh = new THREE.Mesh(cabinGeo, carPaintMaterial);
+        cabinMesh.position.set(0, 0.94, -0.15);
+        cabinMesh.castShadow = true;
+        bodyGroup.add(cabinMesh);
 
-            if (isMobile) {
-                const fs1 = Math.floor(pCanvas.width * 0.115);
-                const fs2 = Math.floor(pCanvas.width * 0.085);
-                oCtx.font = `700 ${fs1}px "Quicksand", sans-serif`;
-                oCtx.fillText('CHÚC MỪNG', cx, cy - fs1 * 1.15);
-                oCtx.fillText('SINH NHẬT', cx, cy);
-                oCtx.font = `700 ${fs2}px "Quicksand", sans-serif`;
-                oCtx.fillText('✨ TUỔI 18 RỰC RỠ ✨', cx, cy + fs1 * 1.25);
-            } else {
-                const fs1 = Math.min(Math.floor(pCanvas.width * 0.062), 78);
-                const fs2 = Math.min(Math.floor(pCanvas.width * 0.045), 54);
-                oCtx.font = `700 ${fs1}px "Quicksand", sans-serif`;
-                oCtx.fillText('CHÚC MỪNG SINH NHẬT', cx, cy - fs1 * 0.65);
-                oCtx.font = `700 ${fs2}px "Quicksand", sans-serif`;
-                oCtx.fillText('✨ TUỔI 18 RỰC RỠ ✨', cx, cy + fs1 * 0.65);
-            }
+        // Kính chắn gió trước (Front Windshield nghiêng 48 độ)
+        const frontWindshieldGeo = new THREE.PlaneGeometry(1.45, 0.85);
+        const frontWindshield = new THREE.Mesh(frontWindshieldGeo, glassMaterial);
+        frontWindshield.rotation.x = -Math.PI / 3.4;
+        frontWindshield.position.set(0, 0.92, 0.95);
+        bodyGroup.add(frontWindshield);
 
-            const data = oCtx.getImageData(0, 0, off.width, off.height).data;
-            const step = isMobile ? 3 : 4;
-            const colors = ['#880e4f', '#ad1457', '#d81b60', '#e91e63', '#ff2a75', '#ff6090'];
+        // Kính chắn gió sau (Rear Windshield vuốt dài xuống đuôi xe)
+        const rearWindshieldGeo = new THREE.PlaneGeometry(1.42, 0.92);
+        const rearWindshield = new THREE.Mesh(rearWindshieldGeo, glassMaterial);
+        rearWindshield.rotation.x = Math.PI / 3.2;
+        rearWindshield.rotation.y = Math.PI;
+        rearWindshield.position.set(0, 0.93, -1.25);
+        bodyGroup.add(rearWindshield);
 
-            for (let y = 0; y < off.height; y += step) {
-                for (let x = 0; x < off.width; x += step) {
-                    if (data[(y * off.width + x) * 4 + 3] > 140) {
-                        const angle = Math.random() * Math.PI * 2;
-                        const dist = Math.random() * Math.max(off.width, off.height) + 150;
-                        dustParticles.push({
-                            x: cx + Math.cos(angle) * dist,
-                            y: cy + Math.sin(angle) * dist,
-                            z: Math.random() * 400 + 100,
-                            tx: x,
-                            ty: y,
-                            size: Math.random() * 1.55 + 0.85,
-                            color: colors[Math.floor(Math.random() * colors.length)],
-                            ease: Math.random() * 0.045 + 0.035,
-                            phase: Math.random() * Math.PI * 2
-                        });
-                    }
-                }
-            }
-        }
+        // Kính cửa hông trái & phải
+        [-0.78, 0.78].forEach(xSide => {
+            const sideWindowGeo = new THREE.PlaneGeometry(1.85, 0.38);
+            const sideWindow = new THREE.Mesh(sideWindowGeo, glassMaterial);
+            sideWindow.rotation.y = xSide > 0 ? Math.PI / 2 : -Math.PI / 2;
+            sideWindow.position.set(xSide, 0.95, -0.15);
+            bodyGroup.add(sideWindow);
 
-        function animateMicroDust() {
-            if (!isPage2Active) return;
-            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            // Viền chrome cửa sổ sang trọng
+            const trimGeo = new THREE.BoxGeometry(0.02, 0.02, 1.9);
+            const trim = new THREE.Mesh(trimGeo, chromeMaterial);
+            trim.position.set(xSide * 0.79, 0.76, -0.15);
+            bodyGroup.add(trim);
 
-            for (let i = 0; i < dustParticles.length; i++) {
-                const p = dustParticles[i];
-                p.x += (p.tx - p.x) * p.ease;
-                p.y += (p.ty - p.y) * p.ease;
-                p.z += (0 - p.z) * p.ease;
+            // Gương chiếu hậu 2 bên tích hợp đèn báo rẽ
+            const mirrorGeo = new THREE.BoxGeometry(0.24, 0.12, 0.18);
+            const mirror = new THREE.Mesh(mirrorGeo, carPaintMaterial);
+            mirror.position.set(xSide * 1.02, 0.82, 0.78);
+            bodyGroup.add(mirror);
+        });
 
-                const dx = p.x - pointer2D.x;
-                const dy = p.y - pointer2D.y;
-                const d = Math.sqrt(dx * dx + dy * dy);
-                if (d < pointer2D.radius) {
-                    const f = (pointer2D.radius - d) / pointer2D.radius;
-                    p.x += (dx / d) * f * 11;
-                    p.y += (dy / d) * f * 11;
-                }
+        // 4.2 LƯỚI TẢN NHIỆT MŨI HỔ (TIGER NOSE GRILLE) ĐẶC TRƯNG KIA
+        const tigerGrilleGeo = new THREE.BoxGeometry(1.15, 0.18, 0.1);
+        const tigerGrille = new THREE.Mesh(tigerGrilleGeo, glossBlackMat);
+        tigerGrille.position.set(0, 0.52, 2.18);
+        bodyGroup.add(tigerGrille);
 
-                p.phase += 0.06;
-                const perspectiveScale = 300 / (300 + p.z);
-                const r = Math.max(0.45, (p.size + Math.sin(p.phase) * 0.35) * perspectiveScale);
+        // Hốc gió cản dưới thể thao
+        const lowerIntakeGeo = new THREE.BoxGeometry(1.35, 0.14, 0.08);
+        const lowerIntake = new THREE.Mesh(lowerIntakeGeo, glossBlackMat);
+        lowerIntake.position.set(0, 0.28, 2.19);
+        bodyGroup.add(lowerIntake);
 
-                pCtx.fillStyle = p.color;
-                pCtx.beginPath();
-                pCtx.arc(p.x, p.y, r, 0, Math.PI * 2);
-                pCtx.fill();
-            }
+        // Logo KIA phía trước mạ chrome
+        const logoBadgeGeo = new THREE.BoxGeometry(0.26, 0.08, 0.02);
+        const logoBadge = new THREE.Mesh(logoBadgeGeo, chromeMaterial);
+        logoBadge.position.set(0, 0.68, 2.16);
+        bodyGroup.add(logoBadge);
 
-            dustAnimId = requestAnimationFrame(animateMicroDust);
-        }
+        // 4.3 HỆ THỐNG ĐÈN PHA LED THỂ THAO & ĐÈN HẬU LIỀN MẠCH
+        // Đèn pha LED trước (Sắc nét, góc cạnh)
+        const headLightGroup = new THREE.Group();
+        bodyGroup.add(headLightGroup);
 
-        /* -------------------------------------------------------------------------
-           7. TRANG 4: HIỆU ỨNG GÕ CHỮ TỪ TỪ (TYPEWRITER) CHO BỨC THƯ
-           ------------------------------------------------------------------------- */
-        const letterParagraphs = [
-            {
-                id: 'type-p1',
-                text: 'Chúc mừng sinh nhật tuổi 18 của bạn! Vậy là cột mốc thanh xuân đẹp đẽ và đáng nhớ nhất đã chính thức gõ cửa rồi. Chúc bạn bước sang tuổi mới luôn giữ được nụ cười trong trẻo, đôi mắt ngập tràn niềm vui và một trái tim ấm áp. Mong rằng bầu trời tuổi 18 của bạn sẽ luôn dịu dàng, rực rỡ sắc màu và mọi ước mơ bạn đang ấp ủ đều sẽ sớm nở hoa.'
-            },
-            {
-                id: 'type-p2',
-                boxId: 'highlight-box',
-                text: 'Bước vào chặng đường mới, lịch học tập và những dự định chắc hẳn sẽ bận rộn hơn rất nhiều. Dù có chăm chỉ cố gắng đến đâu thì bạn cũng nhớ giữ gìn sức khỏe thật tốt nhé: đừng vì mải học hay bận việc mà bỏ bữa, nhớ ăn uống đúng giờ, uống đủ nước và hạn chế thức khuya. Đặc biệt là mỗi khi ra ngoài hay đi học về muộn, bạn hãy luôn chú ý đi lại cẩn thận và giữ an toàn cho bản thân ở mọi nơi nha. Bạn cứ bình yên và khỏe mạnh đã là điều tuyệt vời nhất rồi.'
-            },
-            {
-                id: 'type-p3',
-                text: 'Thật lòng mà nói, hôm nay mình không có một món quà vật chất nào thật lớn lao hay đắt giá để tặng bạn cả. Nhưng thay vào đó, mình đã dành rất nhiều thời gian, sự tỉ mỉ và cả sự chân thành để chuẩn bị từng chi tiết nhỏ lấp lánh này thành một không gian dành riêng cho bạn.'
-            },
-            {
-                id: 'type-p4',
-                text: 'Mình chỉ hy vọng khi mở từng trang web này, bạn sẽ cảm nhận được sự bình yên, an tâm và nở một nụ cười thật tươi. Và nếu như món quà nhỏ này có làm bạn tò mò một chút về người đã thức làm ra nó... thì lần tới khi gặp nhau, hãy dành cho mình một ánh mắt thật vui vẻ và cho mình cơ hội được trò chuyện, lắng nghe những câu chuyện của bạn nhiều hơn nhé! ✨'
-            }
+        const headLightMat = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            emissive: 0xe6f3ff,
+            emissiveIntensity: 3.2
+        });
+
+        [-0.68, 0.68].forEach(xSide => {
+            const hlGeo = new THREE.BoxGeometry(0.38, 0.09, 0.14);
+            const hlMesh = new THREE.Mesh(hlGeo, headLightMat);
+            hlMesh.position.set(xSide, 0.56, 2.14);
+            hlMesh.rotation.y = xSide > 0 ? 0.2 : -0.2;
+            headLightGroup.add(hlMesh);
+
+            // Chùm sáng rọi đường từ đèn pha (SpotLight)
+            const spotLight = new THREE.SpotLight(0xfff4e6, 3.8);
+            spotLight.position.set(xSide, 0.56, 2.2);
+            spotLight.target.position.set(xSide * 1.5, 0, 16);
+            spotLight.angle = 0.42;
+            spotLight.penumbra = 0.6;
+            spotLight.distance = 25;
+            spotLight.castShadow = true;
+            bodyGroup.add(spotLight);
+            bodyGroup.add(spotLight.target);
+        });
+
+        // Đèn hậu sau LED dạng dải liền mạch (Signature Full-Width Tail Light của K3)
+        const tailLightMat = new THREE.MeshStandardMaterial({
+            color: 0xff002b,
+            emissive: 0xff002b,
+            emissiveIntensity: 2.8
+        });
+
+        const tailLightBarGeo = new THREE.BoxGeometry(1.65, 0.07, 0.08);
+        const tailLightBar = new THREE.Mesh(tailLightBarGeo, tailLightMat);
+        tailLightBar.position.set(0, 0.68, -2.18);
+        bodyGroup.add(tailLightBar);
+
+        // Ống xả kép thể thao phía sau (Bản GT Turbo)
+        const exhaustMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.95, roughness: 0.2 });
+        [0.48, 0.62].forEach(xEx => {
+            const exGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.16, 12);
+            const exMesh = new THREE.Mesh(exGeo, exhaustMat);
+            exMesh.rotation.x = Math.PI / 2;
+            exMesh.position.set(xEx, 0.26, -2.18);
+            bodyGroup.add(exMesh);
+        });
+
+        // 4.4 BỐN BÁNH XE THỂ THAO HỢP KIM 17 INCH (ROTATING ALLOY WHEELS)
+        const wheels = [];
+        const wheelPositions = [
+            { x: -0.88, y: 0.34, z: 1.32 },  // Trước Trái
+            { x: 0.88, y: 0.34, z: 1.32 },   // Trước Phải
+            { x: -0.88, y: 0.34, z: -1.35 }, // Sau Trái
+            { x: 0.88, y: 0.34, z: -1.35 }   // Sau Phải
         ];
 
-        let isTypingSkipped = false;
-        let typingTimer = null;
-        const letterScrollBox = document.getElementById('letter-scroll-box');
-        const btnSkipTyping = document.getElementById('btn-skip-typing');
-
-        function finishLetterImmediately() {
-            isTypingSkipped = true;
-            clearTimeout(typingTimer);
-            document.querySelectorAll('.typing-cursor').forEach(c => c.remove());
-
-            letterParagraphs.forEach(item => {
-                if (item.boxId) document.getElementById(item.boxId).classList.add('visible');
-                document.getElementById(item.id).textContent = item.text;
-            });
-
-            const el = document.getElementById('python-milestone');
-            if (el) el.classList.add('visible');
-            document.getElementById('letter-footer-box').classList.add('visible');
-            btnSkipTyping.style.display = 'none';
-            setTimeout(() => {
-                letterScrollBox.scrollTop = letterScrollBox.scrollHeight;
-            }, 100);
-        }
-
-        btnSkipTyping.addEventListener('click', finishLetterImmediately);
-
-        function startLetterTypewriter() {
-            let pIndex = 0;
-            let charIndex = 0;
-            const cursorSpan = document.createElement('span');
-            cursorSpan.className = 'typing-cursor';
-
-            function typeStep() {
-                if (isTypingSkipped) return;
-                if (pIndex >= letterParagraphs.length) {
-                    cursorSpan.remove();
-                    const el = document.getElementById('python-milestone');
-            if (el) el.classList.add('visible');
-                    document.getElementById('letter-footer-box').classList.add('visible');
-                    btnSkipTyping.style.display = 'none';
-                    letterScrollBox.scrollTop = letterScrollBox.scrollHeight;
-                    return;
-                }
-
-                const currentItem = letterParagraphs[pIndex];
-                const targetEl = document.getElementById(currentItem.id);
-
-                if (charIndex === 0 && currentItem.boxId) {
-                    document.getElementById(currentItem.boxId).classList.add('visible');
-                }
-
-                charIndex++;
-                targetEl.textContent = currentItem.text.slice(0, charIndex);
-                targetEl.appendChild(cursorSpan);
-
-                if (charIndex % 4 === 0) {
-                    letterScrollBox.scrollTop = letterScrollBox.scrollHeight;
-                }
-
-                if (charIndex < currentItem.text.length) {
-                    const lastChar = currentItem.text[charIndex - 1];
-                    const delay = (lastChar === '.' || lastChar === '!' || lastChar === ',') ? 95 : 22;
-                    typingTimer = setTimeout(typeStep, delay);
-                } else {
-                    pIndex++;
-                    charIndex = 0;
-                    typingTimer = setTimeout(typeStep, 320);
-                }
-            }
-
-            setTimeout(typeStep, 600);
-        }
-
-        /* -------------------------------------------------------------------------
-           8. ĐIỀU KHIỂN LUỒNG 5 TRANG & SỰ KIỆN TƯƠNG TÁC 3D
-           ------------------------------------------------------------------------- */
-        let currentStage = 1;
-        let isGiftOpened = false;
-        let isCandleBlown = false;
-        let autoFireworkInterval = null;
-
-        const page1 = document.getElementById('page-1');
-        const page2 = document.getElementById('page-2');
-        const page3 = document.getElementById('page-3');
-        const page4 = document.getElementById('page-4');
-        const page5 = document.getElementById('page-5');
-
-        const btnPage1 = document.getElementById('btn-page-1');
-        const btnPage2 = document.getElementById('btn-page-2');
-        const btnOpenGift = document.getElementById('btn-open-gift');
-        const btnToPage5 = document.getElementById('btn-to-page-5');
-
-        // TRANG 1 -> TRANG 2
-        btnPage1.addEventListener('click', () => {
-            currentStage = 2;
-            page1.classList.remove('active');
-
-            gsap.to(stage1Group.position, { y: -9, duration: 1.1, ease: "power3.in" });
-            gsap.to(stage1Group.rotation, { y: Math.PI * 1.5, duration: 1.1 });
-            gsap.to(haloPlane.scale, { x: 0.4, y: 0.4, duration: 1.0, onComplete: () => { stage1Group.visible = false; } });
-
-            setTimeout(() => {
-                page2.classList.add('active');
-                pCanvas.style.opacity = '1';
-                pCanvas.style.pointerEvents = 'auto';
-                isPage2Active = true;
-                initMicroDustText();
-                animateMicroDust();
-
-                setTimeout(() => {
-                    btnPage2.classList.add('show');
-                }, 2200);
-            }, 550);
+        // Vật liệu Lốp cao su thể thao đen
+        const tireMat = new THREE.MeshStandardMaterial({
+            color: 0x18181c,
+            roughness: 0.85,
+            metalness: 0.1
         });
 
-        // TRANG 2 -> TRANG 3 (HỘP QUÀ 3D)
-        btnPage2.addEventListener('click', () => {
-            currentStage = 3;
-
-            dustParticles.forEach(p => {
-                p.tx = p.x + (Math.random() - 0.5) * 900;
-                p.ty = p.y - Math.random() * 600 - 100;
-                p.ease = 0.025;
-            });
-
-            page2.classList.remove('active');
-            pCanvas.style.opacity = '0';
-            pCanvas.style.pointerEvents = 'none';
-
-            setTimeout(() => {
-                isPage2Active = false;
-                cancelAnimationFrame(dustAnimId);
-            }, 850);
-
-            giftStageGroup.visible = true;
-            gsap.to(haloPlane.scale, { x: 1.25, y: 1.25, duration: 1.4 });
-            gsap.to(camera.position, { x: 0, y: 3.1, z: 9.8, duration: 1.5, ease: "power3.out", onUpdate: () => camera.lookAt(0, -0.2, 0) });
-            gsap.to(giftStageGroup.position, { y: -0.6, duration: 1.4, ease: "back.out(1.3)" });
-            gsap.fromTo(giftStageGroup.rotation, { y: -Math.PI * 0.8 }, { y: Math.PI / 5, duration: 1.6, ease: "power3.out" });
-
-            setTimeout(() => {
-                page3.classList.add('active');
-            }, 650);
+        // Vật liệu Mâm lazang phay bóng 2 tông màu
+        const rimMat = new THREE.MeshStandardMaterial({
+            color: 0xd8d8d8,
+            metalness: 0.92,
+            roughness: 0.18
         });
 
+        // Cùm phanh thể thao màu đỏ (Brake Caliper)
+        const caliperMat = new THREE.MeshStandardMaterial({
+            color: 0xea0029,
+            metalness: 0.6,
+            roughness: 0.3
+        });
+
+        wheelPositions.forEach((pos, idx) => {
+            const wheelPivot = new THREE.Group();
+            wheelPivot.position.set(pos.x, pos.y, pos.z);
+            carRoot.add(wheelPivot);
+
+            const isRightSide = pos.x > 0;
+
+            // Vỏ lốp bánh xe
+            const tireGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.24, 24);
+            const tireMesh = new THREE.Mesh(tireGeo, tireMat);
+            tireMesh.rotation.z = Math.PI / 2;
+            tireMesh.castShadow = true;
+            wheelPivot.add(tireMesh);
+
+            // Mâm đúc 5 chấu kép thể thao
+            const rimCenterGeo = new THREE.CylinderGeometry(0.24, 0.24, 0.245, 18);
+            const rimCenter = new THREE.Mesh(rimCenterGeo, rimMat);
+            rimCenter.rotation.z = Math.PI / 2;
+            wheelPivot.add(rimCenter);
+
+            // 5 nan hoa lazang tạo hiệu ứng quay chân thật
+            for (let i = 0; i < 5; i++) {
+                const spokeGeo = new THREE.BoxGeometry(0.04, 0.44, 0.25);
+                const spoke = new THREE.Mesh(spokeGeo, rimMat);
+                spoke.rotation.x = (i * Math.PI) / 2.5;
+                wheelPivot.add(spoke);
+            }
+
+            // Đĩa phanh bên trong
+            const discGeo = new THREE.CylinderGeometry(0.21, 0.21, 0.05, 16);
+            const discMesh = new THREE.Mesh(discGeo, chromeMaterial);
+            discMesh.rotation.z = Math.PI / 2;
+            wheelPivot.add(discMesh);
+
+            // Cùm phanh đỏ K3 GT
+            const caliperGeo = new THREE.BoxGeometry(0.07, 0.14, 0.12);
+            const caliper = new THREE.Mesh(caliperGeo, caliperMat);
+            caliper.position.set(isRightSide ? -0.06 : 0.06, 0.11, 0);
+            wheelPivot.add(caliper);
+
+            wheels.push(wheelPivot);
+        });
+
+        // Đổ bóng mềm dưới gầm xe (Ground Contact Shadow)
+        const shadowPlaneGeo = new THREE.PlaneGeometry(2.4, 4.8);
+        const shadowPlaneMat = new THREE.MeshBasicMaterial({
+            color: 0x000000,
+            transparent: true,
+            opacity: 0.68
+        });
+        const shadowMesh = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
+        shadowMesh.rotation.x = -Math.PI / 2;
+        shadowMesh.position.y = 0.02;
+        carRoot.add(shadowMesh);
+
         /* -------------------------------------------------------------------------
-           HỆ THỐNG PHÁO HOA & PHÁO GIẤY KIM TUYẾN ĂN MỪNG (CONFETTI SYSTEM)
+           5. HIỆU ỨNG TỐC ĐỘ, VỆT GIÓ & ANIMATION LOOP
            ------------------------------------------------------------------------- */
-        const confettiCanvas = document.getElementById('confetti-canvas');
-        const cCtx = confettiCanvas.getContext('2d');
-        let confettiParticles = [];
-        let confettiAnimId = null;
+        let isDriving = true;
+        let isTurbo = false;
+        let currentSpeed = 1.0;
+        let baseSpeed = 1.0;
 
-        function resizeConfetti() {
-            confettiCanvas.width = window.innerWidth;
-            confettiCanvas.height = window.innerHeight;
+        // Vệt gió khí động học (Speed Wind Lines)
+        const windCount = 35;
+        const windLines = [];
+        const windGeo = new THREE.BufferGeometry();
+        const windPositions = new Float32Array(windCount * 6);
+
+        for (let i = 0; i < windCount; i++) {
+            const rx = (Math.random() - 0.5) * 3.2;
+            const ry = 0.3 + Math.random() * 1.8;
+            const rz = (Math.random() - 0.5) * 6;
+            windPositions[i * 6] = rx;
+            windPositions[i * 6 + 1] = ry;
+            windPositions[i * 6 + 2] = rz;
+            windPositions[i * 6 + 3] = rx;
+            windPositions[i * 6 + 4] = ry;
+            windPositions[i * 6 + 5] = rz - 2.5;
         }
-        resizeConfetti();
-        window.addEventListener('resize', resizeConfetti);
 
-        const confettiColors = ['#ff2a75', '#ff80ab', '#ffd57e', '#ffeb3b', '#69f0ae', '#b388ff', '#ffffff'];
+        windGeo.setAttribute('position', new THREE.BufferAttribute(windPositions, 3));
+        const windMat = new THREE.LineBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.25
+        });
+        const windMesh = new THREE.LineSegments(windGeo, windMat);
+        scene.add(windMesh);
 
-        function launchConfettiBurst(count = 140) {
-            const cx = confettiCanvas.width / 2;
-            const cy = confettiCanvas.height * 0.72;
-            for (let i = 0; i < count; i++) {
-                const angle = Math.PI * 1.5 + (Math.random() - 0.5) * 1.5;
-                const speed = 7 + Math.random() * 14;
-                confettiParticles.push({
-                    x: cx + (Math.random() - 0.5) * 80,
-                    y: cy,
-                    vx: Math.cos(angle) * speed + (Math.random() - 0.5) * 4,
-                    vy: Math.sin(angle) * speed,
-                    size: 6 + Math.random() * 9,
-                    color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
-                    rotX: Math.random() * Math.PI,
-                    rotY: Math.random() * Math.PI,
-                    rotSpeedX: 0.05 + Math.random() * 0.1,
-                    rotSpeedY: 0.03 + Math.random() * 0.08,
-                    shape: Math.random() > 0.4 ? 'rect' : (Math.random() > 0.5 ? 'heart' : 'circle'),
-                    opacity: 1,
-                    gravity: 0.22 + Math.random() * 0.12,
-                    drag: 0.985
-                });
+        // Vòng lặp render chính (60-120fps mượt mà)
+        let clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const delta = clock.getDelta();
+            const time = clock.getElapsedTime();
+
+            // Tính toán tốc độ hiện tại (Tăng tốc khi ấn Turbo)
+            const targetSpeed = isDriving ? (isTurbo ? 3.2 : 1.2) : 0;
+            currentSpeed += (targetSpeed - currentSpeed) * 0.08;
+
+            // Xoay bánh xe theo tốc độ di chuyển
+            wheels.forEach(w => {
+                w.rotation.x += currentSpeed * 18 * delta;
+            });
+
+            // Di chuyển vạch kẻ đường tạo hiệu ứng xe đang lao vút về phía trước
+            dashLines.forEach(d => {
+                d.position.z += currentSpeed * 42 * delta;
+                if (d.position.z > 25) {
+                    d.position.z = -85;
+                }
+            });
+
+            // Di chuyển cột đèn neon hai bên
+            lightPillars.forEach(p => {
+                p.position.z += currentSpeed * 42 * delta;
+                if (p.position.z > 25) {
+                    p.position.z = -85;
+                }
+            });
+
+            // Di chuyển vệt gió khí động học
+            const posAttr = windGeo.attributes.position;
+            for (let i = 0; i < windCount; i++) {
+                let zVal = posAttr.getZ(i * 2);
+                zVal += currentSpeed * 55 * delta;
+                if (zVal > 15) zVal = -30;
+                posAttr.setZ(i * 2, zVal);
+                posAttr.setZ(i * 2 + 1, zVal - (isTurbo ? 4.5 : 2.2));
             }
-            if (!confettiAnimId) animateConfetti();
-        }
+            posAttr.needsUpdate = true;
+            windMat.opacity = isDriving ? (isTurbo ? 0.75 : 0.3) : 0;
 
-        function drawHeart(ctx, x, y, size, color, opacity) {
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.fillStyle = color;
-            ctx.globalAlpha = opacity;
-            ctx.beginPath();
-            const topCurveHeight = size * 0.3;
-            ctx.moveTo(0, topCurveHeight);
-            ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
-            ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
-            ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
-            ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
-            ctx.closePath();
-            ctx.fill();
-            ctx.restore();
-        }
-
-        function animateConfetti() {
-            cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-            for (let i = confettiParticles.length - 1; i >= 0; i--) {
-                const p = confettiParticles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                p.vy += p.gravity;
-                p.vx *= p.drag;
-                p.vy *= p.drag;
-                p.rotX += p.rotSpeedX;
-                p.rotY += p.rotSpeedY;
-
-                if (p.y > confettiCanvas.height - 40) {
-                    p.opacity -= 0.02;
-                }
-
-                if (p.opacity <= 0 || p.y > confettiCanvas.height + 60) {
-                    confettiParticles.splice(i, 1);
-                    continue;
-                }
-
-                cCtx.save();
-                cCtx.translate(p.x, p.y);
-                cCtx.scale(Math.cos(p.rotX), Math.sin(p.rotY));
-
-                if (p.shape === 'rect') {
-                    cCtx.fillStyle = p.color;
-                    cCtx.globalAlpha = p.opacity;
-                    cCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.55);
-                } else if (p.shape === 'circle') {
-                    cCtx.fillStyle = p.color;
-                    cCtx.globalAlpha = p.opacity;
-                    cCtx.beginPath();
-                    cCtx.arc(0, 0, p.size / 2.5, 0, Math.PI * 2);
-                    cCtx.fill();
-                } else {
-                    drawHeart(cCtx, 0, 0, p.size, p.color, p.opacity);
-                }
-                cCtx.restore();
-            }
-
-            if (confettiParticles.length > 0) {
-                confettiAnimId = requestAnimationFrame(animateConfetti);
+            // Nhún xe tự nhiên khi lướt trên đường (Suspension vibration)
+            if (isDriving) {
+                carRoot.position.y = Math.sin(time * 12) * 0.012;
+                bodyGroup.rotation.z = Math.sin(time * 6) * 0.005;
+                bodyGroup.rotation.x = (isTurbo ? -0.025 : 0.008);
+                controls.autoRotate = false;
             } else {
-                confettiAnimId = null;
-            }
-        }
-
-        // DIỄN HOẠT MỞ HỘP QUÀ (TRANG 3 -> TRANG 4)
-        function openHollowGiftBox() {
-            isGiftOpened = true;
-            launchConfettiBurst(60);
-            page3.classList.remove('active');
-
-            const tl = gsap.timeline();
-            tl.to(giftStageGroup.rotation, { y: Math.PI / 8, duration: 0.4 })
-              .to(giftStageGroup.rotation, { z: 0.06, duration: 0.07, yoyo: true, repeat: 5 })
-              .to(giftStageGroup.rotation, { z: 0, duration: 0.07 })
-              .to(lidGroup.position, { y: 3.8, z: -2.8, duration: 1.15, ease: "power3.out" }, "+=0.05")
-              .to(lidGroup.rotation, { x: -Math.PI / 2.2, z: 0.18, duration: 1.15, ease: "power3.out" }, "<")
-              .to(innerBoxLight, { intensity: 8, duration: 0.7 }, "<")
-              .to(letter3DGroup.position, { y: 2.35, z: 0.8, duration: 1.25, ease: "back.out(1.4)" }, "-=0.65")
-              .to(letter3DGroup.rotation, { y: Math.PI * 2, x: -0.15, duration: 1.25, ease: "power2.out" }, "<")
-              .to(camera.position, { y: 2.1, z: 6.5, duration: 1.1, ease: "power2.inOut" }, "-=0.5")
-              .add(() => {
-                  currentStage = 4;
-                  page4.classList.add('active');
-                  startLetterTypewriter();
-              }, "-=0.35");
-        }
-
-        btnOpenGift.addEventListener('click', () => {
-            if (currentStage === 3 && !isGiftOpened) openHollowGiftBox();
-        });
-
-        // TRANG 4 -> TRANG 5 (SÂN KHẤU BÁNH KEM & VƯƠNG QUỐC HỒNG LẤP LÁNH)
-        btnToPage5.addEventListener('click', () => {
-            currentStage = 5;
-            page4.classList.remove('active');
-
-            // Đồng bộ phông nền hồng sang trọng, tươi sáng giống Trang 1
-            document.body.style.background = 'radial-gradient(circle at 50% 35%, #fff7fa 0%, var(--pink-soft) 48%, var(--pink-mid) 100%)';
-            haloUniforms.uColorInner.value.setHex(0xff5c97);
-            haloUniforms.uColorOuter.value.setHex(0xffe6f0);
-
-            // Đưa hộp quà xuống và nâng Sân khấu Bánh Kem + Vương quốc lấp lánh lên
-            gsap.to(giftStageGroup.position, { y: -15, duration: 1.1, ease: "power2.in", onComplete: () => { giftStageGroup.visible = false; } });
-
-            finaleStageGroup.visible = true;
-            gsap.to(camera.position, { x: 0, y: 1.8, z: 9.2, duration: 1.6, ease: "power3.out", onUpdate: () => camera.lookAt(0, 0.3, 0) });
-            gsap.to(finaleStageGroup.position, { y: 0, duration: 1.6, ease: "back.out(1.2)" });
-            gsap.fromTo(cakeGroup.rotation, { y: -Math.PI }, { y: 0, duration: 1.8, ease: "power3.out" });
-
-            setTimeout(() => {
-                page5.classList.add('active');
-            }, 700);
-        });
-
-        // TƯƠNG TÁC THỔI NẾN & XEM LẠI TRANG WEB
-        const btnBlowCandle = document.getElementById('btn-blow-candle');
-        const btnReplay = document.getElementById('btn-replay');
-        const wishMessageEl = document.getElementById('wish-message');
-
-        function blowOutCandle() {
-            if (isCandleBlown) return;
-            isCandleBlown = true;
-
-            // Diễn hoạt thổi tắt ngọn lửa 3D và giảm độ sáng ngọn nến
-            gsap.to(flameGroup.scale, {
-                x: 0, y: 0, z: 0,
-                duration: 0.65,
-                ease: "power2.in",
-                onComplete: () => {
-                    flameGroup.visible = false;
-                }
-            });
-            gsap.to(candleLight, { intensity: 0, duration: 0.8 });
-
-            // Bắn pháo hoa & pháo giấy kim tuyến ăn mừng liên tục
-            launchConfettiBurst(140);
-            setTimeout(() => launchConfettiBurst(100), 450);
-            setTimeout(() => launchConfettiBurst(90), 950);
-
-            // Cập nhật lời chúc sinh nhật bùng nổ
-            wishMessageEl.innerHTML = '🎉 <b>Ước nguyện đã được gửi tới các vì sao!</b><br>Chúc mừng sinh nhật tuổi 18 thật ngập tràn niềm vui & hạnh phúc! 🌟💖';
-            wishMessageEl.style.transform = 'scale(1.05)';
-            setTimeout(() => { wishMessageEl.style.transform = 'scale(1)'; }, 400);
-
-            // Chuyển nút thổi nến thành nút xem lại từ đầu
-            btnBlowCandle.style.display = 'none';
-            btnReplay.style.display = 'inline-flex';
-            gsap.fromTo(btnReplay, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 });
-        }
-
-        btnBlowCandle.addEventListener('click', blowOutCandle);
-
-        function replayFromStart() {
-            currentStage = 1;
-            isGiftOpened = false;
-            isCandleBlown = false;
-
-            // Bật lại ngọn lửa nến
-            flameGroup.visible = true;
-            flameGroup.scale.set(1, 1, 1);
-            candleLight.intensity = 6.5;
-
-            // Reset hộp quà
-            lidGroup.position.set(0, boxH / 2 + 0.15, 0);
-            lidGroup.rotation.set(0, 0, 0);
-            innerBoxLight.intensity = 0;
-            letter3DGroup.position.set(0, -0.35, 0);
-            letter3DGroup.rotation.set(0, 0, 0);
-            giftStageGroup.position.set(0, -14, 0);
-            giftStageGroup.visible = false;
-
-            // Reset sân khấu bánh kem & các trang
-            finaleStageGroup.position.set(0, -16, 0);
-            finaleStageGroup.visible = false;
-
-            stage1Group.visible = true;
-            stage1Group.position.set(0, 0.15, 0);
-            stage1Group.rotation.set(0, 0, 0);
-
-            haloPlane.scale.set(1, 1, 1);
-            camera.position.set(0, 1.8, 10.5);
-            camera.lookAt(0, 0.2, 0);
-
-            [page2, page3, page4, page5].forEach(p => p.classList.remove('active'));
-            page1.classList.add('active');
-
-            // Reset trang 2
-            isPage2Active = false;
-            pCanvas.style.opacity = '0';
-            pCanvas.style.pointerEvents = 'none';
-            btnPage2.classList.remove('show');
-
-            // Reset typewriter trang 4
-            isTypingSkipped = false;
-            clearTimeout(typingTimer);
-            document.querySelectorAll('.typing-cursor').forEach(c => c.remove());
-            ['type-p1', 'type-p2', 'type-p3', 'type-p4'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = '';
-            });
-            document.getElementById('highlight-box').classList.remove('visible');
-            const pMile = document.getElementById('python-milestone');
-            if (pMile) pMile.classList.remove('visible');
-            document.getElementById('letter-footer-box').classList.remove('visible');
-            btnSkipTyping.style.display = 'inline-block';
-
-            // Reset điều khiển trang 5
-            btnBlowCandle.style.display = 'inline-flex';
-            btnReplay.style.display = 'none';
-            wishMessageEl.innerHTML = '✨ Chúc mọi điều ước tuổi 18 của bạn đều trở thành hiện thực! ✨';
-        }
-
-        btnReplay.addEventListener('click', replayFromStart);
-
-        // Tương tác vuốt xoay 360 độ ở Trang 1, Trang 3, Trang 5
-        const raycaster = new THREE.Raycaster();
-        const pointer3D = new THREE.Vector2();
-        let isDragging = false;
-        let prevX = 0;
-        let dragDistance = 0;
-
-        window.addEventListener('pointerdown', e => {
-            isDragging = true;
-            prevX = e.clientX;
-            dragDistance = 0;
-        });
-
-        window.addEventListener('pointermove', e => {
-            if (!isDragging) return;
-            const dx = e.clientX - prevX;
-            dragDistance += Math.abs(dx);
-            prevX = e.clientX;
-
-            if (currentStage === 1 && stage1Group.visible) {
-                stage1Group.rotation.y += dx * 0.008;
-            } else if (currentStage === 3 && !isGiftOpened) {
-                giftStageGroup.rotation.y += dx * 0.009;
-            } else if (currentStage === 5 && finaleStageGroup.visible) {
-                cakeGroup.rotation.y += dx * 0.01;
-                galaxyPoints.rotation.y += dx * 0.003;
-            }
-        });
-
-        window.addEventListener('pointerup', e => {
-            isDragging = false;
-            if (dragDistance < 10) {
-                if (currentStage === 3 && !isGiftOpened) {
-                    pointer3D.x = (e.clientX / window.innerWidth) * 2 - 1;
-                    pointer3D.y = -(e.clientY / window.innerHeight) * 2 + 1;
-                    raycaster.setFromCamera(pointer3D, camera);
-                    const hits = raycaster.intersectObjects(giftStageGroup.children, true);
-                    if (hits.length > 0) openHollowGiftBox();
-                } else if (currentStage === 5 && !isCandleBlown) {
-                    pointer3D.x = (e.clientX / window.innerWidth) * 2 - 1;
-                    pointer3D.y = -(e.clientY / window.innerHeight) * 2 + 1;
-                    raycaster.setFromCamera(pointer3D, camera);
-                    const hits = raycaster.intersectObjects([cakeGroup, candleGroup, flameGroup], true);
-                    if (hits.length > 0) blowOutCandle();
-                }
-            }
-        });
-
-        /* -------------------------------------------------------------------------
-           9. VÒNG LẶP KẾT XUẤT 3D PBR 60FPS
-           ------------------------------------------------------------------------- */
-        const clock = new THREE.Clock();
-
-        function animate3DScene() {
-            requestAnimationFrame(animate3DScene);
-            const t = clock.getElapsedTime();
-            haloUniforms.uTime.value = t;
-
-            // Trang 1: Diễn hoạt Pha Lê & Ngọc Trai
-            if (stage1Group.visible) {
-                mainCrystal.rotation.y = t * 0.6;
-                mainCrystal.rotation.x = Math.sin(t * 0.8) * 0.25;
-                orbitRing1.rotation.z = t * 0.5;
-                orbitRing2.rotation.y = -t * 0.45;
-                crystalCoreGroup.position.y = 0.25 + Math.sin(t * 2) * 0.1;
-
-                floatingOrbs.forEach(orb => {
-                    const curAngle = orb.angle + t * orb.speed * 0.4;
-                    orb.mesh.position.x = Math.cos(curAngle) * orb.radius;
-                    orb.mesh.position.z = Math.sin(curAngle) * orb.radius;
-                    orb.mesh.position.y = orb.baseY + Math.sin(t * 2 + orb.phase) * 0.22;
-                });
+                carRoot.position.y = 0;
+                bodyGroup.rotation.set(0, 0, 0);
+                controls.autoRotate = true;
+                controls.autoRotateSpeed = 0.8;
             }
 
-            // Trang 3: Diễn hoạt Hộp Quà 3D
-            if (giftStageGroup.visible && !isGiftOpened && !isDragging) {
-                giftStageGroup.rotation.y += 0.0045;
-                giftStageGroup.position.y = -0.6 + Math.sin(t * 1.8) * 0.08;
-            }
-
-            if (isGiftOpened && giftStageGroup.visible) {
-                letter3DGroup.position.y = 2.35 + Math.sin(t * 2.2) * 0.08;
-            }
-
-            // Trang 5: Diễn hoạt Bánh Kem 3D, Lửa Nến, Ngân Hà & Đèn Trời
-            if (finaleStageGroup.visible) {
-                if (!isDragging) {
-                    cakeGroup.rotation.y += 0.004;
-                }
-                galaxyPoints.rotation.y = t * 0.05;
-
-                // Ngọn lửa nến lung lay chân thật
-                if (!isCandleBlown && flameGroup.visible) {
-                    flameGroup.scale.x = 1 + Math.sin(t * 18) * 0.08;
-                    flameGroup.scale.y = 1 + Math.cos(t * 14) * 0.1;
-                    flameGroup.rotation.z = Math.sin(t * 10) * 0.06;
-                    candleLight.intensity = 6.0 + Math.sin(t * 20) * 1.2;
-                }
-
-                // Đèn trời bay lên cao
-                skyLanterns.forEach(item => {
-                    item.group.position.y += item.speedY;
-                    item.group.position.x += Math.sin(t * item.swaySpeed + item.phase) * 0.004;
-                    if (item.group.position.y > 7.5) {
-                        item.group.position.y = -5.5;
-                    }
-                });
-
-                // Cập nhật mưa sao & bụi sáng lấp lánh (Magic Sparkles)
-                if (magicSparkles) {
-                    const spPos = magicSparkles.geometry.attributes.position.array;
-                    magicSparkles.rotation.y = t * 0.02;
-                    for (let i = 0; i < sparkleCount; i++) {
-                        const d = sparkleData[i];
-                        spPos[i * 3 + 1] += d.speedY;
-                        if (spPos[i * 3 + 1] > 8.0) {
-                            spPos[i * 3 + 1] = -6.0;
-                        }
-                    }
-                    magicSparkles.geometry.attributes.position.needsUpdate = true;
-                    sparkleMat.size = 0.55 + Math.sin(t * 3.5) * 0.18;
-                }
-                // Cập nhật mưa hạt sao lấp lánh rơi chầm chậm tự nhiên
-                if (fallingStarsPoints) {
-                    const fPos = fallingStarsPoints.geometry.attributes.position.array;
-                    for (let i = 0; i < fallingStarsCount; i++) {
-                        const d = fallingStarsData[i];
-                        fPos[i * 3 + 1] -= d.speedY;
-                        fPos[i * 3] += Math.sin(t * d.swaySpeed + d.phase) * 0.003;
-                        if (fPos[i * 3 + 1] < -4.5) {
-                            fPos[i * 3 + 1] = 8.5;
-                        }
-                    }
-                    fallingStarsPoints.geometry.attributes.position.needsUpdate = true;
-                }
-
-                // Diễn hoạt vòng quỹ đạo vàng xoay quanh bánh kem
-                cakeGoldOrbit1.rotation.z = t * 0.4;
-                cakeGoldOrbit2.rotation.y = -t * 0.35;
-
-                // Diễn hoạt 16 hạt ngọc trai & tinh thể pha lê bay lơ lửng quanh bánh kem
-                cakeFloatingOrbs.forEach(orb => {
-                    const curAngle = orb.angle + t * orb.speed * 0.3;
-                    orb.mesh.position.x = Math.cos(curAngle) * orb.radius;
-                    orb.mesh.position.z = Math.sin(curAngle) * orb.radius;
-                    orb.mesh.position.y = orb.baseY + Math.sin(t * 1.8 + orb.phase) * 0.18;
-                });
-
-                // Diễn hoạt 36 cánh hoa hồng pha lê 3D bay lượn và xoay tà tà tự nhiên
-                rosePetals.forEach(p => {
-                    p.mesh.position.y -= p.speedY;
-                    p.mesh.position.x += Math.sin(t * p.swaySpeed + p.phase) * p.swayAmp;
-                    p.mesh.position.z += Math.cos(t * p.swaySpeed * 0.8 + p.phase) * p.swayAmp;
-                    p.mesh.rotation.x += p.rotSpeedX;
-                    p.mesh.rotation.y += p.rotSpeedY;
-
-                    if (p.mesh.position.y < -5.0) {
-                        p.mesh.position.y = 5.2;
-                    }
-                });
-            }
-
-            bokehPoints.rotation.y = t * 0.035;
+            controls.update();
             renderer.render(scene, camera);
         }
 
-        animate3DScene();
+        animate();
 
+        /* -------------------------------------------------------------------------
+           6. SỰ KIỆN TƯƠNG TÁC GIAO DIỆN (UI CONTROLS & COLOR PICKER)
+           ------------------------------------------------------------------------- */
+        // 6.1 Đổi màu sơn xe ngoại thất mượt mà với GSAP
+        const colorDots = document.querySelectorAll('.color-dot');
+        colorDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                colorDots.forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+
+                const targetHex = dot.getAttribute('data-color');
+                const targetColor = new THREE.Color(targetHex);
+
+                gsap.to(carPaintMaterial.color, {
+                    r: targetColor.r,
+                    g: targetColor.g,
+                    b: targetColor.b,
+                    duration: 0.65,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        // 6.2 Bật/Tắt chế độ chạy đường cao tốc vs Showroom đứng yên
+        const btnToggleDrive = document.getElementById('btn-toggle-drive');
+        const driveText = document.getElementById('drive-text');
+
+        btnToggleDrive.addEventListener('click', () => {
+            isDriving = !isDriving;
+            if (isDriving) {
+                btnToggleDrive.classList.add('active');
+                driveText.textContent = "Đang chạy";
+                // Chuyển camera về góc nhìn bám đuổi thể thao
+                gsap.to(camera.position, { x: 4.8, y: 1.85, z: 5.8, duration: 1.2, ease: "power2.inOut" });
+            } else {
+                btnToggleDrive.classList.remove('active');
+                driveText.textContent = "Showroom";
+                isTurbo = false;
+                btnTurbo.classList.remove('active');
+                // Chuyển camera về góc nhìn ngắm xe toàn diện
+                gsap.to(camera.position, { x: 3.8, y: 1.5, z: 4.5, duration: 1.2, ease: "power2.inOut" });
+            }
+        });
+
+        // 6.3 Bật/Tắt đèn pha LED trước
+        const btnToggleLights = document.getElementById('btn-toggle-lights');
+        let lightsOn = true;
+        btnToggleLights.addEventListener('click', () => {
+            lightsOn = !lightsOn;
+            btnToggleLights.classList.toggle('active', lightsOn);
+            headLightMat.emissiveIntensity = lightsOn ? 3.2 : 0;
+            tailLightMat.emissiveIntensity = lightsOn ? 2.8 : 0.3;
+        });
+
+        // 6.4 Chế độ tăng tốc Turbo Boost
+        const btnTurbo = document.getElementById('btn-turbo-boost');
+        btnTurbo.addEventListener('click', () => {
+            if (!isDriving) {
+                isDriving = true;
+                btnToggleDrive.classList.add('active');
+                driveText.textContent = "Đang chạy";
+            }
+            isTurbo = !isTurbo;
+            btnTurbo.classList.toggle('active', isTurbo);
+
+            if (isTurbo) {
+                // Giật lùi camera tạo cảm giác gia tốc cực mạnh (FOV warp)
+                gsap.to(camera, { fov: 46, duration: 0.4, onUpdate: () => camera.updateProjectionMatrix() });
+                gsap.to(camera.position, { z: 6.8, duration: 0.5 });
+            } else {
+                gsap.to(camera, { fov: 40, duration: 0.6, onUpdate: () => camera.updateProjectionMatrix() });
+                gsap.to(camera.position, { z: 5.8, duration: 0.6 });
+            }
+        });
+
+        // 6.5 Modal Đăng ký lái thử
+        const modal = document.getElementById('booking-modal');
+        const btnOpenModal = document.getElementById('btn-open-modal');
+        const btnHeroOrder = document.getElementById('btn-hero-order');
+        const btnCloseModal = document.getElementById('btn-close-modal');
+        const selectVersionBtns = document.querySelectorAll('.btn-select-order');
+        const custVersionSelect = document.getElementById('cust-version');
+
+        function openModal(versionName = null) {
+            modal.classList.add('active');
+            if (versionName) {
+                for (let i = 0; i < custVersionSelect.options.length; i++) {
+                    if (custVersionSelect.options[i].text.includes(versionName)) {
+                        custVersionSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        btnOpenModal.addEventListener('click', () => openModal());
+        btnHeroOrder.addEventListener('click', () => openModal());
+        btnCloseModal.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        selectVersionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const ver = btn.getAttribute('data-ver');
+                openModal(ver);
+            });
+        });
+
+        function submitBooking() {
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const ver = document.getElementById('cust-version').value;
+
+            alert(`🎉 Chúc mừng ${name}!\nYêu cầu đăng ký lái thử xe ${ver} (SĐT: ${phone}) đã được tiếp nhận thành công. Tư vấn viên KIA sẽ liên hệ với bạn trong ít phút!`);
+            closeModal();
+            document.getElementById('drive-form').reset();
+        }
+
+        // 6.6 Tự động điều chỉnh kích thước khi Resize màn hình
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-            if (isPage2Active) initMicroDustText();
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         });
     </script>
 </body>
