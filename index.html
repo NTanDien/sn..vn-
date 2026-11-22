@@ -28,9 +28,13 @@
             --kia-neon: #ff1943;
             --cyber-blue: #00d2ff;
             --cyber-blue-glow: rgba(0, 210, 255, 0.45);
+            --cyber-emerald: #00ffaa;
+            --cyber-purple: #b537f2;
             --text-dim: rgba(255, 255, 255, 0.65);
             --border-glass: rgba(255, 255, 255, 0.1);
             --border-hover: rgba(255, 255, 255, 0.35);
+            --mood-light-color: #00d2ff;
+            --mood-light-glow: rgba(0, 210, 255, 0.6);
         }
 
         * {
@@ -178,17 +182,17 @@
         /* HEADER SIÊU TƯƠNG LAI (ANTIGRAVITY DOCK NAV) */
         header {
             position: fixed;
-            top: 24px;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: calc(100% - 90px);
-            max-width: 1400px;
-            padding: 14px 32px;
+            width: calc(100% - 60px);
+            max-width: 1440px;
+            padding: 12px 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             z-index: 100;
-            background: rgba(10, 14, 22, 0.65);
+            background: rgba(10, 14, 22, 0.75);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
@@ -245,20 +249,23 @@
         nav ul {
             display: flex;
             list-style: none;
-            gap: 28px;
+            gap: 22px;
             align-items: center;
         }
 
         nav a {
             text-decoration: none;
             color: rgba(255, 255, 255, 0.7);
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 600;
             letter-spacing: 1.2px;
             text-transform: uppercase;
             transition: all 0.25s ease;
             position: relative;
             padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         nav a:hover, nav a.active {
@@ -266,14 +273,25 @@
             text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
         }
 
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--kia-red);
+            box-shadow: 0 0 8px var(--kia-red-glow);
+        }
+
         .nav-btn-vip {
             background: linear-gradient(135deg, var(--kia-red) 0%, #aa001d 100%);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.25);
-            padding: 10px 22px;
+            padding: 9px 20px;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             letter-spacing: 1.2px;
             text-transform: uppercase;
             cursor: pointer;
@@ -296,12 +314,12 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 160px 80px 40px 80px;
+            padding: 140px 60px 40px 60px;
             position: relative;
         }
 
         .hero-main-box {
-            max-width: 780px;
+            max-width: 820px;
             animation: fadeInDown 1s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
@@ -338,7 +356,7 @@
 
         h1.hero-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 4.8rem;
+            font-size: 4.6rem;
             font-weight: 900;
             line-height: 1.04;
             letter-spacing: -1px;
@@ -358,15 +376,15 @@
             font-size: 1.15rem;
             line-height: 1.7;
             color: var(--text-dim);
-            margin-bottom: 38px;
-            max-width: 650px;
+            margin-bottom: 34px;
+            max-width: 680px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
         }
 
         .hero-action-row {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
@@ -374,9 +392,9 @@
             background: linear-gradient(135deg, var(--kia-red) 0%, #b3001b 100%);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 16px 38px;
+            padding: 15px 36px;
             border-radius: 40px;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 800;
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -386,6 +404,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
         }
 
         .btn-launch-warp:hover {
@@ -398,9 +417,9 @@
             backdrop-filter: blur(14px);
             border: 1px solid var(--border-glass);
             color: #ffffff;
-            padding: 16px 30px;
+            padding: 15px 28px;
             border-radius: 40px;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -417,18 +436,18 @@
             border-color: var(--border-hover);
         }
 
-        /* HUD TELEMETRY COCKPIT STRIP (BẢNG ĐỒNG HỒ KỸ THUẬT SỐ K5 GÓC DƯỚI) */
+        /* HUD TELEMETRY COCKPIT STRIP */
         .hud-telemetry-bar {
             background: rgba(10, 14, 22, 0.7);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
             border-radius: 24px;
-            padding: 22px 36px;
+            padding: 20px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 50px;
+            margin-top: 40px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
             animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
@@ -452,7 +471,7 @@
 
         .telemetry-node .val {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             font-weight: 900;
             color: #ffffff;
             display: flex;
@@ -501,20 +520,20 @@
             box-shadow: 0 0 16px var(--kia-red-glow);
         }
 
-        /* DOCK ĐIỀU KHIỂN VIDEO XE THẬT CỐ ĐỊNH GÓC TRÁI */
+        /* DOCK ĐIỀU KHIỂN VIDEO CỐ ĐỊNH GÓC TRÁI */
         .floating-antigravity-dock {
             position: fixed;
             bottom: 30px;
-            left: 50px;
+            left: 40px;
             z-index: 50;
             background: rgba(10, 14, 22, 0.75);
             backdrop-filter: blur(20px);
             border: 1px solid var(--border-glass);
             border-radius: 20px;
-            padding: 12px 18px;
+            padding: 10px 16px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
         }
 
@@ -522,9 +541,9 @@
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.14);
             color: #ffffff;
-            padding: 9px 16px;
+            padding: 9px 14px;
             border-radius: 12px;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -544,11 +563,12 @@
             box-shadow: 0 0 14px var(--kia-red-glow);
         }
 
-        /* SECTION STUDIO XE THẬT HÌNH ẢNH 4K (SPATIAL REAL-CAR SHOWROOM) */
-        .spatial-showroom-section {
-            padding: 120px 80px 80px 80px;
+        /* SECTION TIÊU CHUẨN CONTAINER CHUNG */
+        .page-section {
+            padding: 110px 60px;
             max-width: 1440px;
             margin: 0 auto;
+            position: relative;
         }
 
         .section-eyebrow {
@@ -557,7 +577,7 @@
             font-weight: 800;
             letter-spacing: 3.5px;
             text-transform: uppercase;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -565,20 +585,31 @@
 
         .section-headline {
             font-family: 'Outfit', sans-serif;
-            font-size: 3.2rem;
+            font-size: 3rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -0.5px;
             line-height: 1.15;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
+        .section-subtext {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            max-width: 720px;
+            margin-bottom: 40px;
+        }
+
+        /* ================================================================
+           SECTION 1: SPATIAL SHOWROOM ẢNH THỰC TẾ 4K
+        ================================================================ */
         .showroom-hologram-stage {
             background: rgba(10, 14, 22, 0.65);
             backdrop-filter: blur(28px);
             border: 1px solid var(--border-glass);
             border-radius: 32px;
-            padding: 40px;
+            padding: 36px;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15);
             position: relative;
         }
@@ -586,8 +617,8 @@
         .stage-tabs-row {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
         }
 
@@ -595,9 +626,9 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.12);
             color: rgba(255, 255, 255, 0.75);
-            padding: 12px 24px;
+            padding: 11px 22px;
             border-radius: 30px;
-            font-size: 0.86rem;
+            font-size: 0.84rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -618,10 +649,9 @@
             box-shadow: 0 0 20px var(--kia-red-glow);
         }
 
-        /* Khung hiển thị ảnh xe thật với hiệu ứng kính Hologram */
         .hologram-viewport {
             width: 100%;
-            height: 580px;
+            height: 560px;
             border-radius: 22px;
             position: relative;
             overflow: hidden;
@@ -640,106 +670,968 @@
         }
 
         .hologram-viewport:hover img {
-            transform: scale(1.04);
+            transform: scale(1.03);
         }
 
-        /* Các điểm tương tác thông minh AR trên ảnh xe (AR Feature Hotspots) */
         .ar-hotspot {
             position: absolute;
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(234, 0, 41, 0.35);
-            border: 2px solid var(--kia-neon);
+            background: rgba(234, 0, 41, 0.85);
+            box-shadow: 0 0 20px var(--kia-red);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 15px var(--kia-red-glow);
-            animation: pulseHotspot 2s infinite ease-in-out;
-            transition: transform 0.2s ease;
-            z-index: 10;
+            color: #ffffff;
+            font-size: 0.75rem;
+            z-index: 5;
+            transition: transform 0.3s ease;
         }
 
         .ar-hotspot::after {
             content: '';
-            width: 10px;
-            height: 10px;
+            position: absolute;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            background: #ffffff;
+            border: 2px solid var(--kia-red);
+            animation: pulseRipple 1.8s infinite cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        @keyframes pulseHotspot {
-            0%, 100% { box-shadow: 0 0 12px var(--kia-neon); }
-            50% { box-shadow: 0 0 24px var(--kia-neon), 0 0 40px var(--kia-neon); }
+        @keyframes pulseRipple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.6); opacity: 0; }
         }
 
         .hotspot-tag {
             position: absolute;
-            bottom: calc(100% + 12px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(6, 8, 13, 0.92);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--kia-neon);
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 0.78rem;
-            font-weight: 700;
+            left: 44px;
             white-space: nowrap;
+            background: rgba(10, 14, 22, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 0.76rem;
+            font-weight: 700;
             color: #ffffff;
-            opacity: 0;
             pointer-events: none;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
         }
 
         .ar-hotspot:hover .hotspot-tag {
             opacity: 1;
-            transform: translateX(-50%) translateY(-4px);
+            transform: translateX(0);
         }
 
         .hologram-telemetry-badge {
             position: absolute;
-            bottom: 30px;
-            left: 36px;
-            background: rgba(6, 8, 13, 0.88);
+            bottom: 24px;
+            left: 24px;
+            background: rgba(10, 14, 22, 0.75);
             backdrop-filter: blur(16px);
-            border: 1px solid var(--border-glass);
-            padding: 16px 26px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 14px 22px;
             border-radius: 16px;
             display: flex;
             flex-direction: column;
             gap: 4px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            border-left: 3px solid var(--kia-red);
+            z-index: 6;
+            max-width: 440px;
         }
 
         .hologram-telemetry-badge .badge-title {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 800;
             color: #ffffff;
         }
+
         .hologram-telemetry-badge .badge-desc {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+
+        /* ================================================================
+           SECTION 2: ADAS LAB (TRUNG TÂM THỬ NGHIỆM AN TOÀN KIA DRIVE WISE)
+        ================================================================ */
+        .adas-interactive-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .lab-card {
+            background: rgba(10, 14, 22, 0.68);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .lab-card:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .lab-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .lab-card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lab-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(234, 0, 41, 0.15);
+            border: 1px solid rgba(234, 0, 41, 0.3);
+            color: var(--kia-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .lab-card-title h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .lab-status-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(0, 255, 170, 0.12);
+            color: var(--cyber-emerald);
+            border: 1px solid rgba(0, 255, 170, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lab-screen-viewport {
+            background: #020408;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            height: 240px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        /* 1. Màn hình đồng hồ số BVM */
+        .cluster-bvm-view {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 16px;
+            position: relative;
+            background: radial-gradient(circle, #0c1220 0%, #03060c 100%);
+        }
+
+        .dial-gauge {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .dial-gauge.camera-active {
+            border-color: var(--cyber-blue);
+            box-shadow: 0 0 25px var(--cyber-blue-glow);
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Road_view_from_car.jpg/640px-Road_view_from_car.jpg') center/cover;
+        }
+
+        .dial-gauge.camera-active::after {
+            content: 'CAMERA ĐIỂM MÙ TRỰC TIẾP';
+            position: absolute;
+            bottom: 6px;
+            font-size: 0.55rem;
+            font-weight: 800;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--cyber-blue);
+        }
+
+        .turn-signal-indicators {
+            position: absolute;
+            top: 14px;
+            display: flex;
+            gap: 60px;
+        }
+
+        .arrow-signal {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.2);
+            transition: color 0.2s ease;
+        }
+
+        .arrow-signal.blinking {
+            color: #00ffaa;
+            text-shadow: 0 0 16px #00ffaa;
+            animation: blinkAnim 0.7s infinite alternate;
+        }
+
+        @keyframes blinkAnim {
+            from { opacity: 0.2; }
+            to { opacity: 1; }
+        }
+
+        /* 2. Màn hình Radar FCA */
+        .radar-fca-view {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #08121f 0%, #010306 100%);
+        }
+
+        .radar-sweep-circle {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 1px dashed rgba(0, 210, 255, 0.25);
+            animation: radarRotate 4s linear infinite;
+        }
+
+        @keyframes radarRotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .fca-car-icon {
+            font-size: 2.2rem;
+            color: #ffffff;
+            z-index: 2;
+            transition: transform 0.5s ease;
+        }
+
+        .fca-obstacle-icon {
+            font-size: 1.6rem;
+            color: #ff3344;
+            position: absolute;
+            top: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .fca-distance-readout {
+            position: absolute;
+            bottom: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 800;
+            background: rgba(10, 14, 22, 0.85);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .fca-brake-alert {
+            position: absolute;
+            inset: 0;
+            background: rgba(234, 0, 41, 0.25);
+            border: 3px solid var(--kia-neon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .fca-brake-alert.triggered {
+            opacity: 1;
+            animation: alertPulse 0.4s infinite alternate;
+        }
+
+        @keyframes alertPulse {
+            from { background: rgba(234, 0, 41, 0.2); }
+            to { background: rgba(234, 0, 41, 0.6); }
+        }
+
+        /* 3. Màn hình SVM Camera 360 */
+        .svm-view-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            position: relative;
+        }
+
+        .svm-bird-eye {
+            width: 45%;
+            height: 100%;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background: #090e18;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .svm-car-top-view {
+            width: 42px;
+            height: 84px;
+            background: #1e293b;
+            border-radius: 10px;
+            border: 2px solid var(--cyber-blue);
+            position: relative;
+            box-shadow: 0 0 15px var(--cyber-blue-glow);
+        }
+
+        .svm-feed-cam {
+            width: 55%;
+            height: 100%;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 12px;
+            transition: background 0.4s ease;
+        }
+
+        .parking-guidelines-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* 4. Màn hình Giữ làn LFA */
+        .lfa-road-view {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: linear-gradient(to bottom, #050a14 0%, #0c182c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .lfa-road-perspective {
+            position: absolute;
+            width: 120px;
+            height: 100%;
+            border-left: 3px dashed var(--cyber-emerald);
+            border-right: 3px dashed var(--cyber-emerald);
+            transform: perspective(120px) rotateX(45deg);
+            box-shadow: inset 0 0 20px rgba(0, 255, 170, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .lfa-steering-icon {
+            font-size: 2.8rem;
+            color: #00ffaa;
+            z-index: 3;
+            transition: transform 0.5s ease;
+            text-shadow: 0 0 20px rgba(0, 255, 170, 0.7);
+        }
+
+        /* Nút tương tác điều khiển các phòng Lab */
+        .lab-actions-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-lab-action {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            padding: 9px 18px;
+            border-radius: 12px;
             font-size: 0.8rem;
-            color: var(--kia-red);
             font-weight: 700;
-            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-lab-action:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .btn-lab-action.active {
+            background: var(--kia-red);
+            border-color: var(--kia-red);
+            box-shadow: 0 0 16px var(--kia-red-glow);
+        }
+
+        /* ================================================================
+           SECTION 3: VIP COCKPIT LAB (THỬ KHOANG LÁI SỐ & TIỆN NGHI 64 MÀU)
+        ================================================================ */
+        .cockpit-simulator-stage {
+            background: rgba(10, 14, 22, 0.7);
+            backdrop-filter: blur(28px);
+            border: 1px solid var(--border-glass);
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+            position: relative;
+        }
+
+        .cockpit-visual-canvas {
+            background: #020407;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            height: 480px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Mô phỏng kính trời Panorama & bầu trời */
+        .sunroof-sky-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 42%;
+            background: radial-gradient(circle at 50% 30%, #162644 0%, #030814 100%);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.6s ease;
+        }
+
+        .sunroof-blind-shutter {
+            position: absolute;
+            inset: 0;
+            background: #0d121c;
+            border-bottom: 3px solid var(--border-glass);
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        /* SECTION MA TRẬN TÍNH NĂNG THƯỢNG LƯU (SPATIAL FEATURE MATRIX) */
-        .spatial-matrix-section {
-            padding: 100px 80px;
-            max-width: 1440px;
-            margin: 0 auto;
+        /* Dải đèn viền nội thất Mood Light 64 màu */
+        .ambient-mood-strip {
+            position: absolute;
+            top: 42%;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--mood-light-color);
+            box-shadow: 0 0 25px var(--mood-light-glow), 0 0 60px var(--mood-light-glow);
+            transition: all 0.5s ease;
+            z-index: 5;
         }
 
+        /* Đồng hồ cong màn hình đôi 12.3 inch */
+        .cockpit-dual-screen {
+            position: relative;
+            z-index: 6;
+            margin-top: 30px;
+            width: 90%;
+            height: 140px;
+            background: #060910;
+            border: 2px solid rgba(255, 255, 255, 0.16);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 10px;
+        }
+
+        .cockpit-dual-screen .cluster-part,
+        .cockpit-dual-screen .infotainment-part {
+            height: 100%;
+            border-radius: 10px;
+            background: #0b111e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .cockpit-dual-screen .cluster-part {
+            width: 48%;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .cockpit-dual-screen .infotainment-part {
+            width: 48%;
+            position: relative;
+        }
+
+        /* Equalizer âm thanh 12 loa Bose */
+        .bose-equalizer-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 48px;
+            margin-top: 6px;
+        }
+
+        .eq-bar {
+            width: 6px;
+            background: var(--mood-light-color);
+            border-radius: 4px;
+            height: 12px;
+            transition: height 0.1s ease;
+            box-shadow: 0 0 8px var(--mood-light-glow);
+        }
+
+        /* Mô hình ghế VIP có làm mát/sưởi */
+        .cockpit-seat-view {
+            position: relative;
+            z-index: 6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .seat-badge-box {
+            background: rgba(10, 14, 22, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 18px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .seat-badge-box.cooling {
+            border-color: var(--cyber-blue);
+            box-shadow: 0 0 20px var(--cyber-blue-glow);
+        }
+
+        .seat-badge-box.heating {
+            border-color: #ff3344;
+            box-shadow: 0 0 20px rgba(255, 51, 68, 0.5);
+        }
+
+        /* Cột điều khiển bên phải của Cockpit Lab */
+        .cockpit-controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .control-group-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .control-group-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Bảng màu Mood Light */
+        .mood-color-palette {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .color-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.15);
+        }
+
+        .color-dot.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 20px currentColor;
+            transform: scale(1.18);
+        }
+
+        /* Điều khiển ghế làm mát / sưởi */
+        .seat-control-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-climate-seat {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-climate-seat:hover {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .btn-climate-seat.active-cool {
+            background: rgba(0, 210, 255, 0.2);
+            border-color: var(--cyber-blue);
+            color: var(--cyber-blue);
+            box-shadow: 0 0 16px var(--cyber-blue-glow);
+        }
+
+        .btn-climate-seat.active-heat {
+            background: rgba(234, 0, 41, 0.2);
+            border-color: var(--kia-neon);
+            color: var(--kia-neon);
+            box-shadow: 0 0 16px var(--kia-red-glow);
+        }
+
+        /* Thanh kéo cửa sổ trời Panorama */
+        .slider-sunroof-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sunroof-range-input {
+            width: 100%;
+            accent-color: var(--kia-red);
+            height: 6px;
+            cursor: pointer;
+        }
+
+        /* ================================================================
+           SECTION 4: BẢNG SO SÁNH & THÔNG SỐ KỸ THUẬT TOÀN DIỆN
+        ================================================================ */
+        .specs-tabs-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .spec-tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spec-tab-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+        }
+
+        .spec-tab-btn.active {
+            background: var(--kia-red);
+            border-color: var(--kia-red);
+            color: #ffffff;
+            box-shadow: 0 0 20px var(--kia-red-glow);
+        }
+
+        .spec-content-panel {
+            background: rgba(10, 14, 22, 0.7);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: 28px;
+            padding: 36px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .spec-table-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .spec-row-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: background 0.25s ease;
+        }
+
+        .spec-row-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .spec-row-item .spec-prop {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .spec-row-item .spec-val {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+        .spec-row-item .spec-val.highlight-val {
+            color: var(--kia-neon);
+        }
+
+        /* ================================================================
+           SECTION 5: CÔNG CỤ DỰ TOÁN GIÁ LĂN BÁNH & TRẢ GÓP TRỰC QUAN
+        ================================================================ */
+        .calculator-deck {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+            background: rgba(10, 14, 22, 0.75);
+            backdrop-filter: blur(28px);
+            border: 1px solid var(--border-glass);
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85);
+        }
+
+        .calc-input-column {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .calc-field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .calc-field-group label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .calc-select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .calc-select option {
+            background: #0d121c;
+            color: #fff;
+        }
+
+        .calc-slider-range {
+            width: 100%;
+            accent-color: var(--kia-red);
+            height: 6px;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
+        .calc-result-column {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .calc-breakdown-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .calc-breakdown-list li {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
+        }
+
+        .calc-breakdown-list li span.val {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .total-price-banner {
+            background: linear-gradient(135deg, rgba(234, 0, 41, 0.15) 0%, rgba(255, 25, 67, 0.05) 100%);
+            border: 1px solid rgba(234, 0, 41, 0.4);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .total-price-banner .price-tagline {
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--kia-neon);
+            margin-bottom: 6px;
+        }
+
+        .total-price-banner .price-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .installment-summary-box {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .installment-summary-box .sub-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--cyber-blue);
+        }
+
+        .installment-summary-box .sub-label {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .btn-calc-cta {
+            width: 100%;
+            padding: 16px;
+            background: var(--kia-red);
+            border: none;
+            border-radius: 14px;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            box-shadow: 0 6px 24px var(--kia-red-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-calc-cta:hover {
+            background: #ff1943;
+            transform: translateY(-2px);
+        }
+
+        /* ================================================================
+           SECTION 6: MA TRẬN 6 ĐẶC QUYỀN TRÊN BẢN K5 2.0 PREMIUM
+        ================================================================ */
         .matrix-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            margin-top: 50px;
+            gap: 24px;
         }
 
         .matrix-card {
@@ -747,116 +1639,99 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--border-glass);
             border-radius: 24px;
-            padding: 38px 32px;
+            padding: 34px 28px;
+            transition: all 0.35s ease;
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .matrix-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--kia-red), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
 
         .matrix-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(234, 0, 41, 0.5);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 25px rgba(234, 0, 41, 0.2);
-        }
-
-        .matrix-card:hover::before {
-            opacity: 1;
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(234, 0, 41, 0.2);
         }
 
         .matrix-icon-box {
-            width: 64px;
-            height: 64px;
-            border-radius: 18px;
-            background: rgba(234, 0, 41, 0.12);
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: rgba(234, 0, 41, 0.15);
             border: 1px solid rgba(234, 0, 41, 0.35);
+            color: var(--kia-neon);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
-            color: var(--kia-red);
-            margin-bottom: 24px;
-            transition: all 0.3s ease;
-        }
-
-        .matrix-card:hover .matrix-icon-box {
-            background: var(--kia-red);
-            color: #ffffff;
-            box-shadow: 0 0 24px var(--kia-red-glow);
+            font-size: 1.4rem;
+            margin-bottom: 22px;
         }
 
         .matrix-card h3 {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.45rem;
+            font-size: 1.28rem;
             font-weight: 800;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             color: #ffffff;
         }
 
         .matrix-card p {
+            font-size: 0.92rem;
             color: var(--text-dim);
-            font-size: 0.95rem;
-            line-height: 1.7;
+            line-height: 1.6;
         }
 
-        /* SECTION SO SÁNH BẢNG GIÁ VIP */
-        .vip-pricing-section {
-            padding: 80px 80px 140px 80px;
-            max-width: 1440px;
-            margin: 0 auto;
-        }
-
+        /* ================================================================
+           SECTION 7: BẢNG GIÁ VIP 3 PHIÊN BẢN
+        ================================================================ */
         .pricing-deck {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 50px;
+            gap: 24px;
+            align-items: stretch;
         }
 
         .pricing-pod {
-            background: rgba(10, 14, 22, 0.65);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 14, 22, 0.7);
+            backdrop-filter: blur(24px);
             border: 1px solid var(--border-glass);
-            border-radius: 24px;
-            padding: 40px 32px;
+            border-radius: 28px;
+            padding: 36px 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative;
             transition: all 0.35s ease;
+            position: relative;
+        }
+
+        .pricing-pod:hover {
+            border-color: rgba(255, 255, 255, 0.35);
+            transform: translateY(-6px);
         }
 
         .pricing-pod.featured {
             border: 2px solid var(--kia-red);
-            background: linear-gradient(180deg, rgba(234, 0, 41, 0.16) 0%, rgba(10, 14, 22, 0.8) 65%);
-            box-shadow: 0 20px 50px rgba(234, 0, 41, 0.3);
+            background: rgba(15, 20, 32, 0.82);
+            box-shadow: 0 25px 60px rgba(234, 0, 41, 0.25);
             transform: scale(1.03);
+        }
+
+        .pricing-pod.featured:hover {
+            transform: scale(1.05) translateY(-6px);
         }
 
         .featured-ribbon {
             position: absolute;
             top: -14px;
-            right: 28px;
+            left: 50%;
+            transform: translateX(-50%);
             background: linear-gradient(135deg, var(--kia-red), #ff2a55);
             color: #ffffff;
             font-size: 0.72rem;
             font-weight: 900;
-            padding: 5px 16px;
+            letter-spacing: 2px;
+            padding: 5px 18px;
             border-radius: 20px;
-            letter-spacing: 1.5px;
             text-transform: uppercase;
-            box-shadow: 0 4px 16px var(--kia-red-glow);
+            box-shadow: 0 4px 15px var(--kia-red-glow);
         }
 
         .pod-title {
@@ -864,30 +1739,29 @@
             font-size: 1.6rem;
             font-weight: 800;
             margin-bottom: 6px;
-            color: #ffffff;
         }
 
         .pod-engine {
-            font-size: 0.88rem;
-            color: rgba(255, 255, 255, 0.55);
-            margin-bottom: 24px;
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            margin-bottom: 22px;
         }
 
         .pod-price {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 900;
-            color: var(--kia-red);
-            margin-bottom: 28px;
+            color: #ffffff;
+            margin-bottom: 26px;
             display: flex;
             align-items: baseline;
-            gap: 6px;
+            gap: 8px;
         }
 
         .pod-price span {
             font-size: 1rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.75);
+            color: var(--kia-red);
+            font-weight: 700;
         }
 
         .pod-checklist {
@@ -895,56 +1769,56 @@
             display: flex;
             flex-direction: column;
             gap: 14px;
-            margin-bottom: 32px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 24px;
+            margin-bottom: 34px;
         }
 
         .pod-checklist li {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.82);
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
         .pod-checklist li i {
-            color: #00e676;
-            font-size: 0.85rem;
+            color: var(--kia-red);
+            font-size: 0.95rem;
         }
 
         .btn-select-pod {
             width: 100%;
+            padding: 14px;
             background: rgba(255, 255, 255, 0.08);
-            color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 15px 0;
-            border-radius: 12px;
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 0.88rem;
             font-weight: 800;
-            font-size: 0.92rem;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .pricing-pod:hover {
-            transform: translateY(-8px);
-        }
-
-        .pricing-pod.featured .btn-select-pod,
-        .btn-select-pod:hover {
+        .pricing-pod.featured .btn-select-pod {
             background: var(--kia-red);
             border-color: var(--kia-red);
-            box-shadow: 0 6px 24px var(--kia-red-glow);
+            box-shadow: 0 6px 20px var(--kia-red-glow);
         }
 
-        /* MODAL ĐẶT LỊCH LÁI THỬ VIP */
+        .btn-select-pod:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* ================================================================
+           MODAL ĐẶT LỊCH LÁI THỬ VIP
+        ================================================================ */
         .vip-modal-overlay {
             position: fixed;
             inset: 0;
             background: rgba(3, 5, 8, 0.88);
-            backdrop-filter: blur(16px);
+            backdrop-filter: blur(24px);
             z-index: 200;
             display: flex;
             align-items: center;
@@ -965,7 +1839,7 @@
             border-radius: 28px;
             width: 90%;
             max-width: 540px;
-            padding: 42px 38px;
+            padding: 40px 36px;
             position: relative;
             transform: scale(0.92);
             transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -978,8 +1852,8 @@
 
         .btn-dismiss {
             position: absolute;
-            top: 24px;
-            right: 24px;
+            top: 22px;
+            right: 22px;
             background: transparent;
             border: none;
             color: rgba(255, 255, 255, 0.6);
@@ -990,12 +1864,12 @@
         .btn-dismiss:hover { color: #ffffff; }
 
         .form-group-row {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-group-row label {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.2px;
@@ -1005,7 +1879,7 @@
 
         .field-input, .field-select {
             width: 100%;
-            padding: 14px 18px;
+            padding: 13px 18px;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.16);
             border-radius: 12px;
@@ -1028,19 +1902,19 @@
 
         .btn-submit-vip {
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             background: var(--kia-red);
             border: none;
             border-radius: 12px;
             color: #ffffff;
             font-weight: 800;
-            font-size: 1.05rem;
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             cursor: pointer;
             box-shadow: 0 6px 24px var(--kia-red-glow);
             transition: all 0.3s ease;
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .btn-submit-vip:hover {
@@ -1052,44 +1926,48 @@
         footer {
             background: rgba(3, 5, 8, 0.98);
             border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 50px 80px;
+            padding: 50px 60px;
             text-align: center;
             color: rgba(255, 255, 255, 0.45);
             font-size: 0.88rem;
         }
 
-        /* Responsive */
+        /* Responsive Breakpoints */
         @media (max-width: 1200px) {
-            .hero-section { padding: 140px 40px 40px 40px; }
-            .spatial-showroom-section, .spatial-matrix-section, .vip-pricing-section { padding: 80px 40px; }
+            .hero-section { padding: 130px 40px 40px 40px; }
+            .page-section { padding: 80px 40px; }
             h1.hero-title { font-size: 3.8rem; }
+            .adas-interactive-container { grid-template-columns: 1fr; }
+            .cockpit-simulator-stage { grid-template-columns: 1fr; }
+            .calculator-deck { grid-template-columns: 1fr; }
             .matrix-grid { grid-template-columns: repeat(2, 1fr); }
             .pricing-deck { grid-template-columns: 1fr; }
             .pricing-pod.featured { transform: none; }
+            .spec-table-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 768px) {
-            header { width: calc(100% - 30px); padding: 12px 20px; }
+            header { width: calc(100% - 24px); padding: 10px 16px; top: 12px; }
             nav ul { display: none; }
             .hero-section { padding: 110px 20px 30px 20px; }
             h1.hero-title { font-size: 2.6rem; }
-            .hud-telemetry-bar { flex-direction: column; gap: 20px; align-items: flex-start; }
+            .hud-telemetry-bar { flex-direction: column; gap: 16px; align-items: flex-start; }
             .hud-divider { display: none; }
             .matrix-grid { grid-template-columns: 1fr; }
             .floating-antigravity-dock { left: 15px; right: 15px; bottom: 15px; justify-content: space-between; }
             .hologram-viewport { height: 320px; }
-            .spatial-showroom-section, .spatial-matrix-section, .vip-pricing-section { padding: 50px 20px; }
+            .page-section { padding: 50px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ĐÈN RỌI QUANG HỌC THEO CON TRỎ CHUỘT (ANTIGRAVITY CURSOR GLOW) -->
+    <!-- ĐÈN RỌI THEO CON TRỎ CHUỘT (ANTIGRAVITY CURSOR GLOW) -->
     <div class="cursor-glow" id="cursor-glow"></div>
 
     <!-- KHUNG NỀN KHÔNG TRỌNG LỰC: VIDEO XE THẬT + PARTICLES LƯỢNG TỬ -->
     <div class="antigravity-bg-container">
-        <!-- Canvas hạt bụi không trọng lực chuyển động phản ứng với chuột -->
+        <!-- Canvas hạt bụi lượng tử bay ngược không trọng lực -->
         <canvas id="particle-canvas"></canvas>
 
         <!-- Sàn lưới Cyber uốn cong 3D -->
@@ -1105,7 +1983,7 @@
             </video>
         </div>
 
-        <!-- Lớp phủ điện ảnh làm nổi bật văn bản -->
+        <!-- Lớp phủ điện ảnh làm nổi bật giao diện -->
         <div class="cinematic-vignette"></div>
     </div>
 
@@ -1142,15 +2020,18 @@
 
             <nav>
                 <ul>
-                    <li><a href="#hero" class="active">Khám Phá</a></li>
-                    <li><a href="#showroom">Bộ Sưu Tập Xe Thật</a></li>
-                    <li><a href="#features">Công Nghệ</a></li>
-                    <li><a href="#pricing">Bảng Giá VIP</a></li>
+                    <li><a href="#hero" class="active"><i class="fa-solid fa-house"></i> Khám Phá</a></li>
+                    <li><a href="#showroom"><i class="fa-solid fa-camera"></i> Showroom 4K</a></li>
+                    <li><a href="#adas-lab"><i class="fa-solid fa-shield-halved"></i> Thử ADAS</a></li>
+                    <li><a href="#cockpit-lab"><i class="fa-solid fa-couch"></i> Thử Khoang Lái</a></li>
+                    <li><a href="#specs-sheet"><i class="fa-solid fa-list-check"></i> Thông Số</a></li>
+                    <li><a href="#estimator"><i class="fa-solid fa-calculator"></i> Tính Lăn Bánh</a></li>
+                    <li><a href="#pricing"><i class="fa-solid fa-tag"></i> Bảng Giá</a></li>
                 </ul>
             </nav>
 
-            <a href="#pricing" class="nav-btn-vip" id="btn-header-order">
-                <i class="fa-solid fa-steering-wheel"></i> Đăng Ký Lái Thử
+            <a href="#pricing" class="nav-btn-vip btn-trigger-modal" data-ver="K5 2.0 Premium">
+                <i class="fa-solid fa-bolt"></i> Lái Thử VIP
             </a>
         </header>
 
@@ -1167,13 +2048,16 @@
                 </h1>
                 
                 <p class="hero-lead">
-                    Định hình lại quy chuẩn sedan hạng D với phong cách Fastback thể thao phóng khoáng, dải đèn "Heartbeat" nhịp tim mê hoặc, cửa sổ trời toàn cảnh Panorama và dàn âm thanh 12 loa Bose đỉnh cao.
+                    Định hình lại chuẩn mực sedan thượng lưu với đường nét Fastback coupe phóng khoáng, dải LED "Heartbeat" nhịp tim mê hoặc, cửa sổ trời toàn cảnh Panorama, 12 loa Bose cao cấp và gói an toàn chủ động thông minh Kia Drive Wise.
                 </p>
 
                 <div class="hero-action-row">
                     <button class="btn-launch-warp" id="btn-warp-booking">
-                        <i class="fa-solid fa-bolt-lightning"></i> Trải Nghiệm Lái Thử
+                        <i class="fa-solid fa-bolt-lightning"></i> Đặt Lịch Lái Thử VIP
                     </button>
+                    <a href="#adas-lab" class="btn-ghost-telemetry">
+                        <i class="fa-solid fa-microchip"></i> Thử Nghiệm Tính Năng ADAS
+                    </a>
                     <a href="#showroom" class="btn-ghost-telemetry">
                         <i class="fa-solid fa-camera-retro"></i> Xem Ảnh Xe Thật 4K
                     </a>
@@ -1214,17 +2098,17 @@
             </div>
         </section>
 
-        <!-- SECTION SPATIAL SHOWROOM ẢNH XE THẬT 4K -->
-        <section class="spatial-showroom-section" id="showroom">
+        <!-- SECTION 1: SHOWROOM XE THẬT 4K -->
+        <section class="page-section" id="showroom">
             <div class="section-eyebrow">
                 <i class="fa-solid fa-crosshairs"></i> Bộ Sưu Tập Xe Thật 100%
             </div>
             <h2 class="section-headline">Chiêm Ngưỡng Từng Góc Cạnh Thực Tế</h2>
+            <p class="section-subtext">Hình ảnh thực tế chân thực từ từng chi tiết ngoại thất cá mập Shark-Skin đến khoang nội thất bọc da cao cấp của KIA K5 Premium.</p>
 
             <div class="showroom-hologram-stage">
-                <!-- Bộ chọn góc chụp thực tế -->
                 <div class="stage-tabs-row">
-                    <button class="stage-pill active" data-img="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" data-title="Ngoại Thất Xanh Pacific / Mineral Blue" data-desc="Mũi xe cá mập Shark-Skin & Cụm đèn LED nhịp tim Heartbeat">
+                    <button class="stage-pill active" data-img="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" data-title="Ngoại Thất Xanh Mineral Blue" data-desc="Mũi xe cá mập Shark-Skin & Cụm đèn LED nhịp tim Heartbeat">
                         <i class="fa-solid fa-car-side"></i> Xanh Mineral Blue
                     </button>
                     <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/e/e2/2021_Kia_K5_GT-Line_in_Glacial_White_Pearl%2C_front_left.jpg" data-title="Ngoại Thất Trắng Ngọc Trai Glacial White" data-desc="Nước sơn ngọc trai đa lớp tôn vinh đường cong khí động học">
@@ -1241,42 +2125,671 @@
                     </button>
                 </div>
 
-                <!-- Khung hiển thị ảnh thực tế kèm Hotspots -->
                 <div class="hologram-viewport">
                     <img id="stage-main-photo" 
                          src="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" 
                          alt="KIA K5 Real Car 4K">
 
-                    <!-- Hotspot 1: Đèn Heartbeat -->
+                    <!-- Hotspots tương tác -->
                     <div class="ar-hotspot" style="top: 48%; left: 34%;">
                         <div class="hotspot-tag">⚡ Đèn DRL Heartbeat Nhịp Tim</div>
                     </div>
-
-                    <!-- Hotspot 2: Cửa sổ trời Panorama -->
                     <div class="ar-hotspot" style="top: 24%; left: 56%;">
                         <div class="hotspot-tag">🌌 Cửa Sổ Trời Toàn Cảnh Panorama</div>
                     </div>
-
-                    <!-- Hotspot 3: Mâm 18 inch -->
                     <div class="ar-hotspot" style="top: 65%; left: 78%;">
                         <div class="hotspot-tag">🛞 Mâm Hợp Kim 18 Inch Đa Chấu</div>
                     </div>
 
-                    <!-- Badge thông tin góc chụp -->
                     <div class="hologram-telemetry-badge">
-                        <span class="badge-title" id="stage-badge-title">Ngoại Thất Xanh Pacific / Mineral Blue</span>
+                        <span class="badge-title" id="stage-badge-title">Ngoại Thất Xanh Mineral Blue</span>
                         <span class="badge-desc" id="stage-badge-desc">Mũi xe cá mập Shark-Skin & Cụm đèn LED nhịp tim Heartbeat</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION MA TRẬN TÍNH NĂNG THƯỢNG LƯU -->
-        <section class="spatial-matrix-section" id="features">
+        <!-- SECTION 2: ADAS LAB - THỬ NGHIỆM AN TOÀN KIA DRIVE WISE -->
+        <section class="page-section" id="adas-lab">
             <div class="section-eyebrow">
-                <i class="fa-solid fa-microchip"></i> Đỉnh Cao Công Nghệ & Tiện Nghi
+                <i class="fa-solid fa-microchip"></i> Phòng Thử Nghiệm Công Nghệ
+            </div>
+            <h2 class="section-headline">Thử Nghiệm Trợ Lái An Toàn Kia Drive Wise</h2>
+            <p class="section-subtext">Trải nghiệm tương tác trực tiếp 4 công nghệ hỗ trợ người lái đỉnh cao được trang bị trên KIA K5 2.0 Premium trước khi cầm lái thực tế.</p>
+
+            <div class="adas-interactive-container">
+                <!-- LAB 1: BVM CAMERA ĐIỂM MÙ TRÊN ĐỒNG HỒ -->
+                <div class="lab-card">
+                    <div>
+                        <div class="lab-card-header">
+                            <div class="lab-card-title">
+                                <div class="lab-icon-box"><i class="fa-solid fa-eye"></i></div>
+                                <div>
+                                    <h3>BVM - Giám Sát Điểm Mù Ảo</h3>
+                                    <div style="font-size: 0.8rem; color: var(--text-dim);">Blind-Spot View Monitor</div>
+                                </div>
+                            </div>
+                            <span class="lab-status-badge" id="bvm-status"><i class="fa-solid fa-circle"></i> Sẵn sàng</span>
+                        </div>
+
+                        <!-- Màn hình cụm đồng hồ tương tác -->
+                        <div class="lab-screen-viewport">
+                            <div class="cluster-bvm-view">
+                                <div class="turn-signal-indicators">
+                                    <i class="fa-solid fa-arrow-left arrow-signal" id="sig-left"></i>
+                                    <i class="fa-solid fa-arrow-right arrow-signal" id="sig-right"></i>
+                                </div>
+
+                                <!-- Đồng hồ vòng tua (Bên Trái) -->
+                                <div class="dial-gauge" id="gauge-left">
+                                    <span style="font-size: 0.72rem; color: rgba(255,255,255,0.6);">VÒNG TUA</span>
+                                    <span style="font-size: 1.5rem; font-weight: 900;" id="rpm-text">2.4</span>
+                                    <span style="font-size: 0.65rem; color: var(--kia-neon);">x1000 RPM</span>
+                                </div>
+
+                                <!-- Đồng hồ tốc độ (Bên Phải) -->
+                                <div class="dial-gauge" id="gauge-right">
+                                    <span style="font-size: 0.72rem; color: rgba(255,255,255,0.6);">TỐC ĐỘ</span>
+                                    <span style="font-size: 1.5rem; font-weight: 900;" id="speed-bvm-text">85</span>
+                                    <span style="font-size: 0.65rem; color: var(--cyber-blue);">KM/H</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="font-size: 0.84rem; color: var(--text-dim); margin-bottom: 12px;">
+                            👉 Thử gạt xi-nhan để xem camera hông xe chiếu trực tiếp góc khuất lên cụm đồng hồ 12.3":
+                        </div>
+                        <div class="lab-actions-row">
+                            <button class="btn-lab-action" id="btn-sig-left">
+                                <i class="fa-solid fa-arrow-left"></i> Xi-nhan Trái (BVM Trái)
+                            </button>
+                            <button class="btn-lab-action" id="btn-sig-off">
+                                <i class="fa-solid fa-ban"></i> Tắt Xi-nhan
+                            </button>
+                            <button class="btn-lab-action" id="btn-sig-right">
+                                <i class="fa-solid fa-arrow-right"></i> Xi-nhan Phải (BVM Phải)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LAB 2: FCA PHANH KHẨN CẤP TRÁNH VA CHẠM -->
+                <div class="lab-card">
+                    <div>
+                        <div class="lab-card-header">
+                            <div class="lab-card-title">
+                                <div class="lab-icon-box"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                <div>
+                                    <h3>FCA - Hỗ Trợ Tránh Va Chạm Trước</h3>
+                                    <div style="font-size: 0.8rem; color: var(--text-dim);">Forward Collision-Avoidance Assist</div>
+                                </div>
+                            </div>
+                            <span class="lab-status-badge" id="fca-status"><i class="fa-solid fa-shield"></i> Radar Hoạt Động</span>
+                        </div>
+
+                        <!-- Màn hình Radar FCA -->
+                        <div class="lab-screen-viewport">
+                            <div class="radar-fca-view">
+                                <div class="radar-sweep-circle"></div>
+                                <i class="fa-solid fa-truck-moving fca-obstacle-icon" id="fca-obstacle"></i>
+                                <i class="fa-solid fa-car-side fca-car-icon" id="fca-ego-car" style="transform: rotate(-90deg);"></i>
+                                <div class="fca-distance-readout" id="fca-dist-readout">Khoảng cách: <span>75m</span> (An toàn)</div>
+
+                                <!-- Cảnh báo phanh khẩn cấp khẩn thiết -->
+                                <div class="fca-brake-alert" id="fca-alert-overlay">
+                                    <i class="fa-solid fa-circle-exclamation" style="font-size: 2.2rem; color: #ff1943;"></i>
+                                    <div style="font-weight: 900; font-size: 1.1rem; color: #fff;">CẢNH BÁO NGUY HIỂM!</div>
+                                    <div style="font-size: 0.82rem; color: #fff; background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 8px;">
+                                        ⚡ HỆ THỐNG ĐÃ TỰ ĐỘNG PHANH KHẨN CẤP AN TOÀN
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="font-size: 0.84rem; color: var(--text-dim); margin-bottom: 12px;">
+                            👉 Nhấn tăng tốc để thử nghiệm hệ thống Radar quét chướng ngại vật & tự động can thiệp phanh:
+                        </div>
+                        <div class="lab-actions-row">
+                            <button class="btn-lab-action active" id="btn-fca-approach">
+                                <i class="fa-solid fa-gauge-high"></i> Tăng Tốc Tiếp Cận Chướng Ngại Vật
+                            </button>
+                            <button class="btn-lab-action" id="btn-fca-reset">
+                                <i class="fa-solid fa-rotate-right"></i> Thiết Lập Lại Cự Ly
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LAB 3: SVM CAMERA 360 ĐỖ XE THÔNG MINH -->
+                <div class="lab-card">
+                    <div>
+                        <div class="lab-card-header">
+                            <div class="lab-card-title">
+                                <div class="lab-icon-box"><i class="fa-solid fa-camera-rotate"></i></div>
+                                <div>
+                                    <h3>SVM - Camera Toàn Cảnh 360°</h3>
+                                    <div style="font-size: 0.8rem; color: var(--text-dim);">Surround View Monitor</div>
+                                </div>
+                            </div>
+                            <span class="lab-status-badge"><i class="fa-solid fa-video"></i> 4 Camera HD</span>
+                        </div>
+
+                        <!-- Màn hình SVM -->
+                        <div class="lab-screen-viewport">
+                            <div class="svm-view-container">
+                                <!-- Mô phỏng góc nhìn trên cao Bird's-Eye -->
+                                <div class="svm-bird-eye">
+                                    <div class="svm-car-top-view"></div>
+                                    <div style="font-size: 0.65rem; color: var(--cyber-blue); margin-top: 8px; font-weight: 700;">TOÀN CẢNH 360°</div>
+                                </div>
+                                <!-- Feed camera trực tiếp góc chọn -->
+                                <div class="svm-feed-cam" id="svm-cam-feed" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Road_view_from_car.jpg/640px-Road_view_from_car.jpg');">
+                                    <svg class="parking-guidelines-svg" viewBox="0 0 200 150">
+                                        <line x1="30" y1="140" x2="65" y2="70" stroke="#00ffaa" stroke-width="2.5" stroke-dasharray="4,4"/>
+                                        <line x1="170" y1="140" x2="135" y2="70" stroke="#00ffaa" stroke-width="2.5" stroke-dasharray="4,4"/>
+                                        <line x1="45" y1="110" x2="155" y2="110" stroke="#ffcc00" stroke-width="2"/>
+                                        <line x1="60" y1="85" x2="140" y2="85" stroke="#ff3344" stroke-width="2"/>
+                                    </svg>
+                                    <div style="font-size: 0.72rem; font-weight: 800; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 6px;" id="svm-label-mode">
+                                        GÓC NHÌN: CAMERA LÙI + VẠCH DẪN HƯỚNG
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="font-size: 0.84rem; color: var(--text-dim); margin-bottom: 12px;">
+                            👉 Chuyển đổi các góc quay camera để mô phỏng đỗ xe an toàn:
+                        </div>
+                        <div class="lab-actions-row">
+                            <button class="btn-lab-action active" data-svm="rear">Camera Lùi</button>
+                            <button class="btn-lab-action" data-svm="front">Camera Đầu Xe</button>
+                            <button class="btn-lab-action" data-svm="wheel">Soi Vành Bánh Xe</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LAB 4: LFA & LKA GIỮ LÀN ĐƯỜNG TỰ ĐỘNG -->
+                <div class="lab-card">
+                    <div>
+                        <div class="lab-card-header">
+                            <div class="lab-card-title">
+                                <div class="lab-icon-box"><i class="fa-solid fa-road"></i></div>
+                                <div>
+                                    <h3>LFA & LKA - Hỗ Trợ Bám Làn Tự Động</h3>
+                                    <div style="font-size: 0.8rem; color: var(--text-dim);">Lane Following & Keeping Assist</div>
+                                </div>
+                            </div>
+                            <span class="lab-status-badge" id="lfa-status-badge"><i class="fa-solid fa-circle"></i> Đang Can Thiệp</span>
+                        </div>
+
+                        <!-- Màn hình LFA -->
+                        <div class="lab-screen-viewport">
+                            <div class="lfa-road-view">
+                                <div class="lfa-road-perspective" id="lfa-lanes"></div>
+                                <i class="fa-solid fa-steering-wheel lfa-steering-icon" id="lfa-steering"></i>
+                                <div style="position: absolute; bottom: 12px; font-size: 0.76rem; font-weight: 800; color: #00ffaa; background: rgba(0,0,0,0.6); padding: 4px 12px; border-radius: 12px;" id="lfa-text">
+                                    VÔ LĂNG TỰ CÂN CHỈNH TRUNG TÂM LÀN ĐƯỜNG
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="font-size: 0.84rem; color: var(--text-dim); margin-bottom: 12px;">
+                            👉 Thử mô phỏng xe chớm lấn làn sang trái hoặc phải để xem xe tự đánh lái về giữa:
+                        </div>
+                        <div class="lab-actions-row">
+                            <button class="btn-lab-action" id="btn-drift-left">Chớm Lệch Trái</button>
+                            <button class="btn-lab-action active" id="btn-auto-center">Tự Động Cân Giữa Làn</button>
+                            <button class="btn-lab-action" id="btn-drift-right">Chớm Lệch Phải</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: VIP COCKPIT LAB - THỬ KHOANG LÁI SỐ & TIỆN NGHI 64 MÀU -->
+        <section class="page-section" id="cockpit-lab">
+            <div class="section-eyebrow">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Tiện Nghi Hạng Thương Gia
+            </div>
+            <h2 class="section-headline">Phòng Thử Nghiệm Khoang Lái Số KIA K5</h2>
+            <p class="section-subtext">Khám phá và tùy chỉnh các tiện nghi cao cấp chỉ có trên bản K5 2.0 Premium: đèn viền 64 màu Mood Light, âm thanh 12 loa Bose, thông gió làm mát ghế và cửa sổ trời toàn cảnh.</p>
+
+            <div class="cockpit-simulator-stage">
+                <!-- KHUNG MÔ PHỎNG NỘI THẤT TRỰC QUAN -->
+                <div class="cockpit-visual-canvas">
+                    <!-- Trần xe và cửa sổ trời Panorama -->
+                    <div class="sunroof-sky-view">
+                        <div class="sunroof-blind-shutter" id="sunroof-shutter">
+                            <i class="fa-solid fa-shield" style="margin-right: 8px;"></i> Rèm Kính Panorama Đang Đóng Kín
+                        </div>
+                    </div>
+
+                    <!-- Dải đèn viền nội thất Mood Light 64 màu phát sáng -->
+                    <div class="ambient-mood-strip" id="ambient-strip"></div>
+
+                    <!-- Cụm đồng hồ màn hình cong kỹ thuật số kép 12.3 inch -->
+                    <div class="cockpit-dual-screen">
+                        <div class="cluster-part">
+                            <div style="font-size: 0.65rem; color: var(--mood-light-color); font-weight: 800; letter-spacing: 1px;">DIGITAL CLUSTER 12.3"</div>
+                            <div style="font-size: 1.6rem; font-weight: 900; color: #fff; margin: 4px 0;">120 <span style="font-size: 0.7rem; color: var(--mood-light-color);">KM/H</span></div>
+                            <div style="font-size: 0.65rem; color: rgba(255,255,255,0.6);">Chế độ: SPORT DYNAMICS</div>
+                        </div>
+
+                        <div class="infotainment-part">
+                            <div style="font-size: 0.65rem; color: var(--mood-light-color); font-weight: 800; letter-spacing: 1px;">BOSE CENTERPOINT 12 SPEAKERS</div>
+                            <!-- Bars Equalizer chuyển động -->
+                            <div class="bose-equalizer-bars" id="eq-container">
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                            </div>
+                            <div style="font-size: 0.62rem; color: rgba(255,255,255,0.7); margin-top: 4px;" id="audio-profile-text">Hi-Fi Surround Studio</div>
+                        </div>
+                    </div>
+
+                    <!-- Ghế bọc da với tính năng làm mát / sưởi -->
+                    <div class="cockpit-seat-view">
+                        <div class="seat-badge-box" id="seat-driver-box">
+                            <i class="fa-solid fa-chair" style="font-size: 1.4rem;"></i>
+                            <div>
+                                <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">Ghế Lái Hạng D</div>
+                                <div style="font-size: 0.8rem; font-weight: 700;" id="seat-driver-state">Nhiệt độ bình thường (26°C)</div>
+                            </div>
+                        </div>
+
+                        <div class="seat-badge-box" id="seat-pass-box">
+                            <i class="fa-solid fa-chair" style="font-size: 1.4rem;"></i>
+                            <div>
+                                <div style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">Ghế Phụ Chỉnh Điện</div>
+                                <div style="font-size: 0.8rem; font-weight: 700;" id="seat-pass-state">Nhiệt độ bình thường (26°C)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BẢNG ĐIỀU KHIỂN TƯƠNG TÁC TIỆN NGHI -->
+                <div class="cockpit-controls-panel">
+                    <!-- 1. Đổi màu đèn nội thất Mood Light 64 màu -->
+                    <div class="control-group-box">
+                        <div class="control-group-title">
+                            <i class="fa-solid fa-palette"></i> Đèn Viền Nội Thất 64 Màu (Mood Light)
+                        </div>
+                        <div class="mood-color-palette">
+                            <div class="color-dot active" style="background: #00d2ff;" data-color="#00d2ff" data-name="Xanh Cyber Cyan" title="Cyber Cyan"></div>
+                            <div class="color-dot" style="background: #ea0029;" data-color="#ea0029" data-name="Đỏ Thể Thao Crimson" title="Crimson Red"></div>
+                            <div class="color-dot" style="background: #b537f2;" data-color="#b537f2" data-name="Tím Huyền Bí Neon" title="Neon Purple"></div>
+                            <div class="color-dot" style="background: #ffb703;" data-color="#ffb703" data-name="Vàng Hổ Phách Amber" title="Amber Gold"></div>
+                            <div class="color-dot" style="background: #00ffaa;" data-color="#00ffaa" data-name="Lục Bảo Emerald" title="Emerald Green"></div>
+                            <div class="color-dot" style="background: #ffffff;" data-color="#ffffff" data-name="Trắng Bắc Cực Pure Ice" title="Pure White"></div>
+                        </div>
+                        <div style="font-size: 0.78rem; color: var(--text-dim); margin-top: 10px;">
+                            Màu hiện tại: <strong id="mood-name-label" style="color: #00d2ff;">Xanh Cyber Cyan</strong>
+                        </div>
+                    </div>
+
+                    <!-- 2. Thử nghiệm chế độ âm thanh 12 loa Bose -->
+                    <div class="control-group-box">
+                        <div class="control-group-title">
+                            <i class="fa-solid fa-volume-high"></i> Dàn 12 Loa Bose Cao Cấp
+                        </div>
+                        <div class="lab-actions-row">
+                            <button class="btn-lab-action active" data-bose="centerpoint">
+                                <i class="fa-solid fa-compact-disc"></i> Centerpoint 360°
+                            </button>
+                            <button class="btn-lab-action" data-bose="concert">
+                                <i class="fa-solid fa-music"></i> Live Concert
+                            </button>
+                            <button class="btn-lab-action" data-bose="bass">
+                                <i class="fa-solid fa-bolt"></i> GT Sport Bass Boost
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Ghế sưởi & làm mát đa cấp độ -->
+                    <div class="control-group-box">
+                        <div class="control-group-title">
+                            <i class="fa-solid fa-temperature-three-quarters"></i> Làm Mát & Sưởi Ấm Ghế Trước
+                        </div>
+                        <div class="seat-control-row">
+                            <button class="btn-climate-seat" id="btn-cool-seat">
+                                <i class="fa-solid fa-snowflake" style="font-size: 1.2rem; color: var(--cyber-blue);"></i>
+                                <span>Làm Mát Gió Lạnh</span>
+                                <small id="cool-level-txt">Tắt</small>
+                            </button>
+                            <button class="btn-climate-seat" id="btn-heat-seat">
+                                <i class="fa-solid fa-fire" style="font-size: 1.2rem; color: #ff3344;"></i>
+                                <span>Sưởi Nhiệt Ấm Áp</span>
+                                <small id="heat-level-txt">Tắt</small>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Kéo mở cửa sổ trời toàn cảnh Panorama -->
+                    <div class="control-group-box">
+                        <div class="control-group-title">
+                            <i class="fa-solid fa-sun"></i> Cửa Sổ Trời Toàn Cảnh Panorama
+                        </div>
+                        <div class="slider-sunroof-container">
+                            <input type="range" class="sunroof-range-input" id="sunroof-slider" min="0" max="100" value="0">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim);">
+                                <span>0% (Đóng kín rèm trần)</span>
+                                <span id="sunroof-percent-txt" style="font-weight: 800; color: #fff;">0%</span>
+                                <span>100% (Mở ngắm bầu trời)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: BẢNG SO SÁNH & THÔNG SỐ KỸ THUẬT CHI TIẾT -->
+        <section class="page-section" id="specs-sheet">
+            <div class="section-eyebrow">
+                <i class="fa-solid fa-database"></i> Dữ Liệu Kỹ Thuật Chính Hãng
+            </div>
+            <h2 class="section-headline">Bảng Thông Số Kỹ Thuật KIA K5 2.0 Premium</h2>
+            <p class="section-subtext">Khám phá chi tiết các thông số kỹ thuật chuẩn xác được công bố bởi THACO KIA Việt Nam.</p>
+
+            <div class="specs-tabs-header">
+                <button class="spec-tab-btn active" data-tab="engine"><i class="fa-solid fa-engine"></i> Động Cơ & Vận Hành</button>
+                <button class="spec-tab-btn" data-tab="dimensions"><i class="fa-solid fa-ruler-combined"></i> Kích Thước & Khung Gầm</button>
+                <button class="spec-tab-btn" data-tab="exterior"><i class="fa-solid fa-car"></i> Ngoại Thất Fastback</button>
+                <button class="spec-tab-btn" data-tab="interior"><i class="fa-solid fa-couch"></i> Nội Thất & Tiện Nghi</button>
+                <button class="spec-tab-btn" data-tab="safety"><i class="fa-solid fa-shield-halved"></i> An Toàn Kia Drive Wise</button>
+            </div>
+
+            <div class="spec-content-panel">
+                <!-- TAB 1: ĐỘNG CƠ -->
+                <div class="spec-table-grid" id="spec-grid-engine">
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Loại động cơ</span>
+                        <span class="spec-val highlight-val">Xăng Nu 2.0L MPI Smartstream</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Dung tích xi lanh</span>
+                        <span class="spec-val">1,999 cc</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Công suất cực đại</span>
+                        <span class="spec-val highlight-val">150 mã lực @ 6,200 vòng/phút</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Mô-men xoắn cực đại</span>
+                        <span class="spec-val highlight-val">192 Nm @ 4,000 vòng/phút</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hộp số</span>
+                        <span class="spec-val">Tự động 6 cấp (6AT) êm ái</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hệ dẫn động</span>
+                        <span class="spec-val">Cầu trước (FWD) tối ưu độ bám</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Chế độ lái Drive Mode</span>
+                        <span class="spec-val">4 Chế độ: Comfort, Eco, Sport, Smart</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Dung tích bình nhiên liệu</span>
+                        <span class="spec-val">60 Lít</span>
+                    </div>
+                </div>
+
+                <!-- TAB 2: KÍCH THƯỚC -->
+                <div class="spec-table-grid" id="spec-grid-dimensions" style="display: none;">
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Dài x Rộng x Cao (mm)</span>
+                        <span class="spec-val highlight-val">4,905 x 1,860 x 1,465 (Dài nhất phân khúc D)</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Chiều dài cơ sở</span>
+                        <span class="spec-val highlight-val">2,850 mm (Rộng rãi khoang sau)</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Khoảng sáng gầm xe</span>
+                        <span class="spec-val">135 mm (Khí động học chuẩn coupe)</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Bán kính quay vòng tối thiểu</span>
+                        <span class="spec-val">5.45 m</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hệ thống treo trước</span>
+                        <span class="spec-val">Độc lập kiểu MacPherson</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hệ thống treo sau</span>
+                        <span class="spec-val highlight-val">Đa liên kết (Multi-link) êm ái</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hệ thống phanh</span>
+                        <span class="spec-val">Đĩa tản nhiệt trước / Đĩa đặc sau</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Thể tích khoang hành lý</span>
+                        <span class="spec-val">510 Lít (Mở cốp thông minh)</span>
+                    </div>
+                </div>
+
+                <!-- TAB 3: NGOẠI THẤT -->
+                <div class="spec-table-grid" id="spec-grid-exterior" style="display: none;">
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Thiết kế phong cách</span>
+                        <span class="spec-val highlight-val">Fastback Coupe Sedan thế hệ mới</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Cụm đèn pha chiếu sáng</span>
+                        <span class="spec-val highlight-val">Full-LED đa thấu kính tự động bật/tắt</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Đèn định vị ban ngày (DRL)</span>
+                        <span class="spec-val highlight-val">Dải LED "Heartbeat" nhịp tim sắc nét</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Cụm đèn hậu phía sau</span>
+                        <span class="spec-val">LED nét đứt dạng đồ họa nhịp tim liền mạch</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Mâm và lốp</span>
+                        <span class="spec-val">Hợp kim nhôm 18 inch phay 2 màu thể thao</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Cửa sổ trời</span>
+                        <span class="spec-val highlight-val">Toàn cảnh Panorama đóng/mở điện</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Gương chiếu hậu</span>
+                        <span class="spec-val">Chỉnh điện, gập điện tự động tích hợp sấy</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Cụm ống xả</span>
+                        <span class="spec-val">Ống xả kép mạ crom thể thao</span>
+                    </div>
+                </div>
+
+                <!-- TAB 4: NỘI THẤT -->
+                <div class="spec-table-grid" id="spec-grid-interior" style="display: none;">
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Chất liệu bọc ghế</span>
+                        <span class="spec-val highlight-val">Da cao cấp Martian Brown / Nâu sang trọng</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Ghế người lái</span>
+                        <span class="spec-val">Chỉnh điện 10 hướng + Nhớ 2 vị trí ngồi</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Ghế hành khách trước</span>
+                        <span class="spec-val">Chỉnh điện 8 hướng + Nút chỉnh vị trí phụ</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Tiện nghi ghế ngồi</span>
+                        <span class="spec-val highlight-val">Sưởi ấm & Làm mát thông gió hàng ghế trước</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Màn hình đa thông tin</span>
+                        <span class="spec-val highlight-val">Full Digital 12.3 inch siêu nét</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Màn hình giải trí AVN</span>
+                        <span class="spec-val">10.25 inch hỗ trợ Apple CarPlay / Android Auto</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hệ thống âm thanh</span>
+                        <span class="spec-val highlight-val">12 Loa vòm cao cấp Bose Centerpoint</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Đèn viền nội thất</span>
+                        <span class="spec-val">Mood Light 64 dải màu tùy chỉnh</span>
+                    </div>
+                </div>
+
+                <!-- TAB 5: AN TOÀN -->
+                <div class="spec-table-grid" id="spec-grid-safety" style="display: none;">
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Số lượng túi khí</span>
+                        <span class="spec-val highlight-val">06 Túi khí vòng tròn khoang xe</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Camera toàn cảnh</span>
+                        <span class="spec-val highlight-val">Camera 360 độ SVM siêu nét với vạch dẫn lái</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hiển thị điểm mù</span>
+                        <span class="spec-val highlight-val">BVM - Chiếu video điểm mù lên đồng hồ 12.3"</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Cảnh báo điểm mù</span>
+                        <span class="spec-val">BCA tích hợp trên gương chiếu hậu</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Cảm biến đỗ xe</span>
+                        <span class="spec-val">Cảm biến khoảng cách trước và sau</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hỗ trợ phanh</span>
+                        <span class="spec-val">ABS, EBD, BA, Cân bằng điện tử ESC</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Hỗ trợ khởi hành ngang dốc</span>
+                        <span class="spec-val">HAC + Phanh tay điện tử EPB & Auto Hold</span>
+                    </div>
+                    <div class="spec-row-item">
+                        <span class="spec-prop">Cảm biến áp suất lốp</span>
+                        <span class="spec-val">TPMS hiển thị thông số từng bánh xe</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: CÔNG CỤ DỰ TOÁN GIÁ LĂN BÁNH & BẢNG TÍNH TRẢ GÓP -->
+        <section class="page-section" id="estimator">
+            <div class="section-eyebrow">
+                <i class="fa-solid fa-calculator"></i> Bảng Tính Chi Phí Trực Quan
+            </div>
+            <h2 class="section-headline">Dự Toán Giá Lăn Bánh & Trả Góp Ưu Đãi</h2>
+            <p class="section-subtext">Nhập thông tin tỉnh thành và ngân sách để tính toán chính xác tổng chi phí sở hữu KIA K5 cùng phương án trả góp hàng tháng tối ưu nhất.</p>
+
+            <div class="calculator-deck">
+                <!-- CỘT NHẬP THÔNG SỐ -->
+                <div class="calc-input-column">
+                    <div class="calc-field-group">
+                        <label>Chọn Phiên Bản Xe</label>
+                        <select class="calc-select" id="calc-version-select">
+                            <option value="904000000" data-name="KIA K5 2.0 Premium" selected>KIA K5 2.0 Premium - 904.000.000 VNĐ (Khuyên Dùng)</option>
+                            <option value="859000000" data-name="KIA K5 2.0 Luxury">KIA K5 2.0 Luxury - 859.000.000 VNĐ</option>
+                            <option value="999000000" data-name="KIA K5 2.5 GT-Line">KIA K5 2.5 GT-Line - 999.000.000 VNĐ</option>
+                        </select>
+                    </div>
+
+                    <div class="calc-field-group">
+                        <label>Khu Vực Đăng Ký Lăn Bánh</label>
+                        <select class="calc-select" id="calc-region-select">
+                            <option value="hanoi" data-tax="0.12" data-plate="20000000">Hà Nội (Trước bạ 12%, Biển 20 Triệu)</option>
+                            <option value="hcm" data-tax="0.10" data-plate="20000000" selected>TP. Hồ Chí Minh (Trước bạ 10%, Biển 20 Triệu)</option>
+                            <option value="other" data-tax="0.10" data-plate="1000000">Các Tỉnh / Thành Phố Khác (Trước bạ 10%, Biển 1 Triệu)</option>
+                        </select>
+                    </div>
+
+                    <div class="calc-field-group">
+                        <label>
+                            <span>Tỷ Lệ Trả Trước: <strong id="lbl-down-percent" style="color: var(--kia-neon);">20%</strong></span>
+                            <span id="lbl-down-amount" style="color: var(--text-dim);">180.800.000 VNĐ</span>
+                        </label>
+                        <input type="range" class="calc-slider-range" id="slider-down-percent" min="20" max="80" step="5" value="20">
+                    </div>
+
+                    <div class="calc-field-group">
+                        <label>
+                            <span>Thời Hạn Vay: <strong id="lbl-loan-months" style="color: var(--cyber-blue);">60 Tháng (5 Năm)</strong></span>
+                            <span style="color: #00ffaa;">Lãi suất ưu đãi: 7.5%/năm</span>
+                        </label>
+                        <input type="range" class="calc-slider-range" id="slider-loan-months" min="12" max="84" step="12" value="60">
+                    </div>
+                </div>
+
+                <!-- CỘT HIỂN THỊ KẾT QUẢ DỰ TOÁN -->
+                <div class="calc-result-column">
+                    <div>
+                        <div style="font-size: 0.82rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 16px;">
+                            Bảng Bóc Tách Chi Phí Lăn Bánh
+                        </div>
+
+                        <ul class="calc-breakdown-list">
+                            <li><span>Giá xe niêm yết:</span> <span class="val" id="res-base-price">904.000.000 đ</span></li>
+                            <li><span>Lệ phí trước bạ:</span> <span class="val" id="res-tax-price">90.400.000 đ</span></li>
+                            <li><span>Lệ phí cấp biển số:</span> <span class="val" id="res-plate-fee">20.000.000 đ</span></li>
+                            <li><span>Phí sử dụng đường bộ (1 năm):</span> <span class="val">1.560.000 đ</span></li>
+                            <li><span>Bảo hiểm TNDS bắt buộc:</span> <span class="val">480.000 đ</span></li>
+                            <li><span>Phí kiểm định an toàn:</span> <span class="val">340.000 đ</span></li>
+                        </ul>
+
+                        <div class="total-price-banner">
+                            <div class="price-tagline">Tổng Giá Lăn Bánh Tạm Tính</div>
+                            <div class="price-number" id="res-total-rolling">1.016.780.000 <span style="font-size: 1.1rem; color: var(--kia-neon);">VNĐ</span></div>
+                        </div>
+
+                        <div class="installment-summary-box">
+                            <div>
+                                <div class="sub-val" id="res-initial-pay">293.580.000 đ</div>
+                                <div class="sub-label">Trả trước ban đầu</div>
+                            </div>
+                            <div style="width: 1px; background: rgba(255,255,255,0.15);"></div>
+                            <div>
+                                <div class="sub-val" id="res-monthly-pay" style="color: #00ffaa;">14.520.000 đ</div>
+                                <div class="sub-label">Góp ước tính / tháng</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-calc-cta btn-trigger-modal" data-ver="K5 2.0 Premium">
+                        <i class="fa-solid fa-file-invoice-dollar"></i> Nhận Báo Giá Ưu Đãi Lăn Bánh Chi Tiết
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: MA TRẬN 6 ĐẶC QUYỀN TRÊN BẢN K5 2.0 PREMIUM -->
+        <section class="page-section" id="features">
+            <div class="section-eyebrow">
+                <i class="fa-solid fa-crown"></i> Đỉnh Cao Công Nghệ & Tiện Nghi
             </div>
             <h2 class="section-headline">6 Đặc Quyền Trên Bản K5 2.0 Premium</h2>
+            <p class="section-subtext">Trang bị vượt bậc biến K5 Premium thành lựa chọn xứng tầm sedan hạng sang nhất phân khúc D.</p>
 
             <div class="matrix-grid">
                 <div class="matrix-card">
@@ -1317,12 +2830,13 @@
             </div>
         </section>
 
-        <!-- SECTION BẢNG GIÁ VIP & SO SÁNH PHIÊN BẢN -->
-        <section class="vip-pricing-section" id="pricing">
+        <!-- SECTION 7: BẢNG GIÁ VIP & SO SÁNH PHIÊN BẢN -->
+        <section class="page-section" id="pricing">
             <div class="section-eyebrow">
                 <i class="fa-solid fa-tag"></i> Bảng Giá Lăn Bánh Chính Hãng
             </div>
             <h2 class="section-headline">Lựa Chọn Phiên Bản KIA K5</h2>
+            <p class="section-subtext">Mức giá niêm yết chính hãng đi kèm chính sách bảo hành 5 năm hoặc 150.000 KM từ THACO KIA.</p>
 
             <div class="pricing-deck">
                 <!-- Bản 2.0 Luxury -->
@@ -1344,7 +2858,7 @@
 
                 <!-- Bản 2.0 Premium (TÂM ĐIỂM VIP) -->
                 <div class="pricing-pod featured">
-                    <div class="featured-ribbon">BÁN CHẠY NHẤT</div>
+                    <div class="featured-ribbon">BÁN CHẠY NHẤT - KHUYÊN DÙNG</div>
                     <div>
                         <div class="pod-title" style="color: #ff3355;">K5 2.0 Premium</div>
                         <div class="pod-engine">Xăng Nu 2.0L MPI - 150HP - 6AT Êm Ái</div>
@@ -1393,7 +2907,7 @@
         <div class="vip-modal-dialog">
             <button class="btn-dismiss" id="btn-close-modal">&times;</button>
             <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">Đăng Ký Lái Thử KIA K5</h3>
-            <p style="color: var(--text-dim); font-size: 0.94rem; margin-bottom: 26px;">Nhận đặc quyền lái thử tận nhà và bảng dự toán giá lăn bánh mới nhất từ đại lý chính hãng.</p>
+            <p style="color: var(--text-dim); font-size: 0.94rem; margin-bottom: 24px;">Nhận đặc quyền lái thử tận nhà và bảng dự toán giá lăn bánh mới nhất từ đại lý chính hãng.</p>
 
             <form id="booking-form" onsubmit="event.preventDefault(); handleBookingSubmit();">
                 <div class="form-group-row">
@@ -1420,12 +2934,12 @@
                         <option>Đà Nẵng & Miền Trung</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-submit-vip">Xác Nhận Đăng Ký Lái Thử</button>
+                <button type="submit" class="btn-submit-vip">Xác Nhận Đăng Ký Lái Thử VIP</button>
             </form>
         </div>
     </div>
 
-    <!-- JAVASCRIPT: PARTICLE CANVAS + AUDIO SYNTH + CHUYỂN ĐỔI ẢNH THỰC TẾ -->
+    <!-- JAVASCRIPT ĐIỀU KHIỂN TOÀN BỘ CÁC TÍNH NĂNG TƯƠNG TÁC -->
     <script>
         // 1. ÁNH SÁNG SPOTLIGHT THEO CHUỘT (CURSOR GLOW)
         const cursorGlow = document.getElementById('cursor-glow');
@@ -1440,7 +2954,7 @@
         let pWidth = pCanvas.width = window.innerWidth;
         let pHeight = pCanvas.height = window.innerHeight;
 
-        const particleCount = 75;
+        const particleCount = 70;
         const particles = [];
 
         class QuantumParticle {
@@ -1475,7 +2989,7 @@
 
         for (let i = 0; i < particleCount; i++) {
             const p = new QuantumParticle();
-            p.y = Math.random() * pHeight; // Phân tán ban đầu
+            p.y = Math.random() * pHeight;
             particles.push(p);
         }
 
@@ -1496,7 +3010,7 @@
             pHeight = pCanvas.height = window.innerHeight;
         });
 
-        // 3. TƯƠNG TÁC BỘ SƯU TẬP ẢNH XE THẬT TRONG SHOWROOM
+        // 3. TƯƠNG TÁC SHOWROOM ẢNH XE THẬT 4K
         const stagePills = document.querySelectorAll('.stage-pill');
         const mainPhoto = document.getElementById('stage-main-photo');
         const badgeTitle = document.getElementById('stage-badge-title');
@@ -1523,7 +3037,7 @@
             });
         });
 
-        // 4. CHẾ ĐỘ LÁI THỂ THAO & TĂNG TỐC GT BOOST
+        // 4. CHẾ ĐỘ LÁI & TĂNG TỐC GT BOOST
         const modeChips = document.querySelectorAll('.mode-chip');
         const gaugeSpeed = document.getElementById('gauge-speed');
         const btnBoost = document.getElementById('btn-boost-mode');
@@ -1549,7 +3063,7 @@
             btnBoost.classList.toggle('active', isBoosted);
             if (isBoosted) {
                 warpMultiplier = 4.5;
-                if (videoPlayer) videoPlayer.playbackRate = 2.0; // Tăng tốc độ video xe chạy gấp đôi
+                if (videoPlayer) videoPlayer.playbackRate = 2.0;
                 document.getElementById('video-wrapper').style.filter = 'contrast(1.3) saturate(1.4) brightness(1.15)';
                 gaugeSpeed.innerHTML = '240 <span>KM/H (BOOST)</span>';
                 gsap.to('.hero-title', { textShadow: '0 0 50px rgba(234, 0, 41, 1)', duration: 0.4 });
@@ -1570,10 +3084,8 @@
         const soundIcon = document.getElementById('sound-icon');
         let isVideoOn = true;
 
-        // Đảm bảo video tự động phát mượt mà
         if (videoPlayer) {
             videoPlayer.play().catch(() => {
-                // Tự động phát khi người dùng tương tác lần đầu
                 document.addEventListener('click', () => {
                     videoPlayer.play();
                 }, { once: true });
@@ -1586,7 +3098,7 @@
             if (isVideoOn) {
                 videoPlayer.play();
                 document.getElementById('video-wrapper').style.opacity = '0.88';
-                videoStatusText.textContent = 'Đang Phát Video';
+                videoStatusText.textContent = 'Video Xe Thật';
             } else {
                 videoPlayer.pause();
                 document.getElementById('video-wrapper').style.opacity = '0';
@@ -1601,7 +3113,380 @@
             soundIcon.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
         });
 
-        // 6. MODAL ĐĂNG KÝ LÁI THỬ VIP
+        // ================================================================
+        // 6. ADAS LAB: TƯƠNG TÁC CÁC TÍNH NĂNG AN TOÀN
+        // ================================================================
+
+        // 6.1. BVM: Turn signals and blind spot camera
+        const btnSigLeft = document.getElementById('btn-sig-left');
+        const btnSigOff = document.getElementById('btn-sig-off');
+        const btnSigRight = document.getElementById('btn-sig-right');
+        const sigLeft = document.getElementById('sig-left');
+        const sigRight = document.getElementById('sig-right');
+        const gaugeLeft = document.getElementById('gauge-left');
+        const gaugeRight = document.getElementById('gauge-right');
+        const bvmStatus = document.getElementById('bvm-status');
+
+        function setBvmMode(mode) {
+            sigLeft.classList.remove('blinking');
+            sigRight.classList.remove('blinking');
+            gaugeLeft.classList.remove('camera-active');
+            gaugeRight.classList.remove('camera-active');
+
+            if (mode === 'left') {
+                sigLeft.classList.add('blinking');
+                gaugeLeft.classList.add('camera-active');
+                bvmStatus.innerHTML = '<i class="fa-solid fa-circle" style="color: #00ffaa;"></i> Đang bật Camera Trái';
+            } else if (mode === 'right') {
+                sigRight.classList.add('blinking');
+                gaugeRight.classList.add('camera-active');
+                bvmStatus.innerHTML = '<i class="fa-solid fa-circle" style="color: #00ffaa;"></i> Đang bật Camera Phải';
+            } else {
+                bvmStatus.innerHTML = '<i class="fa-solid fa-circle"></i> Sẵn sàng';
+            }
+        }
+
+        btnSigLeft.addEventListener('click', () => setBvmMode('left'));
+        btnSigRight.addEventListener('click', () => setBvmMode('right'));
+        btnSigOff.addEventListener('click', () => setBvmMode('off'));
+
+        // 6.2. FCA: Forward collision avoidance simulator
+        const btnFcaApproach = document.getElementById('btn-fca-approach');
+        const btnFcaReset = document.getElementById('btn-fca-reset');
+        const fcaEgoCar = document.getElementById('fca-ego-car');
+        const fcaDistReadout = document.getElementById('fca-dist-readout');
+        const fcaAlertOverlay = document.getElementById('fca-alert-overlay');
+        const fcaStatus = document.getElementById('fca-status');
+        let fcaInterval = null;
+
+        function runFcaSimulation() {
+            clearInterval(fcaInterval);
+            let dist = 80;
+            fcaAlertOverlay.classList.remove('triggered');
+            fcaStatus.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color: #ffcc00;"></i> Đang Tiếp Cận';
+
+            fcaInterval = setInterval(() => {
+                dist -= 4;
+                if (dist > 30) {
+                    fcaDistReadout.innerHTML = `Khoảng cách: <span style="color:#00d2ff">${dist}m</span> (An toàn)`;
+                    fcaEgoCar.style.transform = `rotate(-90deg) translateY(-${(80 - dist) * 1.2}px)`;
+                } else if (dist > 12) {
+                    fcaDistReadout.innerHTML = `Khoảng cách: <span style="color:#ffcc00">${dist}m</span> (Cảnh báo)`;
+                    fcaEgoCar.style.transform = `rotate(-90deg) translateY(-${(80 - dist) * 1.2}px)`;
+                } else {
+                    // Trigger emergency brake
+                    clearInterval(fcaInterval);
+                    fcaDistReadout.innerHTML = `Khoảng cách: <span style="color:#ff1943; font-weight:900;">1.8m (Đã dừng khẩn cấp)</span>`;
+                    fcaAlertOverlay.classList.add('triggered');
+                    fcaStatus.innerHTML = '<i class="fa-solid fa-shield-check" style="color: #00ffaa;"></i> Đã Kích Hoạt Phanh';
+                }
+            }, 100);
+        }
+
+        function resetFcaSimulation() {
+            clearInterval(fcaInterval);
+            fcaAlertOverlay.classList.remove('triggered');
+            fcaEgoCar.style.transform = 'rotate(-90deg) translateY(0px)';
+            fcaDistReadout.innerHTML = 'Khoảng cách: <span>75m</span> (An toàn)';
+            fcaStatus.innerHTML = '<i class="fa-solid fa-shield"></i> Radar Hoạt Động';
+        }
+
+        btnFcaApproach.addEventListener('click', runFcaSimulation);
+        btnFcaReset.addEventListener('click', resetFcaSimulation);
+
+        // 6.3. SVM: Surround View Monitor angle switch
+        const svmButtons = document.querySelectorAll('[data-svm]');
+        const svmFeedCam = document.getElementById('svm-cam-feed');
+        const svmLabelMode = document.getElementById('svm-label-mode');
+
+        const svmViews = {
+            rear: {
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Road_view_from_car.jpg/640px-Road_view_from_car.jpg",
+                label: "GÓC NHÌN: CAMERA LÙI + VẠCH DẪN HƯỚNG THEO GÓC LÁI"
+            },
+            front: {
+                img: "https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg",
+                label: "GÓC NHÌN: CAMERA ĐẦU XE GÓC RỘNG 180°"
+            },
+            wheel: {
+                img: "https://upload.wikimedia.org/wikipedia/commons/0/0e/2021_Kia_K5_GT-Line%2C_rear_left.jpg",
+                label: "GÓC NHÌN: SOI VÀNH BÁNH XE - CHỐNG TRẦY XƯỚC MÂM 18\""
+            }
+        };
+
+        svmButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                svmButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const key = btn.getAttribute('data-svm');
+                if (svmViews[key]) {
+                    svmFeedCam.style.backgroundImage = `url('${svmViews[key].img}')`;
+                    svmLabelMode.textContent = svmViews[key].label;
+                }
+            });
+        });
+
+        // 6.4. LFA: Lane Following Assist
+        const btnDriftLeft = document.getElementById('btn-drift-left');
+        const btnAutoCenter = document.getElementById('btn-auto-center');
+        const btnDriftRight = document.getElementById('btn-drift-right');
+        const lfaLanes = document.getElementById('lfa-lanes');
+        const lfaSteering = document.getElementById('lfa-steering');
+        const lfaText = document.getElementById('lfa-text');
+
+        btnDriftLeft.addEventListener('click', () => {
+            lfaLanes.style.transform = 'perspective(120px) rotateX(45deg) translateX(30px)';
+            lfaSteering.style.transform = 'rotate(-25deg)';
+            lfaText.textContent = 'PHÁT HIỆN LỆCH TRÁI -> TỰ ĐÁNH LÁI PHẢI';
+            lfaText.style.color = '#ffcc00';
+        });
+
+        btnDriftRight.addEventListener('click', () => {
+            lfaLanes.style.transform = 'perspective(120px) rotateX(45deg) translateX(-30px)';
+            lfaSteering.style.transform = 'rotate(25deg)';
+            lfaText.textContent = 'PHÁT HIỆN LỆCH PHẢI -> TỰ ĐÁNH LÁI TRÁI';
+            lfaText.style.color = '#ffcc00';
+        });
+
+        btnAutoCenter.addEventListener('click', () => {
+            lfaLanes.style.transform = 'perspective(120px) rotateX(45deg) translateX(0px)';
+            lfaSteering.style.transform = 'rotate(0deg)';
+            lfaText.textContent = 'VÔ LĂNG TỰ CÂN CHỈNH TRUNG TÂM LÀN ĐƯỜNG';
+            lfaText.style.color = '#00ffaa';
+        });
+
+        // ================================================================
+        // 7. VIP COCKPIT LAB: ĐÈN 64 MÀU, 12 LOA BOSE, GHẾ LÀM MÁT, PANORAMA
+        // ================================================================
+
+        // 7.1. Mood light colors
+        const colorDots = document.querySelectorAll('.color-dot');
+        const ambientStrip = document.getElementById('ambient-strip');
+        const moodNameLabel = document.getElementById('mood-name-label');
+
+        colorDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                colorDots.forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+
+                const color = dot.getAttribute('data-color');
+                const name = dot.getAttribute('data-name');
+
+                ambientStrip.style.background = color;
+                ambientStrip.style.boxShadow = `0 0 25px ${color}, 0 0 60px ${color}`;
+                document.documentElement.style.setProperty('--mood-light-color', color);
+                document.documentElement.style.setProperty('--mood-light-glow', color + '99');
+                moodNameLabel.textContent = name;
+                moodNameLabel.style.color = color;
+            });
+        });
+
+        // 7.2. 12 Bose speakers equalizer animation
+        const eqBars = document.querySelectorAll('.eq-bar');
+        const boseBtns = document.querySelectorAll('[data-bose]');
+        const audioProfileText = document.getElementById('audio-profile-text');
+        let eqSpeed = 1;
+
+        setInterval(() => {
+            eqBars.forEach(bar => {
+                const height = Math.floor(Math.random() * 38 * eqSpeed) + 8;
+                bar.style.height = height + 'px';
+            });
+        }, 120);
+
+        boseBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                boseBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const mode = btn.getAttribute('data-bose');
+                if (mode === 'concert') {
+                    eqSpeed = 0.7;
+                    audioProfileText.textContent = "Acoustic Live Concert Soundstage";
+                } else if (mode === 'bass') {
+                    eqSpeed = 1.4;
+                    audioProfileText.textContent = "GT Sport High-Bass EDM Dynamic";
+                } else {
+                    eqSpeed = 1.0;
+                    audioProfileText.textContent = "Hi-Fi Centerpoint 360° Studio";
+                }
+            });
+        });
+
+        // 7.3. Seat Cooling & Heating
+        const btnCoolSeat = document.getElementById('btn-cool-seat');
+        const btnHeatSeat = document.getElementById('btn-heat-seat');
+        const seatDriverBox = document.getElementById('seat-driver-box');
+        const seatDriverState = document.getElementById('seat-driver-state');
+        const seatPassBox = document.getElementById('seat-pass-box');
+        const seatPassState = document.getElementById('seat-pass-state');
+        const coolLevelTxt = document.getElementById('cool-level-txt');
+        const heatLevelTxt = document.getElementById('heat-level-txt');
+
+        let coolLevel = 0;
+        let heatLevel = 0;
+
+        btnCoolSeat.addEventListener('click', () => {
+            heatLevel = 0;
+            btnHeatSeat.classList.remove('active-heat');
+            heatLevelTxt.textContent = 'Tắt';
+
+            coolLevel = (coolLevel + 1) % 4;
+            if (coolLevel > 0) {
+                btnCoolSeat.classList.add('active-cool');
+                coolLevelTxt.textContent = `Nấc ${coolLevel} (${26 - coolLevel * 2}°C)`;
+                seatDriverBox.className = 'seat-badge-box cooling';
+                seatPassBox.className = 'seat-badge-box cooling';
+                seatDriverState.innerHTML = `<span style="color:#00d2ff">❄️ Đang làm mát nấc ${coolLevel} (21°C)</span>`;
+                seatPassState.innerHTML = `<span style="color:#00d2ff">❄️ Đang làm mát nấc ${coolLevel} (21°C)</span>`;
+            } else {
+                btnCoolSeat.classList.remove('active-cool');
+                coolLevelTxt.textContent = 'Tắt';
+                seatDriverBox.className = 'seat-badge-box';
+                seatPassBox.className = 'seat-badge-box';
+                seatDriverState.textContent = 'Nhiệt độ bình thường (26°C)';
+                seatPassState.textContent = 'Nhiệt độ bình thường (26°C)';
+            }
+        });
+
+        btnHeatSeat.addEventListener('click', () => {
+            coolLevel = 0;
+            btnCoolSeat.classList.remove('active-cool');
+            coolLevelTxt.textContent = 'Tắt';
+
+            heatLevel = (heatLevel + 1) % 4;
+            if (heatLevel > 0) {
+                btnHeatSeat.classList.add('active-heat');
+                heatLevelTxt.textContent = `Nấc ${heatLevel} (${26 + heatLevel * 4}°C)`;
+                seatDriverBox.className = 'seat-badge-box heating';
+                seatPassBox.className = 'seat-badge-box heating';
+                seatDriverState.innerHTML = `<span style="color:#ff3344">🔥 Đang sưởi ấm nấc ${heatLevel} (38°C)</span>`;
+                seatPassState.innerHTML = `<span style="color:#ff3344">🔥 Đang sưởi ấm nấc ${heatLevel} (38°C)</span>`;
+            } else {
+                btnHeatSeat.classList.remove('active-heat');
+                heatLevelTxt.textContent = 'Tắt';
+                seatDriverBox.className = 'seat-badge-box';
+                seatPassBox.className = 'seat-badge-box';
+                seatDriverState.textContent = 'Nhiệt độ bình thường (26°C)';
+                seatPassState.textContent = 'Nhiệt độ bình thường (26°C)';
+            }
+        });
+
+        // 7.4. Sunroof Panorama Slider
+        const sunroofSlider = document.getElementById('sunroof-slider');
+        const sunroofShutter = document.getElementById('sunroof-shutter');
+        const sunroofPercentTxt = document.getElementById('sunroof-percent-txt');
+
+        sunroofSlider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            sunroofPercentTxt.textContent = val + '%';
+            sunroofShutter.style.transform = `translateX(${val}%)`;
+            if (val > 10) {
+                sunroofShutter.innerHTML = `<i class="fa-solid fa-sun" style="margin-right: 8px;"></i> Mở Cửa Sổ Trời (${val}%)`;
+            } else {
+                sunroofShutter.innerHTML = `<i class="fa-solid fa-shield" style="margin-right: 8px;"></i> Rèm Kính Panorama Đang Đóng Kín`;
+            }
+        });
+
+        // ================================================================
+        // 8. BẢNG THÔNG SỐ KỸ THUẬT (TABS SWITCHER)
+        // ================================================================
+        const specTabBtns = document.querySelectorAll('.spec-tab-btn');
+        const specGrids = {
+            engine: document.getElementById('spec-grid-engine'),
+            dimensions: document.getElementById('spec-grid-dimensions'),
+            exterior: document.getElementById('spec-grid-exterior'),
+            interior: document.getElementById('spec-grid-interior'),
+            safety: document.getElementById('spec-grid-safety')
+        };
+
+        specTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                specTabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const targetTab = btn.getAttribute('data-tab');
+                Object.keys(specGrids).forEach(key => {
+                    if (key === targetTab) {
+                        specGrids[key].style.display = 'grid';
+                    } else {
+                        specGrids[key].style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // ================================================================
+        // 9. CÔNG CỤ DỰ TOÁN GIÁ LĂN BÁNH & TRẢ GÓP TRỰC QUAN
+        // ================================================================
+        const calcVersionSelect = document.getElementById('calc-version-select');
+        const calcRegionSelect = document.getElementById('calc-region-select');
+        const sliderDownPercent = document.getElementById('slider-down-percent');
+        const sliderLoanMonths = document.getElementById('slider-loan-months');
+
+        const lblDownPercent = document.getElementById('lbl-down-percent');
+        const lblDownAmount = document.getElementById('lbl-down-amount');
+        const lblLoanMonths = document.getElementById('lbl-loan-months');
+
+        const resBasePrice = document.getElementById('res-base-price');
+        const resTaxPrice = document.getElementById('res-tax-price');
+        const resPlateFee = document.getElementById('res-plate-fee');
+        const resTotalRolling = document.getElementById('res-total-rolling');
+        const resInitialPay = document.getElementById('res-initial-pay');
+        const resMonthlyPay = document.getElementById('res-monthly-pay');
+
+        function formatVND(amount) {
+            return new Intl.NumberFormat('vi-VN').format(Math.round(amount)) + ' đ';
+        }
+
+        function recalculateEstimates() {
+            const basePrice = parseFloat(calcVersionSelect.value);
+            const selectedRegion = calcRegionSelect.options[calcRegionSelect.selectedIndex];
+            const taxRate = parseFloat(selectedRegion.getAttribute('data-tax'));
+            const plateFee = parseFloat(selectedRegion.getAttribute('data-plate'));
+
+            const roadFee = 1560000;
+            const tndsFee = 480000;
+            const inspectionFee = 340000;
+
+            const registrationTax = basePrice * taxRate;
+            const totalRolling = basePrice + registrationTax + plateFee + roadFee + tndsFee + inspectionFee;
+
+            const downPercent = parseInt(sliderDownPercent.value);
+            const loanMonths = parseInt(sliderLoanMonths.value);
+
+            lblDownPercent.textContent = downPercent + '%';
+            lblLoanMonths.textContent = `${loanMonths} Tháng (${(loanMonths / 12).toFixed(0)} Năm)`;
+
+            const downPaymentCar = (basePrice * downPercent) / 100;
+            const loanAmount = basePrice - downPaymentCar;
+            const initialPayment = downPaymentCar + (totalRolling - basePrice);
+
+            // Tính lãi suất 7.5%/năm
+            const monthlyInterestRate = 0.075 / 12;
+            const principalMonthly = loanAmount / loanMonths;
+            const interestFirstMonth = loanAmount * monthlyInterestRate;
+            const estimatedMonthlyPay = principalMonthly + interestFirstMonth;
+
+            lblDownAmount.textContent = formatVND(downPaymentCar);
+            resBasePrice.textContent = formatVND(basePrice);
+            resTaxPrice.textContent = formatVND(registrationTax);
+            resPlateFee.textContent = formatVND(plateFee);
+            resTotalRolling.innerHTML = `${formatVND(totalRolling).replace(' đ', '')} <span style="font-size: 1.1rem; color: var(--kia-neon);">VNĐ</span>`;
+            resInitialPay.textContent = formatVND(initialPayment);
+            resMonthlyPay.textContent = formatVND(estimatedMonthlyPay);
+        }
+
+        calcVersionSelect.addEventListener('change', recalculateEstimates);
+        calcRegionSelect.addEventListener('change', recalculateEstimates);
+        sliderDownPercent.addEventListener('input', recalculateEstimates);
+        sliderLoanMonths.addEventListener('input', recalculateEstimates);
+
+        // Khởi chạy tính toán ban đầu
+        recalculateEstimates();
+
+        // ================================================================
+        // 10. MODAL ĐĂNG KÝ LÁI THỬ VIP
+        // ================================================================
         const modal = document.getElementById('vip-modal');
         const btnWarpBooking = document.getElementById('btn-warp-booking');
         const btnCloseModal = document.getElementById('btn-close-modal');
@@ -1632,7 +3517,7 @@
 
         triggerBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                const ver = btn.getAttribute('data-ver');
+                const ver = btn.getAttribute('data-ver') || 'K5 2.0 Premium';
                 openModal(ver);
             });
         });
