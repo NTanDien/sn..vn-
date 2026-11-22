@@ -138,6 +138,74 @@
             filter: contrast(1.15) saturate(1.25) brightness(0.92);
         }
 
+        /* TRÌNH CHIẾU CÁC MÀU XE THẬT TRONG CÙNG 1 VIDEO CHẠY NỀN */
+        .bg-car-slides-container {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-car-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            background-size: cover;
+            background-position: center 65%;
+            filter: contrast(1.15) saturate(1.22) brightness(0.92);
+            transform: scale(1.02);
+            transition: opacity 2.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 7s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: opacity, transform;
+        }
+
+        .bg-car-slide.active {
+            opacity: 0.92;
+            transform: scale(1.06) translateY(-8px);
+        }
+
+        /* Huy hiệu nhỏ hiển thị màu xe đang chạy nền */
+        .bg-color-telemetry-badge {
+            position: fixed;
+            bottom: 24px;
+            right: 40px;
+            z-index: 30;
+            background: rgba(10, 14, 22, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 30px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .color-dot-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00d2ff;
+            box-shadow: 0 0 12px #00d2ff;
+            transition: background 0.6s ease, box-shadow 0.6s ease;
+        }
+
+        .bg-color-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.88);
+            transition: color 0.5s ease;
+        }
+
         .video-fallback-poster {
             position: absolute;
             top: 0;
@@ -2030,16 +2098,29 @@
 
         <!-- Video xe thật KIA K5 chạy trên cao tốc (HTML5 Video Trực Tiếp 100%) -->
         <div class="video-wrapper" id="video-wrapper">
-            <video id="k5-video-player" autoplay muted loop playsinline poster="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg">
+            <video id="k5-video-player" autoplay muted loop playsinline poster="k5-blue.jpg">
                 <source src="k5-driving.webm" type="video/webm">
-                <img class="video-fallback-poster" 
-                     src="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" 
-                     alt="KIA K5 Real Car">
+                <img class="video-fallback-poster" src="k5-blue.jpg" alt="KIA K5 Real Car">
             </video>
+
+            <!-- TRÌNH CHIẾU CÁC MÀU XE THẬT KIA K5 CHẠY NỀN TỪ TỪ TỪNG CHIẾC (CÙNG 1 VIDEO CHẠY NỀN) -->
+            <div class="bg-car-slides-container">
+                <div class="bg-car-slide active" style="background-image: url('k5-blue.jpg');" data-color="#00d2ff" data-name="Xanh Mineral Blue"></div>
+                <div class="bg-car-slide" style="background-image: url('k5-white.jpg');" data-color="#ffffff" data-name="Trắng Ngọc Trai Glacial White"></div>
+                <div class="bg-car-slide" style="background-image: url('k5-black.jpg');" data-color="#555555" data-name="Đen Ánh Kim Aurora Black"></div>
+                <div class="bg-car-slide" style="background-image: url('k5-grey.jpg');" data-color="#b0c4de" data-name="Xám Bạc Interstellar Grey"></div>
+                <div class="bg-car-slide" style="background-image: url('k5-red.jpg');" data-color="#ea0029" data-name="Đỏ Thể Thao Runway Red"></div>
+            </div>
         </div>
 
         <!-- Lớp phủ điện ảnh làm nổi bật giao diện -->
         <div class="cinematic-vignette"></div>
+
+        <!-- HUY HIỆU TELEMETRY MÀU XE ĐANG CHẠY NỀN -->
+        <div class="bg-color-telemetry-badge">
+            <span class="color-dot-indicator" id="bg-color-swatch"></span>
+            <span class="bg-color-label" id="bg-color-title">XE CHẠY NỀN: XANH MINERAL BLUE (1/5)</span>
+        </div>
     </div>
 
     <!-- LỚP GIAO DIỆN NỘI DUNG CHÍNH -->
@@ -2150,26 +2231,26 @@
 
             <div class="showroom-hologram-stage">
                 <div class="stage-tabs-row">
-                    <button class="stage-pill active" data-img="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" data-title="Ngoại Thất Xanh Mineral Blue" data-desc="Mũi xe cá mập Shark-Skin & Cụm đèn LED nhịp tim Heartbeat">
+                    <button class="stage-pill active" data-img="k5-blue.jpg" data-title="Ngoại Thất Xanh Mineral Blue (Pacific Blue)" data-desc="Mũi xe cá mập Shark-Skin & Cụm đèn LED nhịp tim Heartbeat">
                         <i class="fa-solid fa-car-side"></i> Xanh Mineral Blue
                     </button>
-                    <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/e/e2/2021_Kia_K5_GT-Line_in_Glacial_White_Pearl%2C_front_left.jpg" data-title="Ngoại Thất Trắng Ngọc Trai Glacial White" data-desc="Nước sơn ngọc trai đa lớp tôn vinh đường cong khí động học">
+                    <button class="stage-pill" data-img="k5-white.jpg" data-title="Ngoại Thất Trắng Ngọc Trai Glacial White" data-desc="Nước sơn ngọc trai đa lớp tôn vinh đường cong khí động học">
                         <i class="fa-solid fa-palette"></i> Trắng Ngọc Trai
                     </button>
-                    <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/0/0e/2021_Kia_K5_GT-Line%2C_rear_left.jpg" data-title="Đuôi Xe Thể Thao Đèn LED Nhịp Tim" data-desc="Cụm đèn hậu LED nét đứt xuyên suốt đuôi xe với ống xả kép thể thao">
-                        <i class="fa-solid fa-shield-halved"></i> Đuôi Xe LED Nhịp Tim
+                    <button class="stage-pill" data-img="k5-black.jpg" data-title="Ngoại Thất Đen Ánh Kim Aurora Black" data-desc="Sắc đen ánh kim quyền lực, sang trọng đỉnh cao sedan hạng D">
+                        <i class="fa-solid fa-moon"></i> Đen Ánh Kim
                     </button>
-                    <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/3/39/Kia_K5_DL3_PE_Martian_Brown_%281%29.jpg" data-title="Khoang Lái Kỹ Thuật Số & Cần Số Mới" data-desc="Màn hình cong Full Digital 12.3 inch, vô lăng bọc da & núm xoay điện tử">
-                        <i class="fa-solid fa-gauge"></i> Màn Hình & Vô Lăng
+                    <button class="stage-pill" data-img="k5-grey.jpg" data-title="Ngoại Thất Xám Bạc Interstellar Grey" data-desc="Màu xám kim loại thời thượng, khỏe khoắn phong cách thể thao">
+                        <i class="fa-solid fa-shield-halved"></i> Xám Interstellar
                     </button>
-                    <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/7/75/Kia_K5_Hybrid_DL3_HEV_Martian_Brown_%283%29.jpg" data-title="Ghế Da Sang Trọng & Cửa Sổ Trời Panorama" data-desc="Không gian nội thất da cao cấp kết hợp trần kính toàn cảnh">
-                        <i class="fa-solid fa-couch"></i> Ghế Da & Cửa Sổ Trời
+                    <button class="stage-pill" data-img="k5-red.jpg" data-title="Ngoại Thất Đỏ Thể Thao Runway Red" data-desc="Màu đỏ rực rỡ cá tính kết hợp mâm 18 inch phay 2 màu">
+                        <i class="fa-solid fa-fire"></i> Đỏ Runway Red
                     </button>
                 </div>
 
                 <div class="hologram-viewport">
                     <img id="stage-main-photo" 
-                         src="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" 
+                         src="k5-blue.jpg" 
                          alt="KIA K5 Real Car 4K">
 
                     <!-- Hotspots tương tác -->
@@ -3098,7 +3179,7 @@
             });
         });
 
-        // 5. TỰ ĐỘNG PHÁT VIDEO XE THẬT CHẠY NỀN
+        // 5. TỰ ĐỘNG PHÁT VIDEO VÀ CHUYỂN MÀU XE THẬT CHẠY NỀN (CÙNG 1 VIDEO CHẠY NỀN)
         const videoPlayer = document.getElementById('k5-video-player');
         if (videoPlayer) {
             videoPlayer.play().catch(() => {
@@ -3107,6 +3188,32 @@
                 }, { once: true });
             });
         }
+
+        const bgCarSlides = document.querySelectorAll('.bg-car-slide');
+        const bgSwatch = document.getElementById('bg-color-swatch');
+        const bgTitle = document.getElementById('bg-color-title');
+        let currentBgCarIndex = 0;
+
+        function cycleBgCarColors() {
+            if (!bgCarSlides || bgCarSlides.length === 0) return;
+            bgCarSlides[currentBgCarIndex].classList.remove('active');
+            currentBgCarIndex = (currentBgCarIndex + 1) % bgCarSlides.length;
+            const nextSlide = bgCarSlides[currentBgCarIndex];
+            nextSlide.classList.add('active');
+
+            const color = nextSlide.getAttribute('data-color') || '#00d2ff';
+            const name = nextSlide.getAttribute('data-name') || 'Xanh Mineral Blue';
+            if (bgSwatch) {
+                bgSwatch.style.background = color;
+                bgSwatch.style.boxShadow = `0 0 14px ${color}`;
+            }
+            if (bgTitle) {
+                bgTitle.textContent = `XE CHẠY NỀN: ${name.toUpperCase()} (${currentBgCarIndex + 1}/${bgCarSlides.length})`;
+            }
+        }
+
+        // Tự động chuyển đổi màu xe chạy nền từ từ mỗi 6.5 giây
+        setInterval(cycleBgCarColors, 6500);
 
         // ================================================================
         // 6. ADAS LAB: TƯƠNG TÁC CÁC TÍNH NĂNG AN TOÀN
