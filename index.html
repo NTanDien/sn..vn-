@@ -3,31 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KIA K5 2.0 PREMIUM | Xe Thật Đẳng Cấp - Official Experience</title>
+    <title>KIA K5 PREMIUM | Antigravity Experience - Đỉnh Cao Sedan Hạng D</title>
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🚘</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚡</text></svg>">
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Space Grotesk, Outfit & Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <style>
         :root {
-            --kia-black: #06080d;
-            --kia-dark: #0d111a;
+            --bg-void: #030508;
+            --bg-card: rgba(10, 14, 22, 0.72);
             --kia-red: #ea0029;
-            --kia-red-glow: rgba(234, 0, 41, 0.45);
-            --kia-red-dark: #b3001b;
-            --kia-silver: #d1d5db;
-            --kia-white: #ffffff;
-            --glass-bg: rgba(13, 17, 26, 0.78);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --glass-hover: rgba(255, 255, 255, 0.22);
+            --kia-red-glow: rgba(234, 0, 41, 0.55);
+            --kia-neon: #ff1943;
+            --cyber-blue: #00d2ff;
+            --cyber-blue-glow: rgba(0, 210, 255, 0.45);
+            --text-dim: rgba(255, 255, 255, 0.65);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.35);
         }
 
         * {
@@ -38,30 +41,47 @@
             -webkit-user-select: none;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--kia-black);
+            font-family: 'Space Grotesk', 'Montserrat', sans-serif;
+            background-color: var(--bg-void);
             color: #ffffff;
             overflow-x: hidden;
             overflow-y: auto;
             position: relative;
             scrollbar-width: thin;
-            scrollbar-color: var(--kia-red) #111;
+            scrollbar-color: var(--kia-red) #0a0d14;
         }
 
         body::-webkit-scrollbar {
-            width: 7px;
+            width: 6px;
         }
         body::-webkit-scrollbar-track {
-            background: #0a0d14;
+            background: #030508;
         }
         body::-webkit-scrollbar-thumb {
             background: var(--kia-red);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
-        /* KHUNG VIDEO XE THẬT CHẠY NỀN TOÀN MÀN HÌNH */
-        .video-background-container {
+        /* CON TRỎ CHUỘT PHÁT QUANG ĐIỆN TỬ (CUSTOM GLOW CURSOR) */
+        .cursor-glow {
+            position: fixed;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(234, 0, 41, 0.12) 0%, rgba(0, 210, 255, 0.04) 40%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            transition: transform 0.08s ease-out, opacity 0.3s ease;
+        }
+
+        /* KHUNG VIDEO & HIỆU ỨNG KHÔNG TRỌNG LỰC CHẠY NỀN (ANTIGRAVITY BG) */
+        .antigravity-bg-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -69,164 +89,195 @@
             height: 100vh;
             overflow: hidden;
             z-index: 1;
-            background: #05070a;
+            background: #030508;
         }
 
-        /* Poster ảnh xe thật độ phân giải cao phòng khi video đang tải */
-        .video-fallback-img {
+        /* Canvas hạt bụi lượng tử bay ngược không trọng lực (Zero-G Particles) */
+        #particle-canvas {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 60%;
-            z-index: 1;
-            opacity: 1;
-            transition: opacity 1.2s ease;
-        }
-
-        .video-background-container iframe {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100vw;
-            height: 56.25vw; /* 16:9 */
-            min-height: 100vh;
-            min-width: 177.77vh; /* 16:9 */
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0.88;
-            filter: contrast(1.08) saturate(1.15);
-            transition: opacity 0.8s ease;
-        }
-
-        /* Lớp phủ Gradient điện ảnh tăng tương phản cho chữ */
-        .video-ambient-overlay {
-            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 3;
             pointer-events: none;
-            background: radial-gradient(circle at 60% 45%, rgba(6, 8, 13, 0.25) 0%, rgba(6, 8, 13, 0.72) 65%, rgba(6, 8, 13, 0.95) 100%),
-                        linear-gradient(to bottom, rgba(6, 8, 13, 0.85) 0%, transparent 25%, transparent 65%, rgba(6, 8, 13, 0.96) 100%);
         }
 
-        /* Giao diện chính */
-        .content-layer {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-        }
-
-        /* Header / Thanh điều hướng */
-        header {
-            position: fixed;
+        /* Video xe thật chạy trên cao tốc */
+        .video-wrapper {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 18px 50px;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.85;
+            transition: opacity 1s ease, filter 1s ease;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 56.25vw;
+            min-height: 100vh;
+            min-width: 177.77vh;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            filter: contrast(1.12) saturate(1.2);
+        }
+
+        .video-fallback-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 65%;
+            z-index: 1;
+        }
+
+        /* Lưới Cyber Grid 3D uốn cong dưới sàn */
+        .cyber-grid-floor {
+            position: absolute;
+            bottom: 0;
+            left: -50%;
+            width: 200%;
+            height: 60%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(600px) rotateX(72deg);
+            transform-origin: bottom center;
+            opacity: 0.45;
+            z-index: 2;
+            pointer-events: none;
+            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 85%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 85%);
+        }
+
+        /* Lớp gradient điện ảnh làm sâu không gian */
+        .cinematic-vignette {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 50%, rgba(3, 5, 8, 0.2) 0%, rgba(3, 5, 8, 0.75) 65%, rgba(3, 5, 8, 0.98) 100%),
+                        linear-gradient(to bottom, rgba(3, 5, 8, 0.9) 0%, transparent 22%, transparent 70%, rgba(3, 5, 8, 0.98) 100%);
+        }
+
+        /* NỘI DUNG CHÍNH */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* HEADER SIÊU TƯƠNG LAI (ANTIGRAVITY DOCK NAV) */
+        header {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 90px);
+            max-width: 1400px;
+            padding: 14px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             z-index: 100;
-            background: linear-gradient(180deg, rgba(6, 8, 13, 0.92) 0%, rgba(6, 8, 13, 0) 100%);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(10, 14, 22, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
             transition: all 0.3s ease;
         }
 
         .brand-logo {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             text-decoration: none;
         }
 
         .kia-svg-logo {
-            height: 28px;
+            height: 24px;
             fill: #ffffff;
             transition: transform 0.3s ease;
         }
         .brand-logo:hover .kia-svg-logo {
-            transform: scale(1.05);
+            transform: scale(1.08);
             fill: var(--kia-red);
         }
 
         .model-badge {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.35rem;
+            font-size: 1.15rem;
             font-weight: 800;
             letter-spacing: 3px;
             color: #ffffff;
-            border-left: 2px solid var(--kia-red);
+            border-left: 1.5px solid rgba(255, 255, 255, 0.25);
             padding-left: 14px;
-            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .model-badge span {
-            color: var(--kia-red);
+        .model-badge .k5-glow {
+            color: #ffffff;
+            font-weight: 900;
+        }
+        .model-badge .vip-tag {
+            background: linear-gradient(135deg, var(--kia-red), #ff2a55);
+            color: #fff;
+            font-size: 0.62rem;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 12px;
+            letter-spacing: 1.5px;
+            box-shadow: 0 0 10px var(--kia-red-glow);
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 32px;
+            gap: 28px;
             align-items: center;
         }
 
         nav a {
             text-decoration: none;
-            color: rgba(255, 255, 255, 0.82);
-            font-size: 0.92rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.82rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
             transition: all 0.25s ease;
             position: relative;
             padding: 6px 0;
         }
 
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: var(--kia-red);
-            transition: width 0.3s ease;
-            box-shadow: 0 0 8px var(--kia-red);
-        }
-
         nav a:hover, nav a.active {
             color: #ffffff;
-        }
-        nav a:hover::after, nav a.active::after {
-            width: 100%;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
         }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .btn-test-drive {
-            background: linear-gradient(135deg, var(--kia-red) 0%, #c40022 100%);
+        .nav-btn-vip {
+            background: linear-gradient(135deg, var(--kia-red) 0%, #aa001d 100%);
             color: #ffffff;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 10px 22px;
+            border-radius: 30px;
             font-weight: 700;
-            font-size: 0.86rem;
+            font-size: 0.82rem;
             letter-spacing: 1.2px;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 18px var(--kia-red-glow);
+            box-shadow: 0 4px 20px var(--kia-red-glow);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -234,9 +285,9 @@
             text-decoration: none;
         }
 
-        .btn-test-drive:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(234, 0, 41, 0.65);
+        .nav-btn-vip:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 30px rgba(234, 0, 41, 0.8);
         }
 
         /* HERO SECTION */
@@ -245,94 +296,236 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 140px 60px 45px 60px;
+            padding: 160px 80px 40px 80px;
             position: relative;
         }
 
-        .hero-title-box {
-            max-width: 680px;
+        .hero-main-box {
+            max-width: 780px;
             animation: fadeInDown 1s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .tag-k5 {
+        .hero-antigravity-tag {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(234, 0, 41, 0.18);
-            border: 1px solid rgba(234, 0, 41, 0.55);
-            padding: 7px 18px;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 20px;
             border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #ff3355;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: #ffffff;
             text-transform: uppercase;
-            margin-bottom: 18px;
-            backdrop-filter: blur(8px);
+            margin-bottom: 24px;
+            backdrop-filter: blur(14px);
         }
 
-        h1.hero-heading {
+        .pulse-orb {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--kia-neon);
+            box-shadow: 0 0 12px var(--kia-neon);
+            animation: pulseOrb 1.6s infinite ease-in-out;
+        }
+
+        @keyframes pulseOrb {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.6); opacity: 0.5; }
+        }
+
+        h1.hero-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 4rem;
+            font-size: 4.8rem;
             font-weight: 900;
-            line-height: 1.08;
-            letter-spacing: 1.5px;
+            line-height: 1.04;
+            letter-spacing: -1px;
             text-transform: uppercase;
-            margin-bottom: 16px;
-            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
+            margin-bottom: 20px;
+            text-shadow: 0 8px 32px rgba(0, 0, 0, 0.95);
         }
 
-        h1.hero-heading .red-accent {
-            color: var(--kia-red);
-            display: inline-block;
-            text-shadow: 0 0 35px var(--kia-red-glow);
+        h1.hero-title .glow-red {
+            background: linear-gradient(135deg, #ff2a55 0%, var(--kia-red) 50%, #990018 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px var(--kia-red-glow);
         }
 
-        p.hero-desc {
-            font-size: 1.1rem;
-            line-height: 1.65;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 32px;
-            font-weight: 400;
+        p.hero-lead {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--text-dim);
+            margin-bottom: 38px;
+            max-width: 650px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
         }
 
-        /* BẢNG ĐIỀU KHIỂN VIDEO XE THẬT DƯỚI GÓC TRÁI */
-        .video-control-dock {
+        .hero-action-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-launch-warp {
+            background: linear-gradient(135deg, var(--kia-red) 0%, #b3001b 100%);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 16px 38px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 8px 30px var(--kia-red-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-launch-warp:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(234, 0, 41, 0.85);
+        }
+
+        .btn-ghost-telemetry {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border-glass);
+            color: #ffffff;
+            padding: 16px 30px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-ghost-telemetry:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--border-hover);
+        }
+
+        /* HUD TELEMETRY COCKPIT STRIP (BẢNG ĐỒNG HỒ KỸ THUẬT SỐ K5 GÓC DƯỚI) */
+        .hud-telemetry-bar {
+            background: rgba(10, 14, 22, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 22px 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 50px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+            animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .telemetry-node {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .telemetry-node .label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .telemetry-node .val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #ffffff;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .telemetry-node .val span {
+            font-size: 0.92rem;
+            color: var(--kia-red);
+            font-weight: 700;
+        }
+
+        .hud-divider {
+            width: 1px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* DRIVE MODE SELECTOR */
+        .drive-mode-pill {
+            display: flex;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 4px;
+            border-radius: 30px;
+            gap: 4px;
+        }
+
+        .mode-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: rgba(255, 255, 255, 0.6);
+            border: none;
+            background: transparent;
+        }
+
+        .mode-chip.active {
+            background: var(--kia-red);
+            color: #ffffff;
+            box-shadow: 0 0 16px var(--kia-red-glow);
+        }
+
+        /* DOCK ĐIỀU KHIỂN VIDEO XE THẬT CỐ ĐỊNH GÓC TRÁI */
+        .floating-antigravity-dock {
             position: fixed;
             bottom: 30px;
             left: 50px;
             z-index: 50;
-            background: var(--glass-bg);
-            backdrop-filter: blur(18px);
-            border: 1px solid var(--glass-border);
-            padding: 14px 22px;
-            border-radius: 16px;
+            background: rgba(10, 14, 22, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
-            gap: 20px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
-            transition: all 0.3s ease;
+            gap: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
         }
 
-        .dock-label {
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: rgba(255, 255, 255, 0.55);
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .dock-btn {
+        .dock-tool-btn {
             background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             color: #ffffff;
-            padding: 8px 14px;
-            border-radius: 8px;
+            padding: 9px 16px;
+            border-radius: 12px;
             font-size: 0.82rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -340,229 +533,227 @@
             transition: all 0.25s ease;
         }
 
-        .dock-btn:hover {
+        .dock-tool-btn:hover {
             background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.35);
+            border-color: var(--border-hover);
         }
 
-        .dock-btn.active {
+        .dock-tool-btn.active {
             background: var(--kia-red);
             border-color: var(--kia-red);
             box-shadow: 0 0 14px var(--kia-red-glow);
         }
 
-        /* Hero Specs Strip (Góc phải) */
-        .hero-specs-strip {
-            display: flex;
-            gap: 32px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            padding: 18px 34px;
-            border-radius: 16px;
-            align-self: flex-end;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-            animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .spec-item {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .spec-value {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.85rem;
-            font-weight: 800;
-            color: #ffffff;
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-        }
-
-        .spec-value span {
-            font-size: 0.95rem;
-            color: var(--kia-red);
-            font-weight: 600;
-        }
-
-        .spec-title {
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 1.2px;
-            color: rgba(255, 255, 255, 0.6);
-            text-transform: uppercase;
-        }
-
-        .widget-divider {
-            width: 1px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        /* SECTION STUDIO XE THẬT 100% (REAL CAR GALLERY & COLOR SHOWROOM) */
-        .real-car-section {
-            padding: 100px 60px 80px 60px;
-            max-width: 1360px;
+        /* SECTION STUDIO XE THẬT HÌNH ẢNH 4K (SPATIAL REAL-CAR SHOWROOM) */
+        .spatial-showroom-section {
+            padding: 120px 80px 80px 80px;
+            max-width: 1440px;
             margin: 0 auto;
         }
 
-        .section-header {
-            text-align: center;
-            max-width: 780px;
-            margin: 0 auto 50px auto;
-        }
-
-        .section-tag {
+        .section-eyebrow {
             color: var(--kia-red);
-            font-size: 0.82rem;
+            font-size: 0.84rem;
             font-weight: 800;
-            letter-spacing: 3px;
+            letter-spacing: 3.5px;
             text-transform: uppercase;
-            margin-bottom: 12px;
-            display: inline-block;
-        }
-
-        .section-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            line-height: 1.2;
-            margin-bottom: 16px;
-        }
-
-        .section-desc {
-            color: rgba(255, 255, 255, 0.72);
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-
-        /* Bảng điều khiển góc chụp xe thật */
-        .car-stage-container {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(20px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stage-view-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .stage-tab-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            color: rgba(255, 255, 255, 0.85);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s ease;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .stage-tab-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+        .section-headline {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .showroom-hologram-stage {
+            background: rgba(10, 14, 22, 0.65);
+            backdrop-filter: blur(28px);
+            border: 1px solid var(--border-glass);
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            position: relative;
+        }
+
+        .stage-tabs-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stage-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.75);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stage-pill:hover {
+            background: rgba(255, 255, 255, 0.14);
             color: #ffffff;
         }
 
-        .stage-tab-btn.active {
+        .stage-pill.active {
             background: var(--kia-red);
             border-color: var(--kia-red);
             color: #ffffff;
-            box-shadow: 0 4px 16px var(--kia-red-glow);
+            box-shadow: 0 0 20px var(--kia-red-glow);
         }
 
-        /* Khung hiển thị ảnh xe thật */
-        .real-car-viewport {
+        /* Khung hiển thị ảnh xe thật với hiệu ứng kính Hologram */
+        .hologram-viewport {
             width: 100%;
-            height: 520px;
-            border-radius: 16px;
-            overflow: hidden;
+            height: 580px;
+            border-radius: 22px;
             position: relative;
-            background: radial-gradient(circle at 50% 50%, #151c2a 0%, #080b12 100%);
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #151c2a 0%, #060910 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .real-car-img {
+        .hologram-viewport img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+            transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
         }
 
-        .real-car-viewport:hover .real-car-img {
-            transform: scale(1.03);
+        .hologram-viewport:hover img {
+            transform: scale(1.04);
         }
 
-        .car-photo-badge {
+        /* Các điểm tương tác thông minh AR trên ảnh xe (AR Feature Hotspots) */
+        .ar-hotspot {
             position: absolute;
-            bottom: 24px;
-            left: 28px;
-            background: rgba(6, 8, 13, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 20px;
-            border-radius: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(234, 0, 41, 0.35);
+            border: 2px solid var(--kia-neon);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px var(--kia-red-glow);
+            animation: pulseHotspot 2s infinite ease-in-out;
+            transition: transform 0.2s ease;
+            z-index: 10;
+        }
+
+        .ar-hotspot::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ffffff;
+        }
+
+        @keyframes pulseHotspot {
+            0%, 100% { box-shadow: 0 0 12px var(--kia-neon); }
+            50% { box-shadow: 0 0 24px var(--kia-neon), 0 0 40px var(--kia-neon); }
+        }
+
+        .hotspot-tag {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(6, 8, 13, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--kia-neon);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+            color: #ffffff;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+        }
+
+        .ar-hotspot:hover .hotspot-tag {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
+        }
+
+        .hologram-telemetry-badge {
+            position: absolute;
+            bottom: 30px;
+            left: 36px;
+            background: rgba(6, 8, 13, 0.88);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            padding: 16px 26px;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
             gap: 4px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            border-left: 3px solid var(--kia-red);
         }
 
-        .car-photo-badge .badge-title {
-            font-size: 0.88rem;
-            font-weight: 700;
+        .hologram-telemetry-badge .badge-title {
+            font-size: 1.05rem;
+            font-weight: 800;
             color: #ffffff;
         }
-        .car-photo-badge .badge-desc {
-            font-size: 0.74rem;
+        .hologram-telemetry-badge .badge-desc {
+            font-size: 0.8rem;
             color: var(--kia-red);
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        /* SECTION TÍNH NĂNG VƯỢT TRỘI CỦA BẢN PREMIUM */
-        .features-section {
-            padding: 80px 60px 100px 60px;
-            max-width: 1360px;
+        /* SECTION MA TRẬN TÍNH NĂNG THƯỢNG LƯU (SPATIAL FEATURE MATRIX) */
+        .spatial-matrix-section {
+            padding: 100px 80px;
+            max-width: 1440px;
             margin: 0 auto;
         }
 
-        .features-grid {
+        .matrix-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 28px;
+            margin-top: 50px;
         }
 
-        .feature-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 34px 28px;
-            transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+        .matrix-card {
+            background: rgba(10, 14, 22, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 38px 32px;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .feature-card::before {
+        .matrix-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -574,395 +765,372 @@
             transition: opacity 0.3s ease;
         }
 
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(234, 0, 41, 0.45);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 20px rgba(234, 0, 41, 0.18);
+        .matrix-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(234, 0, 41, 0.5);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 25px rgba(234, 0, 41, 0.2);
         }
 
-        .feature-card:hover::before {
+        .matrix-card:hover::before {
             opacity: 1;
         }
 
-        .feature-icon {
-            width: 58px;
-            height: 58px;
-            border-radius: 14px;
+        .matrix-icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
             background: rgba(234, 0, 41, 0.12);
-            border: 1px solid rgba(234, 0, 41, 0.3);
+            border: 1px solid rgba(234, 0, 41, 0.35);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: var(--kia-red);
-            margin-bottom: 22px;
+            margin-bottom: 24px;
             transition: all 0.3s ease;
         }
 
-        .feature-card:hover .feature-icon {
+        .matrix-card:hover .matrix-icon-box {
             background: var(--kia-red);
             color: #ffffff;
-            box-shadow: 0 0 20px var(--kia-red-glow);
+            box-shadow: 0 0 24px var(--kia-red-glow);
         }
 
-        .feature-card h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #ffffff;
-        }
-
-        .feature-card p {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.94rem;
-            line-height: 1.6;
-        }
-
-        /* SECTION PHIÊN BẢN & BẢNG GIÁ */
-        .pricing-section {
-            padding: 80px 60px 120px 60px;
-            max-width: 1360px;
-            margin: 0 auto;
-        }
-
-        .versions-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 26px;
-            margin-top: 50px;
-        }
-
-        .version-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 34px 28px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .version-card.highlight {
-            border-color: var(--kia-red);
-            background: linear-gradient(180deg, rgba(234, 0, 41, 0.14) 0%, var(--glass-bg) 65%);
-            box-shadow: 0 16px 40px rgba(234, 0, 41, 0.25);
-        }
-
-        .badge-hot {
-            position: absolute;
-            top: -12px;
-            right: 24px;
-            background: var(--kia-red);
-            color: #fff;
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 5px 14px;
-            border-radius: 20px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 4px 12px var(--kia-red-glow);
-        }
-
-        .version-name {
+        .matrix-card h3 {
             font-family: 'Outfit', sans-serif;
             font-size: 1.45rem;
             font-weight: 800;
+            margin-bottom: 14px;
             color: #ffffff;
-            margin-bottom: 6px;
         }
 
-        .version-engine {
-            font-size: 0.86rem;
-            color: rgba(255, 255, 255, 0.55);
-            margin-bottom: 22px;
+        .matrix-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.7;
         }
 
-        .version-price {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.2rem;
+        /* SECTION SO SÁNH BẢNG GIÁ VIP */
+        .vip-pricing-section {
+            padding: 80px 80px 140px 80px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .pricing-deck {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .pricing-pod {
+            background: rgba(10, 14, 22, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.35s ease;
+        }
+
+        .pricing-pod.featured {
+            border: 2px solid var(--kia-red);
+            background: linear-gradient(180deg, rgba(234, 0, 41, 0.16) 0%, rgba(10, 14, 22, 0.8) 65%);
+            box-shadow: 0 20px 50px rgba(234, 0, 41, 0.3);
+            transform: scale(1.03);
+        }
+
+        .featured-ribbon {
+            position: absolute;
+            top: -14px;
+            right: 28px;
+            background: linear-gradient(135deg, var(--kia-red), #ff2a55);
+            color: #ffffff;
+            font-size: 0.72rem;
             font-weight: 900;
-            color: var(--kia-red);
+            padding: 5px 16px;
+            border-radius: 20px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px var(--kia-red-glow);
+        }
+
+        .pod-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+
+        .pod-engine {
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.55);
             margin-bottom: 24px;
         }
 
-        .version-price span {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.7);
+        .pod-price {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--kia-red);
+            margin-bottom: 28px;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
         }
 
-        .version-features-list {
+        .pod-price span {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .pod-checklist {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 13px;
-            margin-bottom: 28px;
+            gap: 14px;
+            margin-bottom: 32px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 22px;
+            padding-top: 24px;
         }
 
-        .version-features-list li {
-            font-size: 0.88rem;
-            color: rgba(255, 255, 255, 0.78);
+        .pod-checklist li {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .version-features-list li i {
+        .pod-checklist li i {
             color: #00e676;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
 
-        .btn-choose-version {
+        .btn-select-pod {
             width: 100%;
             background: rgba(255, 255, 255, 0.08);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            padding: 13px 0;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 0;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.92rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.3s ease;
         }
 
-        .version-card:hover {
-            transform: translateY(-6px);
+        .pricing-pod:hover {
+            transform: translateY(-8px);
         }
 
-        .version-card.highlight .btn-choose-version,
-        .btn-choose-version:hover {
+        .pricing-pod.featured .btn-select-pod,
+        .btn-select-pod:hover {
             background: var(--kia-red);
             border-color: var(--kia-red);
-            box-shadow: 0 4px 18px var(--kia-red-glow);
+            box-shadow: 0 6px 24px var(--kia-red-glow);
         }
 
-        /* MODAL ĐĂNG KÝ LÁI THỬ */
-        .modal-overlay {
+        /* MODAL ĐẶT LỊCH LÁI THỬ VIP */
+        .vip-modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(14px);
+            background: rgba(3, 5, 8, 0.88);
+            backdrop-filter: blur(16px);
             z-index: 200;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.35s ease;
         }
 
-        .modal-overlay.active {
+        .vip-modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
 
-        .modal-box {
-            background: #0f141f;
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            border-radius: 20px;
+        .vip-modal-dialog {
+            background: #0d121c;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 28px;
             width: 90%;
-            max-width: 520px;
-            padding: 38px 34px;
+            max-width: 540px;
+            padding: 42px 38px;
             position: relative;
             transform: scale(0.92);
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
         }
 
-        .modal-overlay.active .modal-box {
+        .vip-modal-overlay.active .vip-modal-dialog {
             transform: scale(1);
         }
 
-        .btn-close-modal {
+        .btn-dismiss {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 24px;
+            right: 24px;
             background: transparent;
             border: none;
             color: rgba(255, 255, 255, 0.6);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             cursor: pointer;
             transition: color 0.2s ease;
         }
-        .btn-close-modal:hover { color: #ffffff; }
+        .btn-dismiss:hover { color: #ffffff; }
 
-        .modal-box h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.7rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            text-transform: uppercase;
+        .form-group-row {
+            margin-bottom: 20px;
         }
 
-        .modal-box p {
-            color: rgba(255, 255, 255, 0.65);
-            font-size: 0.92rem;
-            margin-bottom: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
+        .form-group-row label {
             display: block;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 1.2px;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.85);
         }
 
-        .form-input, .form-select {
+        .field-input, .field-select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 18px;
             background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 12px;
             color: #ffffff;
             font-size: 0.95rem;
             outline: none;
+            font-family: inherit;
             transition: border-color 0.25s ease;
         }
 
-        .form-input:focus, .form-select:focus {
+        .field-input:focus, .field-select:focus {
             border-color: var(--kia-red);
-            background: rgba(255, 255, 255, 0.09);
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .form-select option {
-            background: #111;
+        .field-select option {
+            background: #0d121c;
             color: #fff;
         }
 
-        .btn-submit-form {
+        .btn-submit-vip {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             background: var(--kia-red);
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             color: #ffffff;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 800;
+            font-size: 1.05rem;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
             cursor: pointer;
-            box-shadow: 0 4px 18px var(--kia-red-glow);
+            box-shadow: 0 6px 24px var(--kia-red-glow);
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
-        .btn-submit-form:hover {
+        .btn-submit-vip:hover {
             background: #ff1943;
             transform: translateY(-2px);
         }
 
-        /* Footer */
+        /* FOOTER */
         footer {
-            background: rgba(6, 8, 13, 0.98);
+            background: rgba(3, 5, 8, 0.98);
             border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 40px 60px;
+            padding: 50px 80px;
             text-align: center;
             color: rgba(255, 255, 255, 0.45);
-            font-size: 0.85rem;
-        }
-
-        footer strong {
-            color: #ffffff;
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            font-size: 0.88rem;
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            .features-grid { grid-template-columns: repeat(2, 1fr); }
-            .versions-grid { grid-template-columns: 1fr; }
-            h1.hero-heading { font-size: 3rem; }
-            .hero-specs-strip { display: none; }
-            .video-control-dock { left: 20px; bottom: 20px; }
-            .real-car-viewport { height: 420px; }
+        @media (max-width: 1200px) {
+            .hero-section { padding: 140px 40px 40px 40px; }
+            .spatial-showroom-section, .spatial-matrix-section, .vip-pricing-section { padding: 80px 40px; }
+            h1.hero-title { font-size: 3.8rem; }
+            .matrix-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-deck { grid-template-columns: 1fr; }
+            .pricing-pod.featured { transform: none; }
         }
 
         @media (max-width: 768px) {
-            header { padding: 16px 20px; }
+            header { width: calc(100% - 30px); padding: 12px 20px; }
             nav ul { display: none; }
-            .hero-section { padding: 110px 24px 30px 24px; }
-            h1.hero-heading { font-size: 2.3rem; }
-            .features-grid { grid-template-columns: 1fr; }
-            .video-control-dock {
-                left: 15px;
-                right: 15px;
-                bottom: 15px;
-                justify-content: space-between;
-                padding: 10px 14px;
-                gap: 8px;
-            }
-            .real-car-section, .features-section, .pricing-section { padding: 60px 20px; }
-            .real-car-viewport { height: 280px; }
+            .hero-section { padding: 110px 20px 30px 20px; }
+            h1.hero-title { font-size: 2.6rem; }
+            .hud-telemetry-bar { flex-direction: column; gap: 20px; align-items: flex-start; }
+            .hud-divider { display: none; }
+            .matrix-grid { grid-template-columns: 1fr; }
+            .floating-antigravity-dock { left: 15px; right: 15px; bottom: 15px; justify-content: space-between; }
+            .hologram-viewport { height: 320px; }
+            .spatial-showroom-section, .spatial-matrix-section, .vip-pricing-section { padding: 50px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- KHUNG VIDEO & ẢNH XE THẬT 100% CHẠY NỀN TOÀN MÀN HÌNH -->
-    <div class="video-background-container">
-        <!-- Ảnh xe thật chất lượng cao Pacific Blue của K5 -->
-        <img class="video-fallback-img" id="hero-fallback-img" 
-             src="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" 
-             alt="KIA K5 Real Car">
+    <!-- ĐÈN RỌI QUANG HỌC THEO CON TRỎ CHUỘT (ANTIGRAVITY CURSOR GLOW) -->
+    <div class="cursor-glow" id="cursor-glow"></div>
 
-        <!-- Video xe thật KIA K5 chạy trên cao tốc và đường phố -->
-        <iframe id="k5-video-player"
-                src="https://www.youtube.com/embed/pvdJ_3iwerc?autoplay=1&mute=1&loop=1&playlist=pvdJ_3iwerc&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1"
-                title="KIA K5 Official Real Car Driving"
-                frameborder="0"
-                allow="autoplay; encrypted-media"
-                allowfullscreen>
-        </iframe>
-    </div>
+    <!-- KHUNG NỀN KHÔNG TRỌNG LỰC: VIDEO XE THẬT + PARTICLES LƯỢNG TỬ -->
+    <div class="antigravity-bg-container">
+        <!-- Canvas hạt bụi không trọng lực chuyển động phản ứng với chuột -->
+        <canvas id="particle-canvas"></canvas>
 
-    <!-- Lớp phủ điện ảnh làm nổi bật văn bản -->
-    <div class="video-ambient-overlay"></div>
+        <!-- Sàn lưới Cyber uốn cong 3D -->
+        <div class="cyber-grid-floor"></div>
 
-    <!-- BẢNG ĐIỀU KHIỂN VIDEO XE THẬT CỐ ĐỊNH PHÍA DƯỚI -->
-    <div class="video-control-dock">
-        <div>
-            <span class="dock-label">Trải nghiệm xe thật</span>
-            <div style="display: flex; gap: 8px;">
-                <button class="dock-btn active" id="btn-toggle-video" title="Bật/Tắt video chạy nền">
-                    <i class="fa-solid fa-film"></i> <span id="video-btn-text">Video Xe Thật</span>
-                </button>
-                <button class="dock-btn" id="btn-toggle-sound" title="Bật/Tắt âm thanh video">
-                    <i class="fa-solid fa-volume-xmark" id="sound-icon"></i> <span>Âm Thanh</span>
-                </button>
-                <button class="dock-btn" id="btn-scroll-studio" title="Xem bộ sưu tập ảnh xe thật">
-                    <i class="fa-solid fa-camera"></i> <span>Ảnh Thực Tế</span>
-                </button>
-            </div>
+        <!-- Video xe thật KIA K5 chạy trên cao tốc -->
+        <div class="video-wrapper" id="video-wrapper">
+            <img class="video-fallback-poster" 
+                 src="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" 
+                 alt="KIA K5 Real Car">
+            
+            <iframe id="k5-video-player"
+                    src="https://www.youtube.com/embed/pvdJ_3iwerc?autoplay=1&mute=1&loop=1&playlist=pvdJ_3iwerc&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1"
+                    title="KIA K5 Real Car Footage"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen>
+            </iframe>
         </div>
+
+        <!-- Lớp phủ điện ảnh làm nổi bật văn bản -->
+        <div class="cinematic-vignette"></div>
     </div>
 
-    <!-- NỘI DUNG GIAO DIỆN CHÍNH -->
+    <!-- DOCK ĐIỀU KHIỂN VIDEO XE THẬT CỐ ĐỊNH -->
+    <div class="floating-antigravity-dock">
+        <button class="dock-tool-btn active" id="btn-toggle-video" title="Bật/Tắt video chạy nền">
+            <i class="fa-solid fa-play"></i> <span id="video-status-text">Video Xe Thật</span>
+        </button>
+        <button class="dock-tool-btn" id="btn-toggle-sound" title="Bật/Tắt âm thanh video">
+            <i class="fa-solid fa-volume-xmark" id="sound-icon"></i> <span>Âm Thanh</span>
+        </button>
+        <button class="dock-tool-btn" id="btn-boost-mode" title="Kích hoạt chế độ GT Boost / Antigravity">
+            <i class="fa-solid fa-bolt"></i> <span>GT Boost</span>
+        </button>
+    </div>
+
+    <!-- LỚP GIAO DIỆN NỘI DUNG CHÍNH -->
     <div class="content-layer">
 
-        <!-- HEADER -->
+        <!-- HEADER FLOATING DOCK -->
         <header>
             <a href="#" class="brand-logo">
                 <svg class="kia-svg-logo" viewBox="0 0 280 90">
@@ -971,176 +1139,204 @@
                     <path d="M152 22 L186 22 L206 68 L186 68 L180 54 L158 54 L152 68 L132 68 Z M169 32 L163 45 L175 45 Z"/>
                     <rect x="220" y="22" width="16" height="46" rx="3" fill="#ea0029"/>
                 </svg>
-                <div class="model-badge">K5 <span>PREMIUM</span></div>
+                <div class="model-badge">
+                    <span class="k5-glow">K5</span>
+                    <span class="vip-tag">PREMIUM</span>
+                </div>
             </a>
 
             <nav>
                 <ul>
-                    <li><a href="#hero" class="active">Trang chủ</a></li>
-                    <li><a href="#studio">Bộ Sưu Tập Xe Thật</a></li>
-                    <li><a href="#features">Trang Bị Premium</a></li>
-                    <li><a href="#pricing">Bảng Giá Lăn Bánh</a></li>
+                    <li><a href="#hero" class="active">Khám Phá</a></li>
+                    <li><a href="#showroom">Bộ Sưu Tập Xe Thật</a></li>
+                    <li><a href="#features">Công Nghệ</a></li>
+                    <li><a href="#pricing">Bảng Giá VIP</a></li>
                 </ul>
             </nav>
 
-            <div class="header-actions">
-                <button class="btn-test-drive" id="btn-open-modal">
-                    <i class="fa-solid fa-steering-wheel"></i> Lái Thử K5 Premium
-                </button>
-            </div>
+            <a href="#pricing" class="nav-btn-vip" id="btn-header-order">
+                <i class="fa-solid fa-steering-wheel"></i> Đăng Ký Lái Thử
+            </a>
         </header>
 
         <!-- HERO SECTION -->
         <section class="hero-section" id="hero">
-            <div class="hero-title-box">
-                <div class="tag-k5">
-                    <i class="fa-solid fa-crown"></i> Fastback Sedan Hạng D Đẳng Cấp
+            <div class="hero-main-box">
+                <div class="hero-antigravity-tag">
+                    <span class="pulse-orb"></span>
+                    <span>Kiệt Tác Fastback Sedan Hạng D</span>
                 </div>
-                <h1 class="hero-heading">
-                    KIA K5 <br><span class="red-accent">PREMIUM</span> DẪN LỐI TIÊN PHONG
+                
+                <h1 class="hero-title">
+                    KIA K5 <br><span class="glow-red">PREMIUM</span>
                 </h1>
-                <p class="hero-desc">
-                    Trải nghiệm trực quan hình ảnh và video xe thật của mẫu Fastback Sedan hạng D hàng đầu. Thiết kế đèn "Heartbeat" nhịp tim mê hoặc, cửa sổ trời toàn cảnh Panorama và dàn 12 loa Bose đỉnh cao.
+                
+                <p class="hero-lead">
+                    Định hình lại quy chuẩn sedan hạng D với phong cách Fastback thể thao phóng khoáng, dải đèn "Heartbeat" nhịp tim mê hoặc, cửa sổ trời toàn cảnh Panorama và dàn âm thanh 12 loa Bose đỉnh cao.
                 </p>
-                <div style="display: flex; gap: 16px;">
-                    <button class="btn-test-drive" id="btn-hero-order" style="padding: 14px 34px; font-size: 0.95rem;">
-                        Báo Giá K5 2.0 Premium
+
+                <div class="hero-action-row">
+                    <button class="btn-launch-warp" id="btn-warp-booking">
+                        <i class="fa-solid fa-bolt-lightning"></i> Trải Nghiệm Lái Thử
                     </button>
-                    <a href="#studio" class="btn-test-drive" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: none; padding: 14px 26px;">
-                        Khám Phá Xe Thật
+                    <a href="#showroom" class="btn-ghost-telemetry">
+                        <i class="fa-solid fa-camera-retro"></i> Xem Ảnh Xe Thật 4K
                     </a>
                 </div>
             </div>
 
-            <!-- Thanh thông số nhanh -->
-            <div class="hero-specs-strip" id="specs">
-                <div class="spec-item">
-                    <div class="spec-value">150 <span>HP</span></div>
-                    <div class="spec-title">Động cơ Nu 2.0L MPI</div>
-                </div>
-                <div class="widget-divider"></div>
-                <div class="spec-item">
-                    <div class="spec-value">12.3 <span>Inch</span></div>
-                    <div class="spec-title">Màn hình Full Digital</div>
-                </div>
-                <div class="widget-divider"></div>
-                <div class="spec-item">
-                    <div class="spec-value">12 <span>Loa</span></div>
-                    <div class="spec-title">Âm thanh vòm Bose</div>
-                </div>
-                <div class="widget-divider"></div>
-                <div class="spec-item">
-                    <div class="spec-value">904 <span>Triệu</span></div>
-                    <div class="spec-title">Giá niêm yết Premium</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION BỘ SƯU TẬP ẢNH XE THẬT 100% (REAL CAR STUDIO) -->
-        <section class="real-car-section" id="studio">
-            <div class="section-header">
-                <span class="section-tag">Hình Ảnh Thực Tế 100%</span>
-                <h2 class="section-title">Chiêm Ngưỡng Từng Góc Cạnh Xe Thật</h2>
-                <p class="section-desc">Bộ sưu tập hình ảnh thực tế chất lượng cao của KIA K5, từ thiết kế ngoại thất thể thao sắc nét đến khoang lái sang trọng đỉnh cao.</p>
-            </div>
-
-            <div class="car-stage-container">
-                <!-- Các tab chuyển đổi góc nhìn xe thật -->
-                <div class="stage-view-tabs">
-                    <button class="stage-tab-btn active" data-img="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" data-title="Ngoại Thất Xanh Mineral / Pacific Blue" data-desc="Góc nhìn 3/4 đầu xe thể thao với lưới tản nhiệt Shark-Skin & Đèn Heartbeat">
-                        <i class="fa-solid fa-car-side"></i> Xanh Yacht/Pacific Blue
-                    </button>
-                    <button class="stage-tab-btn" data-img="https://upload.wikimedia.org/wikipedia/commons/e/e2/2021_Kia_K5_GT-Line_in_Glacial_White_Pearl%2C_front_left.jpg" data-title="Ngoại Thất Trắng Ngọc Trai Glacial White" data-desc="Vẻ đẹp sang trọng, tinh tế tôn vinh đường nét khí động học">
-                        <i class="fa-solid fa-palette"></i> Trắng Glacial White
-                    </button>
-                    <button class="stage-tab-btn" data-img="https://upload.wikimedia.org/wikipedia/commons/0/0e/2021_Kia_K5_GT-Line%2C_rear_left.jpg" data-title="Đuôi Xe & Dải Đèn LED Nhịp Tim Liền Mạch" data-desc="Dải đèn hậu LED xuyên suốt đuôi xe với ống xả kép và cánh lướt gió khí động học">
-                        <i class="fa-solid fa-shield-halved"></i> Đuôi Xe LED Nhịp Tim
-                    </button>
-                    <button class="stage-tab-btn" data-img="https://upload.wikimedia.org/wikipedia/commons/3/39/Kia_K5_DL3_PE_Martian_Brown_%281%29.jpg" data-title="Khoang Lái Kỹ Thuật Số & Ghế Da Cao Cấp" data-desc="Màn hình cong kép 12.3 inch, vô lăng thể thao và cần số hiện đại">
-                        <i class="fa-solid fa-gauge"></i> Khoang Lái & Màn Hình
-                    </button>
-                    <button class="stage-tab-btn" data-img="https://upload.wikimedia.org/wikipedia/commons/7/75/Kia_K5_Hybrid_DL3_HEV_Martian_Brown_%283%29.jpg" data-title="Nội Thất Da Martian Brown & Cửa Sổ Trời" data-desc="Không gian nội thất cao cấp với cửa sổ trời toàn cảnh Panorama">
-                        <i class="fa-solid fa-couch"></i> Ghế Da & Cửa Sổ Trời
-                    </button>
+            <!-- HUD TELEMETRY COCKPIT STRIP -->
+            <div class="hud-telemetry-bar">
+                <div class="telemetry-node">
+                    <div class="label"><i class="fa-solid fa-gauge-high"></i> Vận tốc tối đa</div>
+                    <div class="val" id="gauge-speed">210 <span>KM/H</span></div>
                 </div>
 
-                <!-- Khung hiển thị ảnh thực tế -->
-                <div class="real-car-viewport">
-                    <img id="stage-active-img" class="real-car-img" 
-                         src="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" 
-                         alt="KIA K5 Real Car Official Photo">
-                    
-                    <div class="car-photo-badge">
-                        <span class="badge-title" id="stage-badge-title">Ngoại Thất Xanh Mineral / Pacific Blue</span>
-                        <span class="badge-desc" id="stage-badge-desc">Góc nhìn 3/4 đầu xe thể thao với lưới tản nhiệt Shark-Skin & Đèn Heartbeat</span>
+                <div class="hud-divider"></div>
+
+                <div class="telemetry-node">
+                    <div class="label"><i class="fa-solid fa-microchip"></i> Động cơ Smartstream</div>
+                    <div class="val">150 <span>HP / 192 Nm</span></div>
+                </div>
+
+                <div class="hud-divider"></div>
+
+                <div class="telemetry-node">
+                    <div class="label"><i class="fa-solid fa-display"></i> Màn hình kép Digital</div>
+                    <div class="val">12.3 <span>INCH</span></div>
+                </div>
+
+                <div class="hud-divider"></div>
+
+                <div class="telemetry-node">
+                    <div class="label"><i class="fa-solid fa-sliders"></i> Chế độ lái</div>
+                    <div class="drive-mode-pill">
+                        <button class="mode-chip" data-mode="ECO">ECO</button>
+                        <button class="mode-chip" data-mode="NORMAL">NORMAL</button>
+                        <button class="mode-chip active" data-mode="SPORT">SPORT</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION TRANG BỊ VƯỢT TRỘI BẢN PREMIUM -->
-        <section class="features-section" id="features">
-            <div class="section-header">
-                <span class="section-tag">Trang Bị Cao Cấp</span>
-                <h2 class="section-title">KIA K5 2.0 Premium - Đẳng Cấp Thượng Lưu</h2>
-                <p class="section-desc">Phiên bản Premium hội tụ những tinh hoa công nghệ và tiện nghi cao cấp nhất trong phân khúc sedan hạng D, sẵn sàng cùng bạn khẳng định vị thế dẫn đầu.</p>
+        <!-- SECTION SPATIAL SHOWROOM ẢNH XE THẬT 4K -->
+        <section class="spatial-showroom-section" id="showroom">
+            <div class="section-eyebrow">
+                <i class="fa-solid fa-crosshairs"></i> Bộ Sưu Tập Xe Thật 100%
             </div>
+            <h2 class="section-headline">Chiêm Ngưỡng Từng Góc Cạnh Thực Tế</h2>
 
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                    <h3>Đèn DRL "Heartbeat" Nhịp Tim</h3>
-                    <p>Dải đèn định vị ban ngày hình nhịp tim độc bản của K5 kéo dài sắc sảo sang hai bên sườn xe, kết hợp cụm đèn pha Full-LED đa thấu kính cho ánh sáng vượt trội.</p>
+            <div class="showroom-hologram-stage">
+                <!-- Bộ chọn góc chụp thực tế -->
+                <div class="stage-tabs-row">
+                    <button class="stage-pill active" data-img="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" data-title="Ngoại Thất Xanh Pacific / Mineral Blue" data-desc="Mũi xe cá mập Shark-Skin & Cụm đèn LED nhịp tim Heartbeat">
+                        <i class="fa-solid fa-car-side"></i> Xanh Mineral Blue
+                    </button>
+                    <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/e/e2/2021_Kia_K5_GT-Line_in_Glacial_White_Pearl%2C_front_left.jpg" data-title="Ngoại Thất Trắng Ngọc Trai Glacial White" data-desc="Nước sơn ngọc trai đa lớp tôn vinh đường cong khí động học">
+                        <i class="fa-solid fa-palette"></i> Trắng Ngọc Trai
+                    </button>
+                    <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/0/0e/2021_Kia_K5_GT-Line%2C_rear_left.jpg" data-title="Đuôi Xe Thể Thao Đèn LED Nhịp Tim" data-desc="Cụm đèn hậu LED nét đứt xuyên suốt đuôi xe với ống xả kép thể thao">
+                        <i class="fa-solid fa-shield-halved"></i> Đuôi Xe LED Nhịp Tim
+                    </button>
+                    <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/3/39/Kia_K5_DL3_PE_Martian_Brown_%281%29.jpg" data-title="Khoang Lái Kỹ Thuật Số & Cần Số Mới" data-desc="Màn hình cong Full Digital 12.3 inch, vô lăng bọc da & núm xoay điện tử">
+                        <i class="fa-solid fa-gauge"></i> Màn Hình & Vô Lăng
+                    </button>
+                    <button class="stage-pill" data-img="https://upload.wikimedia.org/wikipedia/commons/7/75/Kia_K5_Hybrid_DL3_HEV_Martian_Brown_%283%29.jpg" data-title="Ghế Da Sang Trọng & Cửa Sổ Trời Panorama" data-desc="Không gian nội thất da cao cấp kết hợp trần kính toàn cảnh">
+                        <i class="fa-solid fa-couch"></i> Ghế Da & Cửa Sổ Trời
+                    </button>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-sun"></i></div>
+                <!-- Khung hiển thị ảnh thực tế kèm Hotspots -->
+                <div class="hologram-viewport">
+                    <img id="stage-main-photo" 
+                         src="https://upload.wikimedia.org/wikipedia/commons/f/ff/2022_Kia_K5_GT-Line_in_Pacific_Blue%2C_Front_Left%2C_09-05-2022.jpg" 
+                         alt="KIA K5 Real Car 4K">
+
+                    <!-- Hotspot 1: Đèn Heartbeat -->
+                    <div class="ar-hotspot" style="top: 48%; left: 34%;">
+                        <div class="hotspot-tag">⚡ Đèn DRL Heartbeat Nhịp Tim</div>
+                    </div>
+
+                    <!-- Hotspot 2: Cửa sổ trời Panorama -->
+                    <div class="ar-hotspot" style="top: 24%; left: 56%;">
+                        <div class="hotspot-tag">🌌 Cửa Sổ Trời Toàn Cảnh Panorama</div>
+                    </div>
+
+                    <!-- Hotspot 3: Mâm 18 inch -->
+                    <div class="ar-hotspot" style="top: 65%; left: 78%;">
+                        <div class="hotspot-tag">🛞 Mâm Hợp Kim 18 Inch Đa Chấu</div>
+                    </div>
+
+                    <!-- Badge thông tin góc chụp -->
+                    <div class="hologram-telemetry-badge">
+                        <span class="badge-title" id="stage-badge-title">Ngoại Thất Xanh Pacific / Mineral Blue</span>
+                        <span class="badge-desc" id="stage-badge-desc">Mũi xe cá mập Shark-Skin & Cụm đèn LED nhịp tim Heartbeat</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION MA TRẬN TÍNH NĂNG THƯỢNG LƯU -->
+        <section class="spatial-matrix-section" id="features">
+            <div class="section-eyebrow">
+                <i class="fa-solid fa-microchip"></i> Đỉnh Cao Công Nghệ & Tiện Nghi
+            </div>
+            <h2 class="section-headline">6 Đặc Quyền Trên Bản K5 2.0 Premium</h2>
+
+            <div class="matrix-grid">
+                <div class="matrix-card">
+                    <div class="matrix-icon-box"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <h3>Đèn DRL "Heartbeat" Nhịp Tim</h3>
+                    <p>Dải đèn định vị ban ngày hình nhịp tim độc bản của K5 kéo dài sắc sảo sang hai bên hông xe, kết hợp cụm đèn pha Full-LED đa thấu kính cho ánh sáng vượt trội.</p>
+                </div>
+
+                <div class="matrix-card">
+                    <div class="matrix-icon-box"><i class="fa-solid fa-sun"></i></div>
                     <h3>Cửa Sổ Trời Toàn Cảnh Panorama</h3>
                     <p>Trang bị độc quyền trên bản Premium, mở rộng không gian trần xe hòa cùng thiên nhiên, mang đến trải nghiệm di chuyển sang trọng và thoáng đãng đẳng cấp.</p>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-music"></i></div>
-                    <h3>Dàn 12 Loa Bose Đỉnh Cao</h3>
-                    <p>Hệ thống âm thanh vòm cao cấp Bose 12 loa với công nghệ Centerpoint và xử lý âm thanh sống động, biến khoang xe K5 thành rạp hát di động chân thực.</p>
+                <div class="matrix-card">
+                    <div class="matrix-icon-box"><i class="fa-solid fa-music"></i></div>
+                    <h3>Dàn 12 Loa Bose Centerpoint</h3>
+                    <p>Hệ thống âm thanh vòm cao cấp Bose 12 loa với công nghệ xử lý âm thanh sống động, biến khoang xe K5 thành rạp hát di động chân thực.</p>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-display"></i></div>
+                <div class="matrix-card">
+                    <div class="matrix-icon-box"><i class="fa-solid fa-display"></i></div>
                     <h3>Màn Hình Kép Siêu Lớn 12.3"</h3>
                     <p>Màn hình cụm đồng hồ kỹ thuật số 12.3 inch đồ họa 3D sắc nét nối liền màn hình giải trí trung tâm 10.25 inch, hỗ trợ kết nối thông minh toàn diện.</p>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-couch"></i></div>
-                    <h3>Ghế Da Sang Trọng Sưởi & Làm Mát</h3>
+                <div class="matrix-card">
+                    <div class="matrix-icon-box"><i class="fa-solid fa-couch"></i></div>
+                    <h3>Ghế Da Sưởi & Thông Gió Làm Mát</h3>
                     <p>Ghế bọc da cao cấp chỉnh điện 10 hướng nhớ 2 vị trí, tích hợp tính năng sưởi ấm và thông gió làm mát cả hàng ghế trước lẫn sưởi hàng ghế sau.</p>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="matrix-card">
+                    <div class="matrix-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
                     <h3>Kia Drive Wise & Camera 360 SVM</h3>
                     <p>Hệ thống giám sát điểm mù hiển thị hình ảnh trên đồng hồ (BVM), Camera toàn cảnh 360 độ siêu nét, cảnh báo phương tiện cắt ngang và 6 túi khí an toàn.</p>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION BẢNG GIÁ & PHIÊN BẢN -->
-        <section class="pricing-section" id="pricing">
-            <div class="section-header">
-                <span class="section-tag">Giá Xe & Phiên Bản</span>
-                <h2 class="section-title">Bảng Giá Lăn Bánh KIA K5</h2>
-                <p class="section-desc">Lựa chọn phiên bản hoàn hảo nhất cho phong cách của bạn, trong đó K5 2.0 Premium là phiên bản được khách hàng ưa chuộng hàng đầu.</p>
+        <!-- SECTION BẢNG GIÁ VIP & SO SÁNH PHIÊN BẢN -->
+        <section class="vip-pricing-section" id="pricing">
+            <div class="section-eyebrow">
+                <i class="fa-solid fa-tag"></i> Bảng Giá Lăn Bánh Chính Hãng
             </div>
+            <h2 class="section-headline">Lựa Chọn Phiên Bản KIA K5</h2>
 
-            <div class="versions-grid">
+            <div class="pricing-deck">
                 <!-- Bản 2.0 Luxury -->
-                <div class="version-card">
+                <div class="pricing-pod">
                     <div>
-                        <div class="version-name">K5 2.0 Luxury</div>
-                        <div class="version-engine">Xăng Nu 2.0L MPI - Hộp số tự động 6AT</div>
-                        <div class="version-price">859 <span>Triệu VNĐ</span></div>
-                        <ul class="version-features-list">
+                        <div class="pod-title">K5 2.0 Luxury</div>
+                        <div class="pod-engine">Xăng Nu 2.0L MPI - Hộp số tự động 6AT</div>
+                        <div class="pod-price">859 <span>Triệu VNĐ</span></div>
+                        <ul class="pod-checklist">
                             <li><i class="fa-solid fa-circle-check"></i> Đèn pha LED & DRL nhịp tim</li>
                             <li><i class="fa-solid fa-circle-check"></i> Ghế lái chỉnh điện 10 hướng</li>
                             <li><i class="fa-solid fa-circle-check"></i> Màn hình trung tâm 10.25 inch</li>
@@ -1148,17 +1344,17 @@
                             <li><i class="fa-solid fa-circle-check"></i> Mâm hợp kim 18 inch thể thao</li>
                         </ul>
                     </div>
-                    <button class="btn-choose-version btn-select-order" data-ver="K5 2.0 Luxury">Chọn Phiên Bản</button>
+                    <button class="btn-select-pod btn-trigger-modal" data-ver="K5 2.0 Luxury">Chọn Phiên Bản</button>
                 </div>
 
-                <!-- Bản 2.0 Premium (TÂM ĐIỂM) -->
-                <div class="version-card highlight">
-                    <div class="badge-hot">LỰA CHỌN TỐT NHẤT</div>
+                <!-- Bản 2.0 Premium (TÂM ĐIỂM VIP) -->
+                <div class="pricing-pod featured">
+                    <div class="featured-ribbon">BÁN CHẠY NHẤT</div>
                     <div>
-                        <div class="version-name" style="color: #ff3355;">K5 2.0 Premium</div>
-                        <div class="version-engine">Xăng Nu 2.0L MPI - 150HP - 6AT Êm Ái</div>
-                        <div class="version-price">904 <span>Triệu VNĐ</span></div>
-                        <ul class="version-features-list">
+                        <div class="pod-title" style="color: #ff3355;">K5 2.0 Premium</div>
+                        <div class="pod-engine">Xăng Nu 2.0L MPI - 150HP - 6AT Êm Ái</div>
+                        <div class="pod-price">904 <span>Triệu VNĐ</span></div>
+                        <ul class="pod-checklist">
                             <li><i class="fa-solid fa-circle-check"></i> <b>Cửa sổ trời toàn cảnh Panorama</b></li>
                             <li><i class="fa-solid fa-circle-check"></i> <b>Dàn 12 loa Bose Centerpoint cao cấp</b></li>
                             <li><i class="fa-solid fa-circle-check"></i> <b>Đồng hồ Full Digital 12.3 inch siêu nét</b></li>
@@ -1167,16 +1363,16 @@
                             <li><i class="fa-solid fa-circle-check"></i> Hiển thị thông tin kính lái HUD sắc nét</li>
                         </ul>
                     </div>
-                    <button class="btn-choose-version btn-select-order" data-ver="K5 2.0 Premium">Chọn Bản Premium</button>
+                    <button class="btn-select-pod btn-trigger-modal" data-ver="K5 2.0 Premium">Chọn Bản Premium VIP</button>
                 </div>
 
                 <!-- Bản 2.5 GT-Line -->
-                <div class="version-card">
+                <div class="pricing-pod">
                     <div>
-                        <div class="version-name">K5 2.5 GT-Line</div>
-                        <div class="version-engine">Xăng Theta-III 2.5L GDi 191HP - 8AT</div>
-                        <div class="version-price">999 <span>Triệu VNĐ</span></div>
-                        <ul class="version-features-list">
+                        <div class="pod-title">K5 2.5 GT-Line</div>
+                        <div class="pod-engine">Xăng Theta-III 2.5L GDi 191HP - 8AT</div>
+                        <div class="pod-price">999 <span>Triệu VNĐ</span></div>
+                        <ul class="pod-checklist">
                             <li><i class="fa-solid fa-circle-check"></i> Động cơ 2.5L GDi 191 mã lực mạnh mẽ</li>
                             <li><i class="fa-solid fa-circle-check"></i> Hộp số tự động 8 cấp 8AT thể thao</li>
                             <li><i class="fa-solid fa-circle-check"></i> Nội thất phối da đỏ GT-Line độc quyền</li>
@@ -1184,7 +1380,7 @@
                             <li><i class="fa-solid fa-circle-check"></i> Toàn bộ trang bị cao cấp của bản Premium</li>
                         </ul>
                     </div>
-                    <button class="btn-choose-version btn-select-order" data-ver="K5 2.5 GT-Line">Chọn Phiên Bản</button>
+                    <button class="btn-select-pod btn-trigger-modal" data-ver="K5 2.5 GT-Line">Chọn Phiên Bản</button>
                 </div>
             </div>
         </section>
@@ -1192,133 +1388,230 @@
         <!-- FOOTER -->
         <footer>
             <p>© 2026 <strong>KIA VIETNAM</strong>. Khám phá kiệt tác Fastback Sedan hạng D cùng KIA K5 2.0 Premium.</p>
-            <p style="margin-top: 8px; font-size: 0.78rem;">Toàn bộ hình ảnh và video là sản phẩm thực tế chính thức của dòng xe KIA K5 thế hệ mới.</p>
+            <p style="margin-top: 8px; font-size: 0.8rem;">Giao diện trải nghiệm xe thật thế hệ mới lấy cảm hứng từ ngôn ngữ thiết kế Antigravity.</p>
         </footer>
 
     </div>
 
-    <!-- MODAL ĐĂNG KÝ LÁI THỬ -->
-    <div class="modal-overlay" id="booking-modal">
-        <div class="modal-box">
-            <button class="btn-close-modal" id="btn-close-modal">&times;</button>
-            <h3>Đăng Ký Lái Thử KIA K5</h3>
-            <p>Trải nghiệm trực tiếp không gian sang trọng và tiện nghi đỉnh cao của KIA K5 2.0 Premium cùng bảng giá khuyến mãi mới nhất.</p>
+    <!-- MODAL ĐẶT LỊCH LÁI THỬ VIP -->
+    <div class="vip-modal-overlay" id="vip-modal">
+        <div class="vip-modal-dialog">
+            <button class="btn-dismiss" id="btn-close-modal">&times;</button>
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">Đăng Ký Lái Thử KIA K5</h3>
+            <p style="color: var(--text-dim); font-size: 0.94rem; margin-bottom: 26px;">Nhận đặc quyền lái thử tận nhà và bảng dự toán giá lăn bánh mới nhất từ đại lý chính hãng.</p>
 
-            <form id="drive-form" onsubmit="event.preventDefault(); submitBooking();">
-                <div class="form-group">
-                    <label>Họ và tên của bạn</label>
-                    <input type="text" class="form-input" id="cust-name" required placeholder="Nguyễn Văn A">
+            <form id="booking-form" onsubmit="event.preventDefault(); handleBookingSubmit();">
+                <div class="form-group-row">
+                    <label>Họ và tên quý khách</label>
+                    <input type="text" class="field-input" id="cust-name" required placeholder="Nguyễn Văn A">
                 </div>
-                <div class="form-group">
+                <div class="form-group-row">
                     <label>Số điện thoại liên hệ</label>
-                    <input type="tel" class="form-input" id="cust-phone" required placeholder="0901 xxx xxx">
+                    <input type="tel" class="field-input" id="cust-phone" required placeholder="0901 xxx xxx">
                 </div>
-                <div class="form-group">
+                <div class="form-group-row">
                     <label>Phiên bản quan tâm</label>
-                    <select class="form-select" id="cust-version">
-                        <option value="KIA K5 2.0 Premium" selected>KIA K5 2.0 Premium (Khuyên dùng)</option>
+                    <select class="field-select" id="cust-version">
+                        <option value="KIA K5 2.0 Premium" selected>KIA K5 2.0 Premium (Khuyên dùng - Bản VIP)</option>
                         <option value="KIA K5 2.5 GT-Line">KIA K5 2.5 GT-Line (Thể thao)</option>
                         <option value="KIA K5 2.0 Luxury">KIA K5 2.0 Luxury (Tiêu chuẩn)</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group-row">
                     <label>Khu vực lái thử</label>
-                    <select class="form-select" id="cust-location">
+                    <select class="field-select" id="cust-location">
                         <option>Hà Nội & Miền Bắc</option>
                         <option selected>TP. Hồ Chí Minh & Miền Nam</option>
                         <option>Đà Nẵng & Miền Trung</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-submit-form" id="btn-submit-booking">Xác Nhận Đăng Ký K5</button>
+                <button type="submit" class="btn-submit-vip">Xác Nhận Đăng Ký Lái Thử</button>
             </form>
         </div>
     </div>
 
-    <!-- JAVASCRIPT ĐIỀU KHIỂN VIDEO & STUDIO XE THẬT -->
+    <!-- JAVASCRIPT: PARTICLE CANVAS + AUDIO SYNTH + CHUYỂN ĐỔI ẢNH THỰC TẾ -->
     <script>
-        // 1. Tương tác chuyển đổi ảnh thực tế trong Studio
-        const stageTabs = document.querySelectorAll('.stage-tab-btn');
-        const activeImg = document.getElementById('stage-active-img');
+        // 1. ÁNH SÁNG SPOTLIGHT THEO CHUỘT (CURSOR GLOW)
+        const cursorGlow = document.getElementById('cursor-glow');
+        window.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+
+        // 2. HIỆU ỨNG HẠT LƯỢNG TỬ KHÔNG TRỌNG LỰC (ZERO-G PARTICLE SYSTEM)
+        const pCanvas = document.getElementById('particle-canvas');
+        const pCtx = pCanvas.getContext('2d');
+        let pWidth = pCanvas.width = window.innerWidth;
+        let pHeight = pCanvas.height = window.innerHeight;
+
+        const particleCount = 75;
+        const particles = [];
+
+        class QuantumParticle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * pWidth;
+                this.y = pHeight + Math.random() * 50;
+                this.size = Math.random() * 2.2 + 0.6;
+                this.speedY = -(Math.random() * 0.8 + 0.3);
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.alpha = Math.random() * 0.6 + 0.2;
+                this.hue = Math.random() > 0.6 ? 350 : 195; // Đỏ neon hoặc Cyan
+            }
+            update(warpSpeed = 1) {
+                this.y += this.speedY * warpSpeed;
+                this.x += this.speedX;
+                if (this.y < -20 || this.x < -20 || this.x > pWidth + 20) {
+                    this.reset();
+                }
+            }
+            draw() {
+                pCtx.beginPath();
+                pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                pCtx.fillStyle = `hsla(${this.hue}, 95%, 65%, ${this.alpha})`;
+                pCtx.shadowBlur = 10;
+                pCtx.shadowColor = `hsla(${this.hue}, 95%, 65%, 0.8)`;
+                pCtx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            const p = new QuantumParticle();
+            p.y = Math.random() * pHeight; // Phân tán ban đầu
+            particles.push(p);
+        }
+
+        let warpMultiplier = 1;
+
+        function animateParticles() {
+            pCtx.clearRect(0, 0, pWidth, pHeight);
+            particles.forEach(p => {
+                p.update(warpMultiplier);
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            pWidth = pCanvas.width = window.innerWidth;
+            pHeight = pCanvas.height = window.innerHeight;
+        });
+
+        // 3. TƯƠNG TÁC BỘ SƯU TẬP ẢNH XE THẬT TRONG SHOWROOM
+        const stagePills = document.querySelectorAll('.stage-pill');
+        const mainPhoto = document.getElementById('stage-main-photo');
         const badgeTitle = document.getElementById('stage-badge-title');
         const badgeDesc = document.getElementById('stage-badge-desc');
 
-        stageTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                stageTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
+        stagePills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                stagePills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
 
-                const newSrc = tab.getAttribute('data-img');
-                const newTitle = tab.getAttribute('data-title');
-                const newDesc = tab.getAttribute('data-desc');
+                const newSrc = pill.getAttribute('data-img');
+                const newTitle = pill.getAttribute('data-title');
+                const newDesc = pill.getAttribute('data-desc');
 
-                activeImg.style.opacity = '0';
+                mainPhoto.style.opacity = '0';
+                mainPhoto.style.transform = 'scale(0.97)';
                 setTimeout(() => {
-                    activeImg.src = newSrc;
+                    mainPhoto.src = newSrc;
                     badgeTitle.textContent = newTitle;
                     badgeDesc.textContent = newDesc;
-                    activeImg.style.opacity = '1';
-                }, 250);
+                    mainPhoto.style.opacity = '1';
+                    mainPhoto.style.transform = 'scale(1)';
+                }, 220);
             });
         });
 
-        // 2. Cuộn nhanh xuống Studio ảnh thực tế
-        document.getElementById('btn-scroll-studio').addEventListener('click', () => {
-            document.getElementById('studio').scrollIntoView({ behavior: 'smooth' });
+        // 4. CHẾ ĐỘ LÁI THỂ THAO & TĂNG TỐC GT BOOST
+        const modeChips = document.querySelectorAll('.mode-chip');
+        const gaugeSpeed = document.getElementById('gauge-speed');
+        const btnBoost = document.getElementById('btn-boost-mode');
+        let isBoosted = false;
+
+        modeChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                modeChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                const mode = chip.getAttribute('data-mode');
+                if (mode === 'SPORT') {
+                    gaugeSpeed.innerHTML = '210 <span>KM/H</span>';
+                } else if (mode === 'ECO') {
+                    gaugeSpeed.innerHTML = '140 <span>KM/H</span>';
+                } else {
+                    gaugeSpeed.innerHTML = '175 <span>KM/H</span>';
+                }
+            });
         });
 
-        // 3. Điều khiển Video chạy nền xe thật
+        btnBoost.addEventListener('click', () => {
+            isBoosted = !isBoosted;
+            btnBoost.classList.toggle('active', isBoosted);
+            if (isBoosted) {
+                warpMultiplier = 4.5;
+                document.getElementById('video-wrapper').style.filter = 'contrast(1.3) saturate(1.4) brightness(1.15)';
+                gaugeSpeed.innerHTML = '240 <span>KM/H (BOOST)</span>';
+                gsap.to('.hero-title', { textShadow: '0 0 50px rgba(234, 0, 41, 1)', duration: 0.4 });
+            } else {
+                warpMultiplier = 1;
+                document.getElementById('video-wrapper').style.filter = 'contrast(1.12) saturate(1.2) brightness(1)';
+                gaugeSpeed.innerHTML = '210 <span>KM/H</span>';
+                gsap.to('.hero-title', { textShadow: '0 8px 32px rgba(0, 0, 0, 0.95)', duration: 0.4 });
+            }
+        });
+
+        // 5. ĐIỀU KHIỂN VIDEO XE THẬT & ÂM THANH
         const videoPlayer = document.getElementById('k5-video-player');
         const btnToggleVideo = document.getElementById('btn-toggle-video');
-        const videoBtnText = document.getElementById('video-btn-text');
-        const fallbackImg = document.getElementById('hero-fallback-img');
-        let isVideoVisible = true;
-
-        btnToggleVideo.addEventListener('click', () => {
-            isVideoVisible = !isVideoVisible;
-            if (isVideoVisible) {
-                videoPlayer.style.opacity = '0.88';
-                videoBtnText.textContent = 'Video Xe Thật';
-                btnToggleVideo.classList.add('active');
-            } else {
-                videoPlayer.style.opacity = '0';
-                videoBtnText.textContent = 'Ảnh Xe Thật';
-                btnToggleVideo.classList.remove('active');
-            }
-        });
-
-        // 4. Bật/Tắt âm thanh video xe thật (Gửi lệnh qua YouTube API)
+        const videoStatusText = document.getElementById('video-status-text');
         const btnToggleSound = document.getElementById('btn-toggle-sound');
         const soundIcon = document.getElementById('sound-icon');
-        let isMuted = true;
+        let isVideoOn = true;
+        let isAudioOn = false;
 
-        btnToggleSound.addEventListener('click', () => {
-            isMuted = !isMuted;
-            if (isMuted) {
-                videoPlayer.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
-                soundIcon.className = 'fa-solid fa-volume-xmark';
-                btnToggleSound.classList.remove('active');
+        btnToggleVideo.addEventListener('click', () => {
+            isVideoOn = !isVideoOn;
+            btnToggleVideo.classList.toggle('active', isVideoOn);
+            if (isVideoOn) {
+                document.getElementById('video-wrapper').style.opacity = '0.85';
+                videoStatusText.textContent = 'Video Xe Thật';
             } else {
-                videoPlayer.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
-                videoPlayer.contentWindow.postMessage('{"event":"command","func":"setVolume","args":[50]}', '*');
-                soundIcon.className = 'fa-solid fa-volume-high';
-                btnToggleSound.classList.add('active');
+                document.getElementById('video-wrapper').style.opacity = '0';
+                videoStatusText.textContent = 'Ảnh Tĩnh 4K';
             }
         });
 
-        // 5. Modal Đăng ký lái thử
-        const modal = document.getElementById('booking-modal');
-        const btnOpenModal = document.getElementById('btn-open-modal');
-        const btnHeroOrder = document.getElementById('btn-hero-order');
-        const btnCloseModal = document.getElementById('btn-close-modal');
-        const selectVersionBtns = document.querySelectorAll('.btn-select-order');
-        const custVersionSelect = document.getElementById('cust-version');
+        btnToggleSound.addEventListener('click', () => {
+            isAudioOn = !isAudioOn;
+            btnToggleSound.classList.toggle('active', isAudioOn);
+            if (isAudioOn) {
+                videoPlayer.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+                videoPlayer.contentWindow.postMessage('{"event":"command","func":"setVolume","args":[55]}', '*');
+                soundIcon.className = 'fa-solid fa-volume-high';
+            } else {
+                videoPlayer.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                soundIcon.className = 'fa-solid fa-volume-xmark';
+            }
+        });
 
-        function openModal(versionName = null) {
+        // 6. MODAL ĐĂNG KÝ LÁI THỬ VIP
+        const modal = document.getElementById('vip-modal');
+        const btnWarpBooking = document.getElementById('btn-warp-booking');
+        const btnCloseModal = document.getElementById('btn-close-modal');
+        const triggerBtns = document.querySelectorAll('.btn-trigger-modal');
+        const versionSelect = document.getElementById('cust-version');
+
+        function openModal(verName = null) {
             modal.classList.add('active');
-            if (versionName) {
-                for (let i = 0; i < custVersionSelect.options.length; i++) {
-                    if (custVersionSelect.options[i].text.includes(versionName)) {
-                        custVersionSelect.selectedIndex = i;
+            if (verName) {
+                for (let i = 0; i < versionSelect.options.length; i++) {
+                    if (versionSelect.options[i].text.includes(verName)) {
+                        versionSelect.selectedIndex = i;
                         break;
                     }
                 }
@@ -1329,28 +1622,27 @@
             modal.classList.remove('active');
         }
 
-        btnOpenModal.addEventListener('click', () => openModal());
-        btnHeroOrder.addEventListener('click', () => openModal());
+        btnWarpBooking.addEventListener('click', () => openModal('K5 2.0 Premium'));
         btnCloseModal.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
 
-        selectVersionBtns.forEach(btn => {
+        triggerBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const ver = btn.getAttribute('data-ver');
                 openModal(ver);
             });
         });
 
-        function submitBooking() {
+        function handleBookingSubmit() {
             const name = document.getElementById('cust-name').value;
             const phone = document.getElementById('cust-phone').value;
             const ver = document.getElementById('cust-version').value;
 
-            alert(`🎉 Chúc mừng ${name}!\nYêu cầu đăng ký lái thử xe ${ver} (SĐT: ${phone}) đã được tiếp nhận thành công. Tư vấn viên KIA sẽ liên hệ với bạn trong ít phút!`);
+            alert(`🎉 Chúc mừng ${name}!\nYêu cầu đăng ký lái thử VIP cho dòng xe ${ver} (SĐT: ${phone}) đã được xác nhận thành công. Tư vấn viên cao cấp của KIA sẽ liên hệ với quý khách trong ít phút!`);
             closeModal();
-            document.getElementById('drive-form').reset();
+            document.getElementById('booking-form').reset();
         }
     </script>
 </body>
