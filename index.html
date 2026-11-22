@@ -520,49 +520,6 @@
             box-shadow: 0 0 16px var(--kia-red-glow);
         }
 
-        /* DOCK ĐIỀU KHIỂN VIDEO CỐ ĐỊNH GÓC TRÁI */
-        .floating-antigravity-dock {
-            position: fixed;
-            bottom: 30px;
-            left: 40px;
-            z-index: 50;
-            background: rgba(10, 14, 22, 0.75);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
-        }
-
-        .dock-tool-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            color: #ffffff;
-            padding: 9px 14px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.25s ease;
-        }
-
-        .dock-tool-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: var(--border-hover);
-        }
-
-        .dock-tool-btn.active {
-            background: var(--kia-red);
-            border-color: var(--kia-red);
-            box-shadow: 0 0 14px var(--kia-red-glow);
-        }
-
         /* SECTION TIÊU CHUẨN CONTAINER CHUNG */
         .page-section {
             padding: 110px 60px;
@@ -1954,7 +1911,6 @@
             .hud-telemetry-bar { flex-direction: column; gap: 16px; align-items: flex-start; }
             .hud-divider { display: none; }
             .matrix-grid { grid-template-columns: 1fr; }
-            .floating-antigravity-dock { left: 15px; right: 15px; bottom: 15px; justify-content: space-between; }
             .hologram-viewport { height: 320px; }
             .page-section { padding: 50px 20px; }
         }
@@ -1985,19 +1941,6 @@
 
         <!-- Lớp phủ điện ảnh làm nổi bật giao diện -->
         <div class="cinematic-vignette"></div>
-    </div>
-
-    <!-- DOCK ĐIỀU KHIỂN VIDEO XE THẬT CỐ ĐỊNH -->
-    <div class="floating-antigravity-dock">
-        <button class="dock-tool-btn active" id="btn-toggle-video" title="Bật/Tắt video chạy nền">
-            <i class="fa-solid fa-play"></i> <span id="video-status-text">Video Xe Thật</span>
-        </button>
-        <button class="dock-tool-btn" id="btn-toggle-sound" title="Bật/Tắt âm thanh video">
-            <i class="fa-solid fa-volume-xmark" id="sound-icon"></i> <span>Âm Thanh</span>
-        </button>
-        <button class="dock-tool-btn" id="btn-boost-mode" title="Kích hoạt chế độ GT Boost / Antigravity">
-            <i class="fa-solid fa-bolt"></i> <span>GT Boost</span>
-        </button>
     </div>
 
     <!-- LỚP GIAO DIỆN NỘI DUNG CHÍNH -->
@@ -3037,11 +2980,9 @@
             });
         });
 
-        // 4. CHẾ ĐỘ LÁI & TĂNG TỐC GT BOOST
+        // 4. CHẾ ĐỘ LÁI TRÊN ĐỒNG HỒ TELEMETRY
         const modeChips = document.querySelectorAll('.mode-chip');
         const gaugeSpeed = document.getElementById('gauge-speed');
-        const btnBoost = document.getElementById('btn-boost-mode');
-        let isBoosted = false;
 
         modeChips.forEach(chip => {
             chip.addEventListener('click', () => {
@@ -3058,32 +2999,8 @@
             });
         });
 
-        btnBoost.addEventListener('click', () => {
-            isBoosted = !isBoosted;
-            btnBoost.classList.toggle('active', isBoosted);
-            if (isBoosted) {
-                warpMultiplier = 4.5;
-                if (videoPlayer) videoPlayer.playbackRate = 2.0;
-                document.getElementById('video-wrapper').style.filter = 'contrast(1.3) saturate(1.4) brightness(1.15)';
-                gaugeSpeed.innerHTML = '240 <span>KM/H (BOOST)</span>';
-                gsap.to('.hero-title', { textShadow: '0 0 50px rgba(234, 0, 41, 1)', duration: 0.4 });
-            } else {
-                warpMultiplier = 1;
-                if (videoPlayer) videoPlayer.playbackRate = 1.0;
-                document.getElementById('video-wrapper').style.filter = 'contrast(1.15) saturate(1.25) brightness(0.92)';
-                gaugeSpeed.innerHTML = '210 <span>KM/H</span>';
-                gsap.to('.hero-title', { textShadow: '0 8px 32px rgba(0, 0, 0, 0.95)', duration: 0.4 });
-            }
-        });
-
-        // 5. ĐIỀU KHIỂN VIDEO XE THẬT & ÂM THANH
+        // 5. TỰ ĐỘNG PHÁT VIDEO XE THẬT CHẠY NỀN
         const videoPlayer = document.getElementById('k5-video-player');
-        const btnToggleVideo = document.getElementById('btn-toggle-video');
-        const videoStatusText = document.getElementById('video-status-text');
-        const btnToggleSound = document.getElementById('btn-toggle-sound');
-        const soundIcon = document.getElementById('sound-icon');
-        let isVideoOn = true;
-
         if (videoPlayer) {
             videoPlayer.play().catch(() => {
                 document.addEventListener('click', () => {
@@ -3091,27 +3008,6 @@
                 }, { once: true });
             });
         }
-
-        btnToggleVideo.addEventListener('click', () => {
-            isVideoOn = !isVideoOn;
-            btnToggleVideo.classList.toggle('active', isVideoOn);
-            if (isVideoOn) {
-                videoPlayer.play();
-                document.getElementById('video-wrapper').style.opacity = '0.88';
-                videoStatusText.textContent = 'Video Xe Thật';
-            } else {
-                videoPlayer.pause();
-                document.getElementById('video-wrapper').style.opacity = '0';
-                videoStatusText.textContent = 'Ảnh Tĩnh 4K';
-            }
-        });
-
-        btnToggleSound.addEventListener('click', () => {
-            videoPlayer.muted = !videoPlayer.muted;
-            const isMuted = videoPlayer.muted;
-            btnToggleSound.classList.toggle('active', !isMuted);
-            soundIcon.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
-        });
 
         // ================================================================
         // 6. ADAS LAB: TƯƠNG TÁC CÁC TÍNH NĂNG AN TOÀN
